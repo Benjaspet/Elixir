@@ -13,6 +13,18 @@ readdirSync("./events/").forEach((file) => {
     }
 });
 
+readdirSync("./events/interactions/").forEach((file) => {
+    const events = readdirSync("./events/interactions/").filter((file) =>
+        file.endsWith(".js")
+    );
+    for (let file of events) {
+        let pull = require(`../events/interactions/${file}`);
+        if (pull.name) {
+            client.events.set(pull.name, pull);
+        }
+    }
+});
+
 readdirSync("./slash/").forEach((file) => {
     const events = readdirSync("./slash/").filter((file) =>
         file.endsWith(".js")
