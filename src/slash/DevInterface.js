@@ -32,6 +32,14 @@ function getAllElixirSlashCommandData() {
                     required: false
                 }
             ],
+        },
+        {
+            name: "queue",
+            description: "View all songs in the queue.",
+        },
+        {
+            name: "skip",
+            description: "Skip to the next song in the queue.",
         }
     ];
 

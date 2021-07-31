@@ -11,6 +11,12 @@ client.on("interactionCreate", async interaction => {
         const skip = interaction.options.getBoolean("skip");
         const channel = interaction.member?.voice.channel;
 
+        if (!channel) {
+
+            return interaction.reply({embeds: [await client.utils.sendError(`${client.config.emojis.error} You must be in a voice channel.`)]})
+
+        }
+
         if (channel) {
 
             await client.player.playVoiceChannel(channel, song)

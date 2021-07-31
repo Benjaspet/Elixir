@@ -28,16 +28,16 @@ const client = new Discord.Client({
 
 client.events = new Discord.Collection();
 client.dev = require("./slash/DevInterface");
+client.utils = require("./utils/ElixirUtil");
 client.embeds = require("./utils/EmbedUtil");
 client.config = require("./resources/config.json");
 client.slash = require("./slash/SlashBase");
 client.player = new Distube.default(client, {
     emitNewSongOnly: false,
     leaveOnEmpty: true,
-    leaveOnFinish: false,
+    leaveOnFinish: true,
     leaveOnStop: true,
     savePreviousSongs: true,
-    emptyCooldown: 10,
     emitAddListWhenCreatingQueue: true,
     emitAddSongWhenCreatingQueue: true,
     customFilters: {
