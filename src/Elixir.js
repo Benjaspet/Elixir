@@ -27,7 +27,12 @@ const client = new Discord.Client({
 
 client.events = new Discord.Collection();
 client.config = require("./resources/config.json");
+client.slash = require("./slash/SlashBase");
 
 module.exports = client;
+
+["EventHandler"].forEach(handler => {
+    require(`./handlers/${handler}`)(client);
+});
 
 client.login(client.config.token).then(response => console.log("✔ Elixir.js loaded."));
