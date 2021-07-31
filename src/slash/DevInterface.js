@@ -39,11 +39,16 @@ function getDevelopmentSlashCommandData() {
 
 }
 
+async function registerElixirDevDeployCommand() {
+    await client.guilds.cache.get(client.config.developer["ponjo-test-guild"])?.commands.set(client.dev.getDevelopmentSlashCommandData());
+}
+
 async function registerElixirDevSlashCommands() {
     await client.guilds.cache.get(client.config.developer["ponjo-test-guild"])?.commands.set(client.slash.getAllElixirSlashData());
 }
 
 module.exports = {
     getDevelopmentSlashCommandData,
-    registerElixirDevSlashCommands
+    registerElixirDevSlashCommands,
+    registerElixirDevDeployCommand
 }
