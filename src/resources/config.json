@@ -6,7 +6,7 @@
   "developer": {
     "owner": "460177285954142208",
     "ponjo-test-guild": "828296827882831913",
-    "deploy-guild-slash-commands": true,
+    "deploy-guild-slash-commands": false,
     "register-deploy-command": true
   },
 

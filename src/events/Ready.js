@@ -1,5 +1,5 @@
 const client = require("../Elixir");
-const {getAllElixirSlashCommandData, getElixirDeployCommandData} = require("../slash/DevInterface");
+const {getAllElixirSlashCommandData, getGlobalElixirSlashCommandData} = require("../slash/DevInterface");
 
 client.on("ready", () => {
 
@@ -10,13 +10,6 @@ client.on("ready", () => {
 
         client.guilds.cache.get(client.config.developer["ponjo-test-guild"])?.commands.set(getAllElixirSlashCommandData())
             .then(response => console.log("All slash commands have been deployed to the development guild."));
-
-    }
-
-    if (client.config.developer["register-deploy-command"] === true) {
-
-        client.guilds.cache.get(client.config.developer["ponjo-test-guild"])?.commands.create(getElixirDeployCommandData())
-            .then(response => console.log("The deploy slash command has been cached to the development guild."));
 
     }
 
