@@ -35,4 +35,4 @@ module.exports = client;
     require(`./handlers/${handler}`)(client);
 });
 
-client.login(client.config.token).then(response => console.log("✔ Elixir.js loaded."));
+client.login(client.config.token).then(response => {});

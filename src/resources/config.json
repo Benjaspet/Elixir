@@ -1,0 +1,15 @@
+{
+  "token": "",
+  "client": "838118537276031006",
+  "invite": "https://discord.com/oauth2/authorize?client_id=838118537276031006&permissions=2214358848&scope=bot%20applications.commands",
+
+  "developer": {
+    "owner": "460177285954142208",
+    "ponjo-test-guild": "828296827882831913"
+  },
+
+  "emojis": {
+
+  }
+
+}
