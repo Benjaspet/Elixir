@@ -27,4 +27,16 @@ module.exports = client => {
         }
     });
 
+    readdirSync("./interactions/").forEach((file) => {
+        const events = readdirSync("./interactions/").filter((file) =>
+            file.endsWith(".js")
+        );
+        for (let file of events) {
+            let pull = require(`../interactions/${file}`);
+            if (pull.name) {
+                client.events.set(pull.name, pull);
+            }
+        }
+    });
+
 }

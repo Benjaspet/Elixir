@@ -6,39 +6,51 @@ function fetchHelpCommandEmbed(client) {
     return new Discord.MessageEmbed()
         .setTitle("Elixir | Help")
         .setColor("PURPLE")
-        .setDescription(`Below you can find all available commands. If you'd like to use this bot in your own server, [invite Elixir here](${client.config.invite}!)`)
+        .setDescription(`Below you can find all available commands. Please note that, due to an API update, traditional prefix commands are no longer supported, and Elixir has fully adapted to built-in slash commands for version 3.0. If you'd like to use this bot in your own server, [invite Elixir here](${client.config.invite})!`)
         .addField("Music [1]", "```" +
-            "e!autoplay\n" +
-            "e!shuffle\n" +
-            "e!skip\n" +
-            "e!filter\n" +
-            "e!forward\n" +
-            "e!loop\n" +
-            "e!lyrics\n" +
-            "e!nowplaying```\n", true)
+            "/autoplay\n" +
+            "/shuffle\n" +
+            "/skip\n" +
+            "/filter\n" +
+            "/forward\n" +
+            "/loop\n" +
+            "/lyrics\n" +
+            "/nowplaying```\n", true)
         .addField("Music [2]", "```" +
-            "e!pause\n" +
-            "e!play\n" +
-            "e!queue\n" +
-            "e!resume\n" +
-            "e!rewind\n" +
-            "e!stop\n" +
-            "e!volume\n" +
-            "e!seek```\n", true)
+            "/pause\n" +
+            "/play\n" +
+            "/queue\n" +
+            "/resume\n" +
+            "/rewind\n" +
+            "/stop\n" +
+            "/volume\n" +
+            "/seek```\n", true)
         .addField("Information", "```" +
-            "e!help\n" +
-            "e!info\n" +
-            "e!ping\n" +
-            "e!support\n" +
-            "e!about\n" +
-            "e!changelog\n" +
-            "e!prefix\n" +
-            "e!invite```\n", true)
-        .setFooter(`https://ponjo.club/elixir`, client.user.displayAvatarURL({dynamic: true}))
+            "/help\n" +
+            "/info\n" +
+            "/ping\n" +
+            "/support\n" +
+            "/about\n" +
+            "/changelog\n" +
+            "/prefix\n" +
+            "/invite```\n", true)
+        .setFooter(`ponjo.club/elixir`, client.user.displayAvatarURL({dynamic: true}))
         .setTimestamp()
 
 }
 
+function fetchElixirMusicErrorEmbed(error) {
+
+    return new Discord.MessageEmbed()
+        .setTitle("An error occurred.")
+        .setColor("RED")
+        .setDescription("```js" + error + "```")
+        .setTimestamp()
+
+
+}
+
 module.exports = {
-    fetchHelpCommandEmbed
+    fetchHelpCommandEmbed,
+    fetchElixirMusicErrorEmbed
 }
