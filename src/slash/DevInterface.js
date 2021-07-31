@@ -1,6 +1,8 @@
 // The slash command data for development commands, such as
 // deploying base commands, sub-commands, and more.
 
+const client = require("../Elixir");
+
 function getDevelopmentSlashCommandData() {
 
     return [
@@ -37,6 +39,11 @@ function getDevelopmentSlashCommandData() {
 
 }
 
+async function registerElixirDevSlashCommands() {
+    await client.guilds.cache.get(client.config.developer["ponjo-test-guild"])?.commands.set(client.slash.getAllElixirSlashData());
+}
+
 module.exports = {
-    getDevelopmentSlashCommandData
+    getDevelopmentSlashCommandData,
+    registerElixirDevSlashCommands
 }

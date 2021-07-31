@@ -26,6 +26,8 @@ const client = new Discord.Client({
 });
 
 client.events = new Discord.Collection();
+client.dev = require("./slash/DevInterface");
+client.embeds = require("./utils/EmbedUtil");
 client.config = require("./resources/config.json");
 client.slash = require("./slash/SlashBase");
 
