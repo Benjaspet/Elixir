@@ -40,6 +40,14 @@ function getAllElixirSlashCommandData() {
         {
             name: "skip",
             description: "Skip to the next song in the queue.",
+        },
+        {
+            name: "invite",
+            description: "Invite Elixir to your server."
+        },
+        {
+            name: "shuffle",
+            description: "Shuffle the order of queued songs."
         }
     ];
 

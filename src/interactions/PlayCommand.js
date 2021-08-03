@@ -48,10 +48,7 @@ client.on("interactionCreate", async interaction => {
 
                     }
 
-
-
                 });
-
         }
 
         if (channel && skip === true) {

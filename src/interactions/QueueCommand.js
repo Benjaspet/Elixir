@@ -13,7 +13,7 @@ client.on("interactionCreate", async interaction => {
         const embed = new Discord.MessageEmbed()
             .setTitle(`Queue for ${interaction.guild.name}`)
             .setColor("PURPLE")
-            .setFooter(`ponjodevelopment.tk`, client.user.displayAvatarURL({dynamic: true}))
+            .setFooter(`ponjo.club/elixir`, client.user.displayAvatarURL({dynamic: true}))
 
         let counter = 0;
 

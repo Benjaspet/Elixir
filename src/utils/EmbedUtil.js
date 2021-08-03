@@ -50,7 +50,18 @@ function fetchElixirMusicErrorEmbed(error) {
 
 }
 
+function fetchElixirInviteEmbed(client) {
+
+    return new Discord.MessageEmbed()
+        .setColor("PURPLE")
+        .setDescription(`You can invite Elixir to your own server by [clicking here](${client.config.invite}).`)
+        .setFooter(`ponjo.club/elixir`, client.user.displayAvatarURL({dynamic: true}))
+        .setTimestamp()
+
+}
+
 module.exports = {
     fetchHelpCommandEmbed,
-    fetchElixirMusicErrorEmbed
+    fetchElixirMusicErrorEmbed,
+    fetchElixirInviteEmbed
 }
