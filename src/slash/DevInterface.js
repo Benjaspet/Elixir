@@ -48,6 +48,10 @@ function getAllElixirSlashCommandData() {
         {
             name: "shuffle",
             description: "Shuffle the order of queued songs."
+        },
+        {
+            name: "pause",
+            description: "Pause the currently playing song."
         }
     ];
 
