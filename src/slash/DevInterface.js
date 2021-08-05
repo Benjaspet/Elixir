@@ -52,6 +52,10 @@ function getAllElixirSlashCommandData() {
         {
             name: "pause",
             description: "Pause the currently playing song."
+        },
+        {
+            name: "info",
+            description: "View information about Elixir."
         }
     ];
 

@@ -60,8 +60,25 @@ function fetchElixirInviteEmbed(client) {
 
 }
 
+function fetchElixirInfoEmbed(client) {
+
+    return new Discord.MessageEmbed()
+        .setColor("PURPLE")
+        .setTitle("Elixir | Information")
+        .setDescription(`Elixir is an advanced music bot for your server. Enjoy smooth audio replay with pristine quality and clearness. Playing high-quality music and creating an active, engaged community has never been easier!`)
+        .addField("Bot Developer", "Eerie#6560 [Twitter: [@Eerie6560](https://twitter.com/Eerie6560)]")
+        .addField("Libraries & Tools", "DJSv13@dev, MongoDB")
+        .addField("Additional Information", "\n" +
+            `Website: https://ponjo.club/elixir\n` +
+            `Invite: [click here!](${client.config.invite})`)
+        .setFooter(`ponjo.club/elixir`, client.user.displayAvatarURL({dynamic: true}))
+        .setTimestamp()
+
+}
+
 module.exports = {
     fetchHelpCommandEmbed,
     fetchElixirMusicErrorEmbed,
-    fetchElixirInviteEmbed
+    fetchElixirInviteEmbed,
+    fetchElixirInfoEmbed
 }
