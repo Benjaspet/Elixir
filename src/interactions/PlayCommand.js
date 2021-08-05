@@ -19,41 +19,29 @@ client.on("interactionCreate", async interaction => {
 
         if (channel) {
 
-            await client.player.playVoiceChannel(channel, song)
+            const embed = new Discord.MessageEmbed()
+                .setTitle("Searching the songbase...")
+                .setColor("PURPLE")
+                .setFooter(`Requested by: ${interaction.member.user.tag}`, interaction.member.user.displayAvatarURL({dynamic: true}))
+                .setTimestamp()
 
-                .then(() => {
+            interaction.reply({embeds: [embed]});
 
-                    const queue = client.player.getQueue(interaction.guild.id);
-                    const length = queue.songs.length;
+            await client.player.playVoiceChannel(channel, song, {textChannel: interaction.channel});
 
-                    if (length === 1) {
-
-                        const embed = new Discord.MessageEmbed()
-                            .setDescription(`**Queued:** [${queue.songs[0].name}](${queue.songs[0].url}) [<@${interaction.member.id}>]`)
-                            .setColor("PURPLE")
-                            .setFooter("ponjo.club/elixir", client.user.displayAvatarURL({dynamic: true}))
-
-                        interaction.reply({embeds: [embed]});
-
-                    }
-
-                    if (length > 1) {
-
-                        const embed2 = new Discord.MessageEmbed()
-                            .setDescription(`**Queued:** [${queue.songs[length - 1].name}](${queue.songs[length - 1].url}) [<@${interaction.member.id}>]`)
-                            .setColor("PURPLE")
-                            .setFooter("ponjo.club/elixir", client.user.displayAvatarURL({dynamic: true}))
-
-                        interaction.reply({embeds: [embed2]});
-
-                    }
-
-                });
         }
 
         if (channel && skip === true) {
 
-            await client.player.playVoiceChannel(channel, song, {skip: true});
+            const embed = new Discord.MessageEmbed()
+                .setTitle("Searching the songbase...")
+                .setColor("PURPLE")
+                .setFooter(`Requested by: ${interaction.member.user.tag}`, interaction.member.user.displayAvatarURL({dynamic: true}))
+                .setTimestamp()
+
+            interaction.reply({embeds: [embed]});
+
+            await client.player.playVoiceChannel(channel, song, {skip: true, textChannel: interaction.channel});
 
         }
 

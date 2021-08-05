@@ -8,25 +8,44 @@ client.on("interactionCreate", async interaction => {
 
     if (interaction.commandName === "queue") {
 
-        const queue = client.player.getQueue(interaction.guild.id);
+        try {
 
-        const embed = new Discord.MessageEmbed()
-            .setTitle(`Queue for ${interaction.guild.name}`)
-            .setColor("PURPLE")
-            .setFooter(`ponjo.club/elixir`, client.user.displayAvatarURL({dynamic: true}))
+            const queue = client.player.getQueue(interaction.guild.id);
 
-        let counter = 0;
+            const embed = new Discord.MessageEmbed()
+                .setTitle(`Queue for ${interaction.guild.name}`)
+                .setColor("PURPLE")
+                .setFooter(`ponjo.club/elixir`, client.user.displayAvatarURL({dynamic: true}))
 
-        for (let i = 0; i < queue.songs.length; i += 20) {
+            let counter = 0;
 
-            if (counter >= 10) break;
-            embed.setDescription("" + queue.songs.map((song, id) =>
-                `**#${id+1}** - [${song.name}](${song.url}) - ${song.formattedDuration}`).join("\n"));
-            counter++;
-            
+            for (let i = 0; i < queue.songs.length; i += 20) {
+
+                if (counter >= 10) break;
+                embed.setDescription("" + queue.songs.map((song, id) =>
+                    `**#${id+1}** - [${song.name}](${song.url}) - ${song.formattedDuration}`).join("\n"));
+                counter++;
+
+            }
+
+            if (queue.length > 20) {
+
+                return interaction.reply({embeds: [await client.utils.sendError(`${client.config.emojis.error} Cannot display queue; too many songs.`)]});
+
+            }
+
+            await interaction.reply({embeds: [embed]});
+
+        } catch (err) {
+
+            const embed = new Discord.MessageEmbed()
+                .addField(`${client.config.emojis.error} Uh-oh!`, `An error occurred. Hang tight!`)
+                .addField(`Debug Information`, "```js" + err + "```")
+                .setColor("RED")
+
+            return interaction.reply({embeds: [embed]})
+
         }
-
-        await interaction.reply({embeds: [embed]});
 
     }
 
