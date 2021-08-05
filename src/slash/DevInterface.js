@@ -13,7 +13,33 @@ function getAllElixirSlashCommandData() {
         },
         {
             name: "help",
-            description: "Displays a list of all available commands for Elixir."
+            description: "Displays a list of all available commands for Elixir.",
+            options: [
+                {
+                    name: "category",
+                    description: "Learn how to use Elixir and its commands.",
+                    type: "STRING",
+                    required: false,
+                    choices: [
+                        {
+                            name: "Frequently Asked Questions",
+                            value: "help-faq"
+                        },
+                        {
+                            name: "How to Invite Elixir to Your Server",
+                            value: "help-invite"
+                        },
+                        {
+                            name: "Join Elixir's Support Server",
+                            value: "help-support"
+                        },
+                        {
+                            name: "How to Use Commands",
+                            value: "help-commands"
+                        }
+                    ]
+                }
+            ]
         },
         {
             name: "play",
@@ -56,6 +82,66 @@ function getAllElixirSlashCommandData() {
         {
             name: "info",
             description: "View information about Elixir."
+        },
+        {
+            name: "filter",
+            description: "Set the audio filter for the queue.",
+            options: [{
+                name: "type",
+                type: "STRING",
+                description: "Choose the type of audio filter to apply.",
+                required: true,
+                choices: [
+                    {
+                        name: "Clear all filters.",
+                        value: "clear"
+                    },
+                    {
+                        name: "Lowbass",
+                        value: "lowbass"
+                    },
+                    {
+                        name: "Bass-BOOST",
+                        value: "baseboost"
+                    },
+                    {
+                        name: "Pure-Bass",
+                        value: "purebass"
+                    },
+                    {
+                        name: "8-Dimensional",
+                        value: "8D"
+                    },
+                    {
+                        name: "Vaporwave",
+                        value: "vaporwave"
+                    },
+                    {
+                        name: "Nightcore",
+                        value: "nightcore"
+                    },
+                    {
+                        name: "Phaser",
+                        value: "phaser"
+                    },
+                    {
+                        name: "Tremolo",
+                        value: "tremolo"
+                    },
+                    {
+                        name: "Vibrato",
+                        value: "vibrato"
+                    },
+                    {
+                        name: "Reverse",
+                        value: "reverse"
+                    },
+                    {
+                        name: "Treble",
+                        value: "treble"
+                    }
+                ]
+            }]
         }
     ];
 
