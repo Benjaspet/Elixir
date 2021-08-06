@@ -3,8 +3,9 @@ const {getAllElixirSlashCommandData, getGlobalElixirSlashCommandData} = require(
 
 client.on("ready", () => {
 
-    console.log(`✔ ${client.user.tag} logged in.`);
     client.user.setActivity({type: "LISTENING", name: "your songs!"});
+    console.clear();
+    console.log(`✔ ${client.user.tag} logged in.`);
 
     if (client.config.developer["deploy-guild-slash-commands"] === true) {
 

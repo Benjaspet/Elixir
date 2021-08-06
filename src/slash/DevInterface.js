@@ -10,6 +10,24 @@ function getAllElixirSlashCommandData() {
         {
             name: "deploy",
             description: "Deploy all slash commands to this guild.",
+            options: [
+                {
+                    name: "variant",
+                    description: "The slash command variant to deploy.",
+                    type: "STRING",
+                    required: true,
+                    choices: [
+                        {
+                            name: "Global Deploy",
+                            value: "deploy-global"
+                        },
+                        {
+                            name: "Guild Deploy",
+                            value: "deploy-guild"
+                        }
+                    ]
+                }
+            ]
         },
         {
             name: "help",

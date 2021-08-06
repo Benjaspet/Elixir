@@ -14,6 +14,8 @@ client.on("interactionCreate", async interaction => {
 
     if (interaction.commandName === "deploy") {
 
+
+
         await deployAllSlashCommands(client, false);
         await interaction.reply({content: "Slash commands successfully deployed."});
 
