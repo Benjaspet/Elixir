@@ -4,7 +4,7 @@ import ElixirUtil from "./ElixirUtil";
 
 export default class EmbedUtil {
 
-    public static fetchEmbedByType(client, type: string) {
+    public static fetchEmbedByType(client, type: string, input?: string) {
 
         switch (type) {
 
@@ -42,7 +42,7 @@ export default class EmbedUtil {
             case "error":
 
                 return new Discord.MessageEmbed()
-                    .setDescription(config.emojis.error + "An error occurred.")
+                    .setDescription(config.emojis.error + " " + input)
                     .setColor("RED")
         }
     }

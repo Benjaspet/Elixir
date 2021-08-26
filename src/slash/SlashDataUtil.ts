@@ -69,6 +69,10 @@ const elixirSlashCommandData = [
             }
         ],
     },
+    {
+        name: "queue",
+        description: "View all songs in the queue.",
+    },
 ];
 
 export default elixirSlashCommandData;

@@ -1,5 +1,7 @@
 import * as Discord from "discord.js";
 import player from "../managers/MusicManager";
+import premiumUsers from "../resources/PremiumUsers";
+import EmbedUtil from "../utils/EmbedUtil";
 
 module.exports = {
     name: "interactionCreate",
@@ -16,7 +18,17 @@ module.exports = {
 
             if (!channel) {
 
-                return interaction.reply({embeds: [await client.utils.sendError(`${client.config.emojis.error} You must be in a voice channel.`)]})
+                return interaction.reply({embeds: [await EmbedUtil.fetchEmbedByType(client, "error", "You must be in a voice channel to run this command.")]});
+
+            }
+
+            if (song.isLive && !premiumUsers.includes(interaction.member.id)) {
+
+                const embed = new Discord.MessageEmbed()
+                    .setColor("PURPLE")
+                    .setDescription("You must be a premium user to play livestreams! If you'd like to become one, join our official Discord server and make a ticket.")
+
+                return await interaction.reply({embeds: [embed]});
 
             }
 
