@@ -26,7 +26,10 @@ const client = new Discord.Client({
     ],
 });
 
+export default client;
+
 ElixirHandler.initAllInteractions(client);
 ElixirHandler.initAllEvents(client);
+ElixirHandler.initAllMusicEvents(client);
 
 client.login(config.token).then(() => {});

@@ -51,6 +51,24 @@ const elixirSlashCommandData = [
             }
         ]
     },
+    {
+        name: "play",
+        description: "Play a song in a voice channel with a link or query.",
+        options: [
+            {
+                name: "song",
+                description: "The name or URL of the song.",
+                type: "STRING",
+                required: true
+            },
+            {
+                name: "skip",
+                description: "Whether or not you want to skip to this song.",
+                type: "BOOLEAN",
+                required: false
+            }
+        ],
+    },
 ];
 
 export default elixirSlashCommandData;

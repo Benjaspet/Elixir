@@ -38,9 +38,12 @@ export default class EmbedUtil {
                         config.emojis.users + " **User count:** " + ElixirUtil.getTotalElixirMemberCount(client))
                     .setFooter("ponjo.club/elixir", client.user.displayAvatarURL({dynamic: true}))
                     .setTimestamp()
+
+            case "error":
+
+                return new Discord.MessageEmbed()
+                    .setDescription(config.emojis.error + "An error occurred.")
+                    .setColor("RED")
         }
-
-
     }
-
 }

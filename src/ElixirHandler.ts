@@ -18,6 +18,20 @@ export default class ElixirHandler {
         }
     }
 
+    static initAllMusicEvents(client: Client) {
+
+        const interactions = fs.readdirSync(__dirname + "/events/music").filter(file => file.endsWith('.ts'));
+
+        for (const file of interactions) {
+            const interaction = require(__dirname + `/events/music/${file}`);
+            if (interaction.once) {
+                client.once(interaction.name, (...args) => interaction.execute(...args, client));
+            } else {
+                client.on(interaction.name, (...args) => interaction.execute(...args, client));
+            }
+        }
+    }
+
     static initAllInteractions(client: Client) {
 
         const interactions = fs.readdirSync(__dirname + "/interactions").filter(file => file.endsWith('.ts'));

@@ -12,4 +12,11 @@ export default class ElixirUtil {
         if (num < 1e3) return num;
         if (num >= 1e3) return +(num / 1e3).toFixed(2) + "K";
     }
+
+    public static cleanDurationFormat(ms) {
+        const sec = Math.floor((ms / 1000) % 60).toString();
+        const min = Math.floor((ms / (60 * 1000)) % 60).toString();
+        const hrs = Math.floor((ms / (60 * 60 * 1000)) % 60).toString();
+        return `${hrs}h ${min}m ${sec}s.`;
+    }
 }
