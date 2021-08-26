@@ -1,4 +1,5 @@
 import * as Discord from "discord.js";
+import EmbedUtil from "../utils/EmbedUtil";
 
 module.exports = {
     name: "interactionCreate",
@@ -9,7 +10,7 @@ module.exports = {
 
             if (!interaction.options.get("category")) {
 
-                return await interaction.reply({content: "No category. Success!"});
+                return await interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(client, "help-default")]});
 
             }
 
@@ -19,7 +20,7 @@ module.exports = {
 
                 case "help-faq":
 
-                    return await interaction.reply({content: "Success!"});
+                    return await interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(client, "info")]});
 
                 case "help-invite":
 
@@ -34,10 +35,6 @@ module.exports = {
                     return await interaction.reply({content: "Success!"});
 
             }
-
-            await interaction.reply({embeds: [client.embeds.fetchHelpCommandEmbed(client)]})
-
         }
-
     }
 }
