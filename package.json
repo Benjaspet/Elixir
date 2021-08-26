@@ -4,13 +4,20 @@
   "author": "Eerie6560",
   "description": "An advanced music bot for Discord.",
   "license": "MIT",
-  "main": "src/Elixir.js",
+  "main": "src/Elixir.ts",
+  "scripts": {
+    "start": "ts-node src/Elixir.ts",
+    "start:dev": "nodemon src/Elixir.ts",
+    "stop": "node src/scripts/StopProcess.ts"
+  },
   "dependencies": {
     "@discordjs/opus": "^0.5.3",
     "@discordjs/voice": "^0.5.5",
-    "discord.js": "^13.0.0",
-    "distube": "^3.0.0-alpha.18",
+    "discord.js": "^13.1.0",
+    "distube": "^3.0.0-beta.36",
     "ffmpeg-static": "^4.4.0",
-    "libsodium-wrappers": "^0.7.9"
+    "libsodium-wrappers": "^0.7.9",
+    "nodemon": "^2.0.12",
+    "ts-node": "^10.2.1"
   }
 }

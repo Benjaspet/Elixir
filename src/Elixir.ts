@@ -1,4 +1,6 @@
-const Discord = require("discord.js");
+import * as Discord from "discord.js";
+import ElixirHandler from "./ElixirHandler";
+import config from "./resources/Config";
 
 const client = new Discord.Client({
     allowedMentions: {
@@ -8,33 +10,23 @@ const client = new Discord.Client({
     partials: ["CHANNEL", "MESSAGE", "REACTION"],
     intents: [
         Discord.Intents.FLAGS.GUILDS,
-        // Discord.Intents.FLAGS.GUILD_MEMBERS,
         Discord.Intents.FLAGS.GUILD_BANS,
         Discord.Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
         Discord.Intents.FLAGS.GUILD_INTEGRATIONS,
         Discord.Intents.FLAGS.GUILD_WEBHOOKS,
         Discord.Intents.FLAGS.GUILD_INVITES,
-        // Discord.Intents.FLAGS.GUILD_MESSAGES, // this will become privileged in latter APIv9
         Discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
         Discord.Intents.FLAGS.GUILD_VOICE_STATES,
         Discord.Intents.FLAGS.GUILD_MESSAGE_TYPING,
         Discord.Intents.FLAGS.DIRECT_MESSAGES,
         Discord.Intents.FLAGS.DIRECT_MESSAGE_TYPING,
         Discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+        // Discord.Intents.FLAGS.GUILD_MESSAGES,
+        // Discord.Intents.FLAGS.GUILD_MEMBERS
     ],
 });
 
-client.events = new Discord.Collection();
-client.dev = require("./slash/DevInterface");
-client.utils = require("./utils/ElixirUtil");
-client.embeds = require("./utils/EmbedUtil");
-client.config = require("./resources/config.json");
-client.slash = require("./slash/SlashBase");
+ElixirHandler.initAllInteractions(client);
+ElixirHandler.initAllEvents(client);
 
-module.exports = client;
-
-["EventHandler"].forEach(handler => {
-    require(`./handlers/${handler}`)(client);
-});
-
-client.login(client.config.token).then(response => {});
+client.login(config.token).then(() => {});
