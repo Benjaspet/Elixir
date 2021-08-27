@@ -73,6 +73,10 @@ const elixirSlashCommandData = [
         name: "queue",
         description: "View all songs in the queue.",
     },
+    {
+        name: "join",
+        description: "Have Elixir join the voice channel."
+    }
 ];
 
 export default elixirSlashCommandData;

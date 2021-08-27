@@ -9,9 +9,12 @@ module.exports = {
     once: true,
     async execute(client) {
 
-        console.clear();
-        console.log(`✔ ${client.user.tag} logged in.`);
-        client.user.setActivity({type: "LISTENING", name: ElixirUtil.getTotalElixirMemberCount(client) + " users!"});
+        await ElixirUtil.sleep(500)
+            .then(result => {
+                console.clear();
+                console.log(`✔ ${client.user.tag} logged in.`);
+                client.user.setActivity({type: "LISTENING", name: ElixirUtil.getTotalElixirMemberCount(client) + " users!"});
+            });
 
         if (config.developer.deploySlashCommands === true) {
 

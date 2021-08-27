@@ -1,5 +1,6 @@
 import * as Distube from "distube";
 import client from "../Elixir";
+const {SpotifyPlugin} = require("@distube/spotify");
 
 const player = new Distube.default(client, {
     emitNewSongOnly: false,
@@ -31,7 +32,8 @@ const player = new Distube.default(client, {
         "gate": "agate",
         "haas": "haas",
         "mcompand": "mcompand"
-    }
+    },
+    plugins: [new SpotifyPlugin()]
 });
 
 export default player;

@@ -8,15 +8,19 @@ export default class ElixirUtil {
         return client.guilds.cache.size;
     }
 
-    public static formatLargeNumber(num: number) {
+    public static formatLargeNumber(num: number): number | string {
         if (num < 1e3) return num;
         if (num >= 1e3) return +(num / 1e3).toFixed(2) + "K";
     }
 
-    public static cleanDurationFormat(ms) {
+    public static cleanDurationFormat(ms): string {
         const sec = Math.floor((ms / 1000) % 60).toString();
         const min = Math.floor((ms / (60 * 1000)) % 60).toString();
         const hrs = Math.floor((ms / (60 * 60 * 1000)) % 60).toString();
         return `${hrs}h ${min}m ${sec}s.`;
+    }
+
+    public static sleep(ms): Promise<any> {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 }
