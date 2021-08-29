@@ -96,6 +96,18 @@ const elixirSlashCommandData = [
     {
         name: "nowplaying",
         description: "View information about the song currently playing."
+    },
+    {
+        name: "lyrics",
+        description: "Search the lyrics of a song.",
+        options: [
+            {
+                name: "song",
+                description: "The song to discover the lyrics of.",
+                type: "STRING",
+                required: true
+            }
+        ]
     }
 ];
 

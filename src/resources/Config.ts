@@ -4,7 +4,8 @@ const config = {
     developer: {
         owner: "460177285954142208",
         developerGuild: "828296827882831913",
-        deploySlashCommands: false
+        deploySlashCommands: false,
+        geniusKey: "4UG96BGeLONsR50IZxxB2krvi_VkPrkvDAv92JYKCvkeP9emtuEA2y_3anaJ7neA"
     },
     emojis: {
         success: "<a:acceptedponjo:846192530584240198>",
