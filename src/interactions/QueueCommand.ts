@@ -12,6 +12,12 @@ module.exports = {
         if (interaction.commandName === "queue") {
             try {
                 const queue = player.getQueue(interaction.guild.id);
+                if (queue.songs.length > 20) {
+                    const embed = new Discord.MessageEmbed()
+                        .setColor("PURPLE")
+                        .setDescription("**Total songs:** " + queue.songs.length + "\n" + "**Duration:** " + queue.formattedDuration)
+                    return await interaction.reply({embeds: [embed]});
+                }
                 const embed = new Discord.MessageEmbed()
                     .setTitle(`Queue for ${interaction.guild.name}`)
                     .setColor("PURPLE")

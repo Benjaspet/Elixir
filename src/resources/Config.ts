@@ -12,7 +12,10 @@ const config = {
         loading: "<a:loadingblue:878275057699414037>",
         servers: "<:server:875428345913958400>",
         developer: "<:developer:880566411972444160>",
-        users: "<:user:875428521986646016>"
+        users: "<:user:875428521986646016>",
+        websocket: "<:websocket:875428558498041907>",
+        uptime: "<:uptime:875428478806282261>",
+        libraries: "<:libraries:875428254402629682>"
     }
 }
 

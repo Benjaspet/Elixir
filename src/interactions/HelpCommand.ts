@@ -14,13 +14,13 @@ module.exports = {
             const {value: string} = interaction.options.get("category");
             switch (string) {
                 case "help-faq":
-                    return await interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(client, "info")]});
+                    return await interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(client, "help-faq")]});
                 case "help-invite":
-                    return await interaction.reply({content: "Success!"});
+                    return await interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(client, "help-invite")]});
                 case "help-support":
-                    return await interaction.reply({content: "Success!"});
+                    return await interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(client, "help-support")]});
                 case "help-commands":
-                    return await interaction.reply({content: "Success!"});
+                    return await interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(client, "help-default")]});
             }
         }
     }

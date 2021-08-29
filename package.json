@@ -1,7 +1,7 @@
 {
   "name": "elixir",
   "version": "3.0.1",
-  "author": "Eerie6560",
+  "author": "Ben Petrillo (Eerie6560)",
   "description": "An advanced music bot for Discord.",
   "license": "MIT",
   "main": "src/Elixir.ts",
@@ -16,13 +16,13 @@
     "@distube/spotify": "^0.6.3",
     "discord.js": "^13.1.0",
     "distube": "^3.0.0-beta.36",
+    "ffmpeg": "^0.0.4",
     "ffmpeg-static": "^4.4.0",
     "libsodium-wrappers": "^0.7.9",
     "nodemon": "^2.0.12",
+    "spotify-url-info": "^2.2.3",
     "ts-node": "^10.2.1",
     "youtube-dl-exec": "^1.2.4",
-    "ytdl-core": "^4.9.1",
-    "ytpl": "^2.2.3",
-    "ytsr": "^3.5.3"
+    "ytdl-core": "^4.9.1"
   }
 }

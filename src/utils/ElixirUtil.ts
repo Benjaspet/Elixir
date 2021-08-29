@@ -1,3 +1,5 @@
+import {Client} from "discord.js";
+
 export default class ElixirUtil {
 
     public static getTotalElixirMemberCount(client): number {
@@ -20,7 +22,30 @@ export default class ElixirUtil {
         return `${hrs}h ${min}m ${sec}s.`;
     }
 
+    public static formatSeconds(seconds: number){
+        function pad(sec: number){
+            return (sec < 10 ? '0' : '') + sec;
+        }
+        const hours = Math.floor(seconds / (60 * 60));
+        const minutes = Math.floor(seconds % (60 * 60) / 60);
+        const secs = Math.floor(seconds % 60);
+        return pad(hours) + ':' + pad(minutes) + ':' + pad(secs);
+    }
+
     public static sleep(ms): Promise<any> {
         return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    public static getWebsocketLatency(client: Client): number {
+        return client.ws.ping;
+    }
+
+    public static getProcessUptime(): string {
+        const uptimeAsUnix = process.uptime();
+        return ElixirUtil.formatSeconds(uptimeAsUnix);
+    }
+
+    public static cleanFormat(num: number): string {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 }

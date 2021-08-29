@@ -76,6 +76,26 @@ const elixirSlashCommandData = [
     {
         name: "join",
         description: "Have Elixir join the voice channel."
+    },
+    {
+        name: "skip",
+        description: "Skip to the next song in the queue."
+    },
+    {
+        name: "stop",
+        description: "Stop the queue & remove Elixir from the voice channel."
+    },
+    {
+        name: "shuffle",
+        description: "Shuffle the order of the songs in the queue."
+    },
+    {
+        name: "info",
+        description: "View Elixir's information & statistics."
+    },
+    {
+        name: "nowplaying",
+        description: "View information about the song currently playing."
     }
 ];
 

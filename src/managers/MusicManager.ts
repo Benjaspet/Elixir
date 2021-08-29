@@ -2,7 +2,7 @@ import * as Distube from "distube";
 import client from "../Elixir";
 const {SpotifyPlugin} = require("@distube/spotify");
 
-const player = new Distube.default(client, {
+const player = new Distube.DisTube(client, {
     emitNewSongOnly: false,
     leaveOnEmpty: true,
     leaveOnFinish: true,
