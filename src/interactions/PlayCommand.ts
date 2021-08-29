@@ -17,6 +17,9 @@ module.exports = {
                 if (!channel) {
                     return interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(client, "error", "You must be in a voice channel to run this command.")]});
                 }
+                if (interaction.guild.me.voice.channel) {
+                    return interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(client, "error", "You must be in the same voice channel as me.")]});
+                }
                 if (song.toLowerCase().includes("spotify") && song.toLowerCase().includes("playlist")) {
                     getTracks(song).then(async result => {
                         if (result.length > 35 && interaction.user.id !== config.developer.owner) {
