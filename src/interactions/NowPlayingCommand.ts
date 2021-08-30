@@ -25,9 +25,9 @@ module.exports = {
                     .setTitle(`${track.name}`.substr(0, 256))
                     .setColor("PURPLE")
                     .setThumbnail(track.thumbnail)
-                    .setDescription(`Views: ${ElixirUtil.cleanFormat(track.views)} | Duration: ${track.formattedDuration}
-                    Likes: ${ElixirUtil.cleanFormat(track.likes)} | Dislikes: ${ElixirUtil.cleanFormat(track.dislikes)}
-                    Song ID: ${track.id} | URL: [click here!](${track.url})`)
+                    .setDescription("Views: **" + ElixirUtil.cleanFormat(track.views) + "** | Duration: **" + track.formattedDuration + "**" + "\n" +
+                    "Likes: **" + ElixirUtil.cleanFormat(track.likes) + "** | Dislikes: **" + ElixirUtil.cleanFormat(track.dislikes) + "**" + "\n" +
+                    "Song URL: **[click here!](" + track.url + ")")
                     .setFooter("ponjo.club/elixir", client.user.displayAvatarURL({dynamic: true}))
                     .setTimestamp()
                 return await interaction.reply({embeds: [embed]});

@@ -60,12 +60,6 @@ const elixirSlashCommandData = [
                 description: "The name or URL of the song.",
                 type: "STRING",
                 required: true
-            },
-            {
-                name: "skip",
-                description: "Whether or not you want to skip to this song.",
-                type: "BOOLEAN",
-                required: false
             }
         ],
     },
@@ -96,18 +90,6 @@ const elixirSlashCommandData = [
     {
         name: "nowplaying",
         description: "View information about the song currently playing."
-    },
-    {
-        name: "lyrics",
-        description: "Search the lyrics of a song.",
-        options: [
-            {
-                name: "song",
-                description: "The song to discover the lyrics of.",
-                type: "STRING",
-                required: true
-            }
-        ]
     },
     {
         name: "pause",

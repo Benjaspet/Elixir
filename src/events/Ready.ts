@@ -1,7 +1,5 @@
 import config from "../resources/Config";
-import SlashDataUtil from "../slash/SlashDataUtil";
 import elixirSlashCommandData from "../slash/SlashDataUtil";
-import {GuildManager} from "discord.js";
 import ElixirUtil from "../utils/ElixirUtil";
 
 module.exports = {

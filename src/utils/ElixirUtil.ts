@@ -48,4 +48,12 @@ export default class ElixirUtil {
     public static cleanFormat(num: number): string {
         return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
+
+    public static capitalize(phrase: string) {
+        return phrase
+            .toLowerCase()
+            .split(" ")
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(" ");
+    }
 }

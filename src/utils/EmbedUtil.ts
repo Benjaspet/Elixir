@@ -22,8 +22,8 @@ export default class EmbedUtil {
                     .setColor("PURPLE")
                     .setDescription(`Below you can find all available commands. Please note that, due to an API update, traditional prefix commands are no longer supported, and Elixir has fully adapted to built-in slash commands for version 3.0. If you'd like to use this bot in your own server, [invite Elixir here](${config.invite})! If you do not have access to Elixir's slash commands in your server, enable them by [clicking here](${config.invite}).`)
                     .addField("Music Commands", "```" +
-                        "play, autoplay, shuffle, skip, filter, forward, loop, lyrics, nowplaying, pause, queue, resume, rewind, stop, volume, seek" + "```")
-                    .addField("Informational Commands", "```" + "help, info, ping, changelog, invite" + "```")
+                        "play, shuffle, skip, filter, nowplaying, pause, queue, resume, stop, volume, join" + "```")
+                    .addField("Informational Commands", "```" + "help, info, ping, invite" + "```")
                     .setFooter("ponjo.club/elixir", client.user.displayAvatarURL({dynamic: true}))
                     .setTimestamp()
 
