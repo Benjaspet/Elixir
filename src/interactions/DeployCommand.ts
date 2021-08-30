@@ -8,11 +8,18 @@ module.exports = {
 
         if (!interaction.isCommand()) return;
         if (interaction.commandName === "deploy") {
+            const query = interaction.options.getString("variant");
             if (interaction.user.id !== config.developer.owner) {
                 return await interaction.reply({content: "You must be a bot developer to run this command."});
             }
-            await DeployUtil.deployAllSlashCommands(client, false);
-            await interaction.reply({content: "Slash commands successfully deployed."});
+            if (query === "deploy-guild") {
+                await DeployUtil.deployAllSlashCommands(client, false);
+                await interaction.reply({content: "Slash commands successfully deployed to the development guild."});
+            }
+            if (query === "deploy-global") {
+                await DeployUtil.deployAllSlashCommands(client, true);
+                await interaction.reply({content: "Slash commands successfully deployed globally."});
+            }
         }
     }
 }

@@ -17,9 +17,6 @@ module.exports = {
                 if (!channel) {
                     return await interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(client, "error", "You must be in a voice channel.")]});
                 }
-                if (interaction.guild.me.voice.channel) {
-                    return interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(client, "error", "You must be in the same voice channel as me.")]});
-                }
                 if (queue.songs.length <= 1) {
                     return await interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(client, "error", "There are no more songs in the queue.")]});
                 }
