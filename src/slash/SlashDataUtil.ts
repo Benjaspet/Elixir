@@ -108,6 +108,14 @@ const elixirSlashCommandData = [
                 required: true
             }
         ]
+    },
+    {
+        name: "pause",
+        description: "Pause the current song."
+    },
+    {
+        name: "resume",
+        description: "Resume the current song."
     }
 ];
 
