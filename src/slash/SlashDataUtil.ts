@@ -116,6 +116,98 @@ const elixirSlashCommandData = [
     {
         name: "resume",
         description: "Resume the current song."
+    },
+    {
+        name: "filter",
+        description: "Add or remove filters to songs.",
+        options: [
+            {
+                name: "type",
+                description: "The type of filter to apply.",
+                type: "STRING",
+                required: true,
+                choices: [
+                    {
+                        name: "Remove All Filters",
+                        value: "remove-all"
+                    },
+                    {
+                        name: "Clear",
+                        value: "clear"
+                    },
+                    {
+                        name: "Lowbass",
+                        value: "lowbass"
+                    },
+                    {
+                        name: "Bassboost",
+                        value: "bassboost"
+                    },
+                    {
+                        name: "8-Dimensional",
+                        value: "8D"
+                    },
+                    {
+                        name: "Vaporwave",
+                        value: "vaporwave"
+                    },
+                    {
+                        name: "Reverse",
+                        value: "reverse"
+                    },
+                    {
+                        name: "Vibrato",
+                        value: "vibrato"
+                    },
+                    {
+                        name: "Nightcore",
+                        value: "nightcore"
+                    },
+                    {
+                        name: "Treble",
+                        value: "treble"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        name: "volume",
+        description: "Amplify or lower the music volume.",
+        options: [
+            {
+                name: "amplifier",
+                description: "The volume amplifier.",
+                type: "NUMBER",
+                required: true,
+                choices: [
+                    {
+                        name: "200",
+                        value: 200
+                    },
+                    {
+                        name: "150",
+                        value: 150
+                    },
+                    {
+                        name: "125",
+                        value: 125
+                    },
+                    {
+                        name: "75",
+                        value: 75
+                    },
+                    {
+                        name: "50",
+                        value: 50
+                    },
+                    {
+                        name: "25",
+                        value: 25
+                    }
+                ]
+            }
+        ]
     }
 ];
 
