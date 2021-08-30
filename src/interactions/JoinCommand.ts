@@ -14,9 +14,6 @@ module.exports = {
             if (!channel) {
                 return interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(client, "error", "You must be in a voice channel to run this command.")]});
             }
-            if (interaction.guild.me.voice.channel) {
-                return interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(client, "error", "You must be in the same voice channel as me.")]});
-            }
             await VoiceManager.connectToVoiceChannel(channel);
             const embed = new Discord.MessageEmbed()
                 .setColor("PURPLE")

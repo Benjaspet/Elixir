@@ -2,7 +2,7 @@ import axios from "axios";
 import config from "../resources/Config";
 import LyricScrapeUtil from "./LyricScrapeUtil";
 
-const search_url = 'https://api.genius.com/search?q=';
+const search_url = "https://api.genius.com/search?q=";
 const access_token = config.developer.geniusKey;
 
 export default class LyricFetchUtil {
@@ -11,7 +11,7 @@ export default class LyricFetchUtil {
         try {
             const req_url = `${search_url}${encodeURIComponent(query)}`
             const headers = {
-                Authorization: 'Bearer ' + access_token
+                Authorization: "Bearer " + access_token
             };
             let {data} = await axios.get(req_url, { headers });
             if (data.response.hits.length === 0) return null;
