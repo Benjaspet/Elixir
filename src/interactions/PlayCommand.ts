@@ -3,6 +3,7 @@ import player from "../managers/MusicManager";
 import EmbedUtil from "../utils/EmbedUtil";
 import {getTracks, getPreview} from "spotify-url-info";
 import config from "../resources/Config";
+import DatabaseUtil from "../utils/DatabaseUtil";
 
 module.exports = {
     name: "interactionCreate",
@@ -11,6 +12,7 @@ module.exports = {
 
         if (!interaction.isCommand()) return;
         if (interaction.commandName === "play") {
+            DatabaseUtil.addExecutedCommand(1);
             try {
                 const song = interaction.options.getString("song");
                 const channel = interaction.member?.voice.channel;

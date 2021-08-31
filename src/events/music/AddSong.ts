@@ -2,6 +2,7 @@ import player from "../../managers/MusicManager";
 import * as Discord from "discord.js";
 import client from "../../Elixir";
 import ElixirUtil from "../../utils/ElixirUtil";
+import DatabaseUtil from "../../utils/DatabaseUtil";
 
 player.on("addSong", (queue, song) => {
 

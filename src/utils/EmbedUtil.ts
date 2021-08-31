@@ -1,7 +1,7 @@
 import * as Discord from "discord.js";
 import config from "../resources/Config";
 import ElixirUtil from "./ElixirUtil";
-import Elixir from "../Elixir";
+import DatabaseUtil from "./DatabaseUtil";
 
 export default class EmbedUtil {
 
@@ -49,7 +49,10 @@ export default class EmbedUtil {
                         config.emojis.servers + " Server count: " + ElixirUtil.getTotalElixirServerCount(client) + "\n" +
                         config.emojis.users + " User count: " + ElixirUtil.getTotalElixirMemberCount(client) + "\n" +
                         config.emojis.websocket + " Websocket latency: " + ElixirUtil.getWebsocketLatency(client) + "ms" + "\n" +
-                        config.emojis.uptime + " Uptime: " + ElixirUtil.getProcessUptime())
+                        config.emojis.uptime + " Uptime: " + ElixirUtil.getProcessUptime() + "\n" +
+                        config.emojis.commands + " Commands ran: " + DatabaseUtil.getTotalCommandsExecuted() + "\n" +
+                        config.emojis.songs + " Songs played: " + DatabaseUtil.getTotalSongsPlayed() + "\n" +
+                        config.emojis.playlists + " Playlists queued: " + DatabaseUtil.getTotalPlaylistsPlayed())
                     .addField("Recent Updates", "‣ Spotify playlist & URL support." + "\n" + "‣ Fixed an issue with livestream playback." + "\n" + "‣ Added full support for slash commands.")
                     .setFooter("ponjo.club/elixir", client.user.displayAvatarURL({dynamic: true}))
                     .setTimestamp()

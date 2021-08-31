@@ -2,6 +2,7 @@ import EmbedUtil from "../utils/EmbedUtil";
 import player from "../managers/MusicManager";
 import * as Discord from "discord.js";
 import ElixirUtil from "../utils/ElixirUtil";
+import DatabaseUtil from "../utils/DatabaseUtil";
 
 module.exports = {
     name: "interactionCreate",
@@ -11,6 +12,7 @@ module.exports = {
 
         if (!interaction.isCommand()) return;
         if (interaction.commandName === "nowplaying") {
+            DatabaseUtil.addExecutedCommand(1);
             try {
                 const channel = interaction.member?.voice.channel;
                 const queue = player.getQueue(interaction.guild.id);

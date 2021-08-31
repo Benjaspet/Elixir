@@ -1,5 +1,6 @@
 import player from "../managers/MusicManager";
 import EmbedUtil from "../utils/EmbedUtil";
+import DatabaseUtil from "../utils/DatabaseUtil";
 
 module.exports = {
     name: "interactionCreate",
@@ -8,6 +9,7 @@ module.exports = {
 
         if (!interaction.isCommand()) return;
         if (interaction.commandName === "skip") {
+            DatabaseUtil.addExecutedCommand(1);
             try {
                 const queue = player.getQueue(interaction.guild.id);
                 const channel = interaction.member?.voice.channel;

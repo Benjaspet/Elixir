@@ -1,6 +1,7 @@
 import * as fs from "fs";
 import * as Discord from "discord.js";
 import {Client} from "discord.js";
+import DatabaseUtil from "./utils/DatabaseUtil";
 
 export default class ElixirHandler {
 

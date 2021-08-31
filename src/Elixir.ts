@@ -1,6 +1,7 @@
 import * as Discord from "discord.js";
 import ElixirHandler from "./ElixirHandler";
 import config from "./resources/Config";
+import DatabaseManager from "./managers/DatabaseManager";
 
 const client = new Discord.Client({
     allowedMentions: {
@@ -28,6 +29,7 @@ const client = new Discord.Client({
 
 export default client;
 
+DatabaseManager.createAllTables();
 ElixirHandler.initAllInteractions(client);
 ElixirHandler.initAllEvents(client);
 ElixirHandler.initAllMusicEvents(client);

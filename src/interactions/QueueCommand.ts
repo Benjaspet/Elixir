@@ -2,6 +2,7 @@ import * as Discord from "discord.js";
 import config from "../resources/Config";
 import EmbedUtil from "../utils/EmbedUtil";
 import player from "../managers/MusicManager";
+import DatabaseUtil from "../utils/DatabaseUtil";
 
 module.exports = {
     name: "interactionCreate",
@@ -10,6 +11,7 @@ module.exports = {
 
         if (!interaction.isCommand()) return;
         if (interaction.commandName === "queue") {
+            DatabaseUtil.addExecutedCommand(1);
             try {
                 const queue = player.getQueue(interaction.guild.id);
                 if (queue.songs.length > 20) {

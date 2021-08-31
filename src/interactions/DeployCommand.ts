@@ -1,5 +1,6 @@
 import DeployUtil from "../slash/DeployUtil";
 import config from "../resources/Config";
+import DatabaseUtil from "../utils/DatabaseUtil";
 
 module.exports = {
     name: "interactionCreate",
@@ -8,6 +9,7 @@ module.exports = {
 
         if (!interaction.isCommand()) return;
         if (interaction.commandName === "deploy") {
+            DatabaseUtil.addExecutedCommand(1);
             const query = interaction.options.getString("variant");
             if (interaction.user.id !== config.developer.owner) {
                 return await interaction.reply({content: "You must be a bot developer to run this command."});

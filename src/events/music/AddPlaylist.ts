@@ -1,8 +1,10 @@
 import player from "../../managers/MusicManager";
 import * as Discord from "discord.js";
 import client from "../../Elixir";
+import DatabaseUtil from "../../utils/DatabaseUtil";
 
 player.on("addList", (queue, playlist) => {
+    DatabaseUtil.addPlaylistPlayed(1);
     const embed = new Discord.MessageEmbed()
        .setColor("PURPLE")
        .setDescription("**Queued playlist:** [" + playlist.name + "](" + playlist.url + ")")

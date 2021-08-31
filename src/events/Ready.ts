@@ -1,6 +1,7 @@
 import config from "../resources/Config";
 import elixirSlashCommandData from "../slash/SlashDataUtil";
 import ElixirUtil from "../utils/ElixirUtil";
+import DatabaseUtil from "../utils/DatabaseUtil";
 
 module.exports = {
     name: "ready",
