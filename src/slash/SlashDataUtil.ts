@@ -84,10 +84,6 @@ const elixirSlashCommandData = [
         description: "Shuffle the order of the songs in the queue."
     },
     {
-        name: "info",
-        description: "View Elixir's information & statistics."
-    },
-    {
         name: "nowplaying",
         description: "View information about the song currently playing."
     },
@@ -98,60 +94,6 @@ const elixirSlashCommandData = [
     {
         name: "resume",
         description: "Resume the current song."
-    },
-    {
-        name: "filter",
-        description: "Add or remove filters to songs.",
-        options: [
-            {
-                name: "type",
-                description: "The type of filter to apply.",
-                type: "STRING",
-                required: true,
-                choices: [
-                    {
-                        name: "Remove All Filters",
-                        value: "remove-all"
-                    },
-                    {
-                        name: "Clear",
-                        value: "clear"
-                    },
-                    {
-                        name: "Lowbass",
-                        value: "lowbass"
-                    },
-                    {
-                        name: "Bassboost",
-                        value: "bassboost"
-                    },
-                    {
-                        name: "8-Dimensional",
-                        value: "8D"
-                    },
-                    {
-                        name: "Vaporwave",
-                        value: "vaporwave"
-                    },
-                    {
-                        name: "Reverse",
-                        value: "reverse"
-                    },
-                    {
-                        name: "Vibrato",
-                        value: "vibrato"
-                    },
-                    {
-                        name: "Nightcore",
-                        value: "nightcore"
-                    },
-                    {
-                        name: "Treble",
-                        value: "treble"
-                    }
-                ]
-            }
-        ]
     },
     {
         name: "volume",
