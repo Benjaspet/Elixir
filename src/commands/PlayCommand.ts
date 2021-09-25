@@ -6,6 +6,7 @@ import {getTracks} from "spotify-url-info";
 import config from "../resources/Config";
 import * as Discord from "discord.js";
 import {player} from "../Elixir";
+import SlashCommandUtil from "../utils/SlashCommandUtil";
 
 export default class PlayCommand implements PonjoCommand {
 
@@ -74,7 +75,7 @@ export default class PlayCommand implements PonjoCommand {
             {
                 name: "song",
                 description: "The URL or song query.",
-                type: "STRING",
+                type: SlashCommandUtil.slashCommandTypeToInt("STRING"),
                 required: true
             }
         ],

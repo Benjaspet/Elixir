@@ -44,7 +44,7 @@ export default class PonjoBuilder {
 
     public static initAllSlashCommands(client: Client) {
         client.on("interactionCreate", (...args) => {
-            new InfoCommand(client).execute(client).then(() => {});
+            new InfoCommand(client).execute(...args).then(() => {});
             new FilterCommand(client).execute(...args).then(() => {});
             new HelpCommand(client).execute(...args).then(() => {});
             new JoinCommand(client).execute(...args).then(() => {});

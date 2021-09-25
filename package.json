@@ -18,16 +18,13 @@
     "better-sqlite3": "^7.4.3",
     "discord.js": "^13.1.0",
     "distube": "^3.0.0-beta.39",
+    "easy-spotify-ts": "^0.2.3",
     "libsodium-wrappers": "^0.7.9",
     "node-fetch": "^2.6.1",
     "nodemon": "^2.0.12",
     "spotify-url-info": "^2.2.3",
-    "spotify-web-api-node": "^5.0.2",
     "ts-node": "^10.2.1",
     "youtube-dl-exec": "^1.2.4",
     "ytdl-core": "^4.9.1"
-  },
-  "devDependencies": {
-    "@types/spotify-web-api-node": "^5.0.3"
   }
 }

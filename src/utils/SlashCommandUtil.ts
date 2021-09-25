@@ -35,7 +35,7 @@ export default class SlashCommandUtil {
             if (!guild) {
                 try {
                     console.log("◒ Refreshing all global slash commands...");
-                    await rest.put(Routes.applicationGuildCommands(config.clientId), {
+                    await rest.put(Routes.applicationCommands(config.clientId), {
                         body: SlashCommandUtil.getAllSlashCommandData(client)});
                     await ElixirUtil.sleep(1000);
                     console.log("✔ Successfully updated all global slash commands.");
@@ -71,20 +71,35 @@ export default class SlashCommandUtil {
         }
     }
 
+    public static slashCommandTypeToInt(type: string): number {
+        const types = {
+            "SUB_COMMAND": 1,
+            "SUB_COMMAND_GROUP": 2,
+            "STRING": 3,
+            "INTEGER": 4,
+            "BOOLEAN": 5,
+            "USER": 6,
+            "CHANNEL": 7,
+            "ROLE": 8,
+            "MENTIONABLE": 9
+        }
+        return types[type];
+    }
+
     public static getAllSlashCommandData(client: Client): object[] {
         return [
             new InfoCommand(client).getSlashData(),
-            new FilterCommand(client).getSlashData(),
-            new HelpCommand(client).getSlashData(),
-            new JoinCommand(client).getSlashData(),
-            new NowPlayingCommand(client).getSlashData(),
-            new PauseCommand(client).getSlashData(),
-            new QueueCommand(client).getSlashData(),
-            new ResumeCommand(client).getSlashData(),
-            new ShuffleCommand(client).getSlashData(),
-            new SkipCommand(client).getSlashData(),
-            new StopCommand(client).getSlashData(),
-            new VolumeCommand(client).getSlashData(),
+            // new FilterCommand(client).getSlashData(),
+            // new HelpCommand(client).getSlashData(),
+            // new JoinCommand(client).getSlashData(),
+            // new NowPlayingCommand(client).getSlashData(),
+            // new PauseCommand(client).getSlashData(),
+            // new QueueCommand(client).getSlashData(),
+            // new ResumeCommand(client).getSlashData(),
+            // new ShuffleCommand(client).getSlashData(),
+            // new SkipCommand(client).getSlashData(),
+            // new StopCommand(client).getSlashData(),
+            // new VolumeCommand(client).getSlashData(),
             new PlayCommand(client).getSlashData()
         ]
     }
