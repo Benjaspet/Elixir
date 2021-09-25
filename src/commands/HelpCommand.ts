@@ -15,12 +15,12 @@ export default class HelpCommand implements PonjoCommand {
     constructor(client: Client) {
         this.enabled = true;
         this.client = client;
-        DatabaseUtil.addExecutedCommand(1);
     }
 
     public async execute(interaction) {
         if (!interaction.isCommand()) return;
         if (interaction.commandName === this.name) {
+            DatabaseUtil.addExecutedCommand(1);
             if (!interaction.options.get("category")) {
                 return await interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(this.client, "help-default")]});
             }

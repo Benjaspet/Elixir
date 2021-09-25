@@ -1,15 +1,15 @@
-import {Client} from "discord.js";
 import SlashCommandUtil from "../utils/SlashCommandUtil";
+import * as Discord from "discord.js";
 
 export default class SlashCommandManager {
 
-    protected client: Client;
+    protected client: Discord.Client;
 
-    constructor(client: Client) {
+    constructor(client: Discord.Client) {
         this.client = client;
     }
 
-    public async updateAllSlashCommands(client: Client, guild = true): Promise<void> {
+    public async updateAllSlashCommands(client, guild = true): Promise<void> {
         if (guild) {
             await SlashCommandUtil.setAllSlashCommands(client, true);
         }
@@ -18,7 +18,7 @@ export default class SlashCommandManager {
         }
     }
 
-    public async deleteAllSlashCommands(client: Client, guild = true) {
+    public async deleteAllSlashCommands(client, guild = true) {
         if (guild) {
             await SlashCommandUtil.deleteAllSlashCommands(client, true);
         }

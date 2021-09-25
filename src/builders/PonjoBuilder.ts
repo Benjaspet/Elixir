@@ -1,5 +1,18 @@
 import {Client} from "discord.js";
 import * as fs from "fs";
+import InfoCommand from "../commands/InfoCommand";
+import FilterCommand from "../commands/FilterCommand";
+import HelpCommand from "../commands/HelpCommand";
+import JoinCommand from "../commands/JoinCommand";
+import NowPlayingCommand from "../commands/NowPlayingCommand";
+import PauseCommand from "../commands/PauseCommand";
+import QueueCommand from "../commands/QueueCommand";
+import ResumeCommand from "../commands/ResumeCommand";
+import ShuffleCommand from "../commands/ShuffleCommand";
+import SkipCommand from "../commands/SkipCommand";
+import StopCommand from "../commands/StopCommand";
+import VolumeCommand from "../commands/VolumeCommand";
+import PlayCommand from "../commands/PlayCommand";
 
 export default class PonjoBuilder {
 
@@ -31,7 +44,19 @@ export default class PonjoBuilder {
 
     public static initAllSlashCommands(client: Client) {
         client.on("interactionCreate", (...args) => {
-
+            new InfoCommand(client).execute(client).then(() => {});
+            new FilterCommand(client).execute(...args).then(() => {});
+            new HelpCommand(client).execute(...args).then(() => {});
+            new JoinCommand(client).execute(...args).then(() => {});
+            new NowPlayingCommand(client).execute(...args).then(() => {});
+            new PauseCommand(client).execute(...args).then(() => {});
+            new QueueCommand(client).execute(...args).then(() => {});
+            new ResumeCommand(client).execute(...args).then(() => {});
+            new ShuffleCommand(client).execute(...args).then(() => {});
+            new SkipCommand(client).execute(...args).then(() => {});
+            new StopCommand(client).execute(...args).then(() => {});
+            new VolumeCommand(client).execute(...args).then(() => {});
+            new PlayCommand(client).execute(...args).then(() => {});
         });
     }
 }

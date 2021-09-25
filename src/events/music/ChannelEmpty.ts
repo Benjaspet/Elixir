@@ -1,4 +1,4 @@
-import player from "../../managers/MusicManager";
+import {player, client} from "../../Elixir";
 import * as Discord from "discord.js";
 
 player.on("empty", queue => {

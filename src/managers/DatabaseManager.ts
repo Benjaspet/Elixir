@@ -1,4 +1,3 @@
-import {Client} from "discord.js";
 import DatabaseUtil from "../utils/DatabaseUtil";
 import SqLite3 from "../resources/SqLite3";
 

@@ -15,7 +15,6 @@ export default class InfoCommand implements PonjoCommand {
     constructor(client: Client) {
         this.enabled = true;
         this.client = client;
-        DatabaseUtil.addExecutedCommand(1);
     }
 
     public async execute(interaction) {

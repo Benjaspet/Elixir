@@ -3,7 +3,7 @@ import {Client} from "discord.js";
 
 export default class CommandBuilder extends PonjoBuilder {
 
-    public client;
+    private readonly client;
 
     constructor(client: Client) {
         super();

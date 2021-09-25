@@ -1,4 +1,4 @@
-import player from "../../managers/MusicManager";
+import {player, client} from "../../Elixir";
 import DatabaseUtil from "../../utils/DatabaseUtil";
 
 player.on("playSong", (queue, song) => {

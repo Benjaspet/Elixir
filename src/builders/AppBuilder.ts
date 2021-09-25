@@ -1,11 +1,12 @@
-import PonjoBuilder from "./PonjoBuilder";
 import {Client} from "discord.js";
 import config from "../resources/Config";
 
-export default class AppBuilder extends PonjoBuilder {
+export default class AppBuilder {
+
+    private client: Client;
 
     constructor(client: Client) {
-        super();
+        this.client = client;
         console.clear();
         client.login(config.token).then(() => {});
     }

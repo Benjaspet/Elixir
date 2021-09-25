@@ -1,24 +1,58 @@
-import * as Discord from "discord.js";
-import ElixirHandler from "./ElixirHandler";
-import config from "./resources/Config";
+import {Client} from "discord.js";
 import DatabaseManager from "./managers/DatabaseManager";
 import CommandBuilder from "./builders/CommandBuilder";
 import AppBuilder from "./builders/AppBuilder";
 import IntentsBuilder from "./builders/IntentsBuilder";
+import * as Distube from "distube";
+import {SpotifyPlugin} from "@distube/spotify";
 
-const client = new Discord.Client({
+export const client = new Client({
     allowedMentions: {
         parse: ["users", "roles", "everyone"],
         repliedUser: false,
     },
     partials: ["CHANNEL", "MESSAGE", "REACTION"],
-    intents: IntentsBuilder.getIntents(),
+    intents: IntentsBuilder.getIntents()
 });
 
-export default client;
+export const player = new Distube.DisTube(client, {
+    emitNewSongOnly: false,
+    leaveOnEmpty: true,
+    leaveOnFinish: true,
+    leaveOnStop: true,
+    savePreviousSongs: true,
+    emitAddListWhenCreatingQueue: true,
+    emitAddSongWhenCreatingQueue: true,
+    customFilters: {
+        "clear": "dynaudnorm=f=200",
+        "lowbass": "bass=g=6,dynaudnorm=f=200",
+        "bassboost": "bass=g=20,dynaudnorm=f=200",
+        "purebass": "bass=g=20,dynaudnorm=f=200,asubboost,apulsator=hz=0.08",
+        "8D": "apulsator=hz=0.08",
+        "vaporwave": "aresample=48000,asetrate=48000*0.8",
+        "nightcore": "aresample=48000,asetrate=48000*1.25",
+        "phaser": "aphaser=in_gain=0.4",
+        "tremolo": "tremolo",
+        "vibrato": "vibrato=f=6.5",
+        "reverse": "areverse",
+        "treble": "treble=g=5",
+        "normalizer": "dynaudnorm=f=200",
+        "surrounding": "surround",
+        "pulsator": "apulsator=hz=1",
+        "subboost": "asubboost",
+        "karaoke": "stereotools=mlev=0.03",
+        "flanger": "flanger",
+        "gate": "agate",
+        "haas": "haas",
+        "mcompand": "mcompand"
+    },
+    plugins: [new SpotifyPlugin()]
+});
 
-DatabaseManager.createAllTables();
-new CommandBuilder(client);
 new AppBuilder(client);
+new CommandBuilder(client);
+new DatabaseManager();
 
-client.login(config.token).then(() => {});
+export default {
+    client, player
+};
