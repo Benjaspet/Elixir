@@ -1,5 +1,4 @@
 import {Client} from "discord.js";
-import DatabaseManager from "./managers/DatabaseManager";
 import CommandBuilder from "./builders/CommandBuilder";
 import AppBuilder from "./builders/AppBuilder";
 import IntentsBuilder from "./builders/IntentsBuilder";
@@ -51,7 +50,6 @@ export const player = new Distube.DisTube(client, {
 
 new AppBuilder(client);
 new CommandBuilder(client);
-new DatabaseManager();
 
 export default {
     client, player

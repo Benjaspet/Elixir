@@ -1,4 +1,5 @@
 import {Client} from "discord.js";
+import config from "../resources/Config";
 
 export default class ElixirUtil {
 
@@ -55,5 +56,9 @@ export default class ElixirUtil {
             .split(" ")
             .map(word => word.charAt(0).toUpperCase() + word.slice(1))
             .join(" ");
+    }
+
+    public static getVersion(): string {
+        return config.version;
     }
 }

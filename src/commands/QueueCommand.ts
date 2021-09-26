@@ -4,6 +4,7 @@ import DatabaseUtil from "../utils/DatabaseUtil";
 import EmbedUtil from "../utils/EmbedUtil";
 import {player} from "../Elixir";
 import * as Discord from "discord.js";
+import SpotifyAPIUtil from "../utils/SpotifyAPIUtil";
 
 export default class QueueCommand implements PonjoCommand {
 
@@ -39,7 +40,7 @@ export default class QueueCommand implements PonjoCommand {
                 for (let i = 0; i < queue.songs.length; i += 20) {
                     if (counter >= 10) break;
                     embed.setDescription("" + queue.songs.map((song, id) =>
-                        `**#${id+1}** - [${song.name}](${song.url}) - ${song.formattedDuration}`).join("\n"));
+                        `**#${id+1}** - ${song.name} ─ ${song.formattedDuration}`).join("\n"));
                     counter++;
                 }
                 if (queue.songs.length > 25) {

@@ -2,6 +2,7 @@ import {Client} from "discord.js";
 import {PonjoCommand} from "../interfaces/PonjoCommand";
 import DatabaseUtil from "../utils/DatabaseUtil";
 import EmbedUtil from "../utils/EmbedUtil";
+import SlashCommandUtil from "../utils/SlashCommandUtil";
 
 export default class HelpCommand implements PonjoCommand {
 
@@ -34,6 +35,8 @@ export default class HelpCommand implements PonjoCommand {
                     return await interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(this.client, "help-support")]});
                 case "help-commands":
                     return await interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(this.client, "help-default")]});
+                case "help-terms":
+                    return await interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(this.client, "help-terms")]});
             }
         }
     }
@@ -49,7 +52,7 @@ export default class HelpCommand implements PonjoCommand {
             {
                 name: "category",
                 description: "Learn how to use Elixir and its commands.",
-                type: "STRING",
+                type: SlashCommandUtil.slashCommandTypeToInt("STRING"),
                 required: false,
                 choices: [
                     {
@@ -67,6 +70,10 @@ export default class HelpCommand implements PonjoCommand {
                     {
                         name: "How to Use Commands",
                         value: "help-commands"
+                    },
+                    {
+                        name: "Disclaimer, Terms, & Privacy Policy",
+                        value: "help-terms"
                     }
                 ]
             }

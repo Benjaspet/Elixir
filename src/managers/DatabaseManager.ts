@@ -1,15 +1,18 @@
 import DatabaseUtil from "../utils/DatabaseUtil";
 import SqLite3 from "../resources/SqLite3";
+import Elixir from "../Elixir";
+import ElixirUtil from "../utils/ElixirUtil";
 
 export default class DatabaseManager {
 
     constructor() {
-        this.createAllTables();
+        this.createAllTables().then(() => {});
     }
 
-    private createAllTables(): void {
+    private async createAllTables(): Promise<void> {
         SqLite3.master.exec(DatabaseUtil.getSqlQuery(0));
-        console.log("Database loaded.")
+        await ElixirUtil.sleep(2000);
+        console.log("✔ Database loaded.")
     }
 
 }

@@ -89,12 +89,12 @@ export default class SlashCommandUtil {
     public static getAllSlashCommandData(client: Client): object[] {
         return [
             new InfoCommand(client).getSlashData(),
-            // new FilterCommand(client).getSlashData(),
-            // new HelpCommand(client).getSlashData(),
-            // new JoinCommand(client).getSlashData(),
+            new FilterCommand(client).getSlashData(),
+            new HelpCommand(client).getSlashData(),
+            new JoinCommand(client).getSlashData(),
             // new NowPlayingCommand(client).getSlashData(),
             // new PauseCommand(client).getSlashData(),
-            // new QueueCommand(client).getSlashData(),
+            new QueueCommand(client).getSlashData(),
             // new ResumeCommand(client).getSlashData(),
             // new ShuffleCommand(client).getSlashData(),
             // new SkipCommand(client).getSlashData(),

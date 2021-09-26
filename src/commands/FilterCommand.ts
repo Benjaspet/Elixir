@@ -4,6 +4,7 @@ import DatabaseUtil from "../utils/DatabaseUtil";
 import EmbedUtil from "../utils/EmbedUtil";
 import {player} from "../Elixir";
 import ElixirUtil from "../utils/ElixirUtil";
+import SlashCommandUtil from "../utils/SlashCommandUtil";
 
 export default class FilterCommand implements PonjoCommand {
 
@@ -64,7 +65,7 @@ export default class FilterCommand implements PonjoCommand {
             {
                 name: "type",
                 description: "The type of filter to apply.",
-                type: "STRING",
+                type: SlashCommandUtil.slashCommandTypeToInt("STRING"),
                 required: true,
                 choices: [
                     {
