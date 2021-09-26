@@ -16,10 +16,10 @@ export default class EmbedUtil {
                 return new Discord.MessageEmbed()
                     .setTitle("Elixir | Commands")
                     .setColor("PURPLE")
-                    .setDescription(`Below you can find all available commands. Please note that, due to an API update, traditional prefix commands are no longer supported, and Elixir has fully adapted to built-in slash commands for version 3.0. If you'd like to use this bot in your own server, [invite Elixir here](${config.invite})! If you do not have access to Elixir's slash commands in your server, enable them by [clicking here](${config.invite}).`)
+                    .setDescription(`Below you can find all available commands. Elixir has fully adapted to built-in slash commands for version 3.0. If you'd like to use this bot in your own server, [invite Elixir here](${config.invite}). If you do not have access to Elixir's slash commands in your server, enable them by [clicking here](${config.invite}).`)
                     .addField("Music Commands", "```" +
                         "play, shuffle, skip, filter, nowplaying, pause, queue, resume, stop, volume, join" + "```")
-                    .addField("Informational Commands", "```" + "help, info, ping, invite" + "```")
+                    .addField("Informational Commands", "```" + "help, info, invite" + "```")
                     .setFooter("ponjo.club/elixir", client.user.displayAvatarURL({dynamic: true}))
                     .setTimestamp()
             case "help-faq":

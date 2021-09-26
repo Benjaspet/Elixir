@@ -1,9 +1,9 @@
 import {Client} from "discord.js";
+import {SpotifyPlugin} from "@distube/spotify";
 import CommandBuilder from "./builders/CommandBuilder";
 import AppBuilder from "./builders/AppBuilder";
 import IntentsBuilder from "./builders/IntentsBuilder";
 import * as Distube from "distube";
-import {SpotifyPlugin} from "@distube/spotify";
 
 export const client = new Client({
     allowedMentions: {

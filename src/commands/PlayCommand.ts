@@ -1,15 +1,13 @@
+import * as Discord from "discord.js";
+import {getData, getTracks} from "spotify-url-info";
 import {Client} from "discord.js";
 import {PonjoCommand} from "../interfaces/PonjoCommand";
+import {player} from "../Elixir";
+import config from "../resources/Config";
 import DatabaseUtil from "../utils/DatabaseUtil";
 import EmbedUtil from "../utils/EmbedUtil";
-import {getTracks} from "spotify-url-info";
-import config from "../resources/Config";
-import * as Discord from "discord.js";
-import {client, player} from "../Elixir";
 import SlashCommandUtil from "../utils/SlashCommandUtil";
 import SpotifyAPIUtil from "../utils/SpotifyAPIUtil";
-import ElixirUtil from "../utils/ElixirUtil";
-import {getPreview} from "spotify-url-info";
 
 export default class PlayCommand implements PonjoCommand {
 
@@ -34,14 +32,20 @@ export default class PlayCommand implements PonjoCommand {
                 const song = interaction.options.getString("song");
                 const channel = interaction.member?.voice.channel;
                 if (!channel) {
-                    return interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(this.client,
+                    return interaction.editReply({embeds: [EmbedUtil.fetchEmbedByType(this.client,
                             "error", "You must be in a voice channel to run this command.")]});
                 }
                 if (song.toLowerCase().includes("spotify") && song.toLowerCase().includes("playlist")) {
                     getTracks(song).then(async result => {
-                        if (result.length > 35 && interaction.user.id !== config.guild) {
-                            return interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(this.client,
-                                    "error", "You cannot queue playlists with more than 35 songs!")]});
+                        if (result.length > 99 && interaction.user.id !== config.guild) {
+                            const embed = new Discord.MessageEmbed()
+                                .setColor("PURPLE")
+                                .setDescription("To avoid ratelimiting, only 100 songs can be queued at once. Therefore, only the first " +
+                                    "100 songs of this playlist will be queued." + "\n\n" + "**Total songs:** " + result.length)
+                                .setFooter(`Requested by: ${interaction.member.user.tag}`, interaction.member.user.displayAvatarURL({dynamic: true}))
+                                .setTimestamp()
+                            await interaction.editReply({embeds: [embed]});
+                            return await player.playVoiceChannel(channel, song, {textChannel: interaction.channel});
                         }
                         const embed = new Discord.MessageEmbed()
                             .setTitle("Searching for the playlist...")
@@ -55,12 +59,12 @@ export default class PlayCommand implements PonjoCommand {
                 } else {
                     if (song.includes("https://open.spotify.com")) {
                         try {
-                            await getPreview(song)
+                            await getData(song)
                                 .then(async data => {
-                                    const songName = data.track;
-                                    const artistUrl = "https://spotify.com";
-                                    const artist = data.artist;
-                                    const songUrl = data.link;
+                                    const songName = data.name;
+                                    const songUrl = data.external_urls.spotify;
+                                    const artist = data.artists[0].name;
+                                    const artistUrl = data.artists[0].external_urls.spotify;
                                     const embed = new Discord.MessageEmbed()
                                         .setColor("PURPLE")
                                         .setDescription(`` +
@@ -71,7 +75,7 @@ export default class PlayCommand implements PonjoCommand {
                                     await interaction.editReply({embeds: [embed]});
                                     DatabaseUtil.addPlayedSong(1);
                                     return await player.playVoiceChannel(channel, song, {textChannel: interaction.channel});
-                                });
+                                })
                         } catch (error) {
                             console.log(error)
                             return await interaction.editReply({embeds: [EmbedUtil.fetchEmbedByType(this.client,

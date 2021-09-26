@@ -1,9 +1,10 @@
 import {Client} from "discord.js";
 import {PonjoCommand} from "../interfaces/PonjoCommand";
+import {player} from "../Elixir";
 import DatabaseUtil from "../utils/DatabaseUtil";
 import EmbedUtil from "../utils/EmbedUtil";
-import {player} from "../Elixir";
 import ElixirUtil from "../utils/ElixirUtil";
+import SlashCommandUtil from "../utils/SlashCommandUtil";
 
 export default class VolumeCommand implements PonjoCommand {
 
@@ -59,7 +60,7 @@ export default class VolumeCommand implements PonjoCommand {
             {
                 name: "amplifier",
                 description: "The volume amplifier.",
-                type: "NUMBER",
+                type: SlashCommandUtil.slashCommandTypeToInt("NUMBER"),
                 required: true,
                 choices: [
                     {

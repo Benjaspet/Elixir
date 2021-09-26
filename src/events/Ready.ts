@@ -1,7 +1,6 @@
 import ElixirUtil from "../utils/ElixirUtil";
 import DatabaseManager from "../managers/DatabaseManager";
 import SlashCommandManager from "../managers/SlashCommandManager";
-import SpotifyAPIUtil from "../utils/SpotifyAPIUtil";
 
 module.exports = {
     name: "ready",

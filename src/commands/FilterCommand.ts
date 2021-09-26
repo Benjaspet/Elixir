@@ -1,8 +1,8 @@
 import {Client} from "discord.js";
+import {player} from "../Elixir";
 import {PonjoCommand} from "../interfaces/PonjoCommand";
 import DatabaseUtil from "../utils/DatabaseUtil";
 import EmbedUtil from "../utils/EmbedUtil";
-import {player} from "../Elixir";
 import ElixirUtil from "../utils/ElixirUtil";
 import SlashCommandUtil from "../utils/SlashCommandUtil";
 

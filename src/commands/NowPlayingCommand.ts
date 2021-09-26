@@ -1,10 +1,10 @@
+import * as Discord from "discord.js";
 import {Client} from "discord.js";
+import {player} from "../Elixir";
 import {PonjoCommand} from "../interfaces/PonjoCommand";
 import DatabaseUtil from "../utils/DatabaseUtil";
 import EmbedUtil from "../utils/EmbedUtil";
-import {player} from "../Elixir";
-import * as Discord from "discord.js";
-import ElixirUtil from "../utils/ElixirUtil";
+
 
 export default class NowPlayingCommand implements PonjoCommand {
 
@@ -37,12 +37,9 @@ export default class NowPlayingCommand implements PonjoCommand {
                 }
                 const track = queue.songs[0];
                 const embed = new Discord.MessageEmbed()
-                    .setTitle(`${track.name}`.substr(0, 256))
+                    .setDescription(`[${track.name}](https://open.spotify.com)`.substr(0, 256) + "\n" +
+                    `**Artist:** [${track.uploader.name}](https://open.spotify.com)`)
                     .setColor("PURPLE")
-                    .setThumbnail(track.thumbnail)
-                    .setDescription("Views: **" + ElixirUtil.cleanFormat(track.views) + "** | Duration: **" + track.formattedDuration + "**" + "\n" +
-                        "Likes: **" + ElixirUtil.cleanFormat(track.likes) + "** | Dislikes: **" + ElixirUtil.cleanFormat(track.dislikes) + "**" + "\n" +
-                        "Song URL: **[click here!](" + track.url + ")")
                     .setFooter("ponjo.club/elixir", this.client.user.displayAvatarURL({dynamic: true}))
                     .setTimestamp()
                 return await interaction.reply({embeds: [embed]});

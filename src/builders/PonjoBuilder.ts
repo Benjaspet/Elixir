@@ -1,5 +1,5 @@
-import {Client} from "discord.js";
 import * as fs from "fs";
+import {Client} from "discord.js";
 import InfoCommand from "../commands/InfoCommand";
 import FilterCommand from "../commands/FilterCommand";
 import HelpCommand from "../commands/HelpCommand";

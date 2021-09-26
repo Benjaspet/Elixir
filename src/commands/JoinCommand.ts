@@ -1,9 +1,9 @@
+import * as Discord from "discord.js";
 import {Client} from "discord.js";
 import {PonjoCommand} from "../interfaces/PonjoCommand";
 import DatabaseUtil from "../utils/DatabaseUtil";
 import EmbedUtil from "../utils/EmbedUtil";
 import VoiceManager from "../managers/VoiceManager";
-import * as Discord from "discord.js";
 
 export default class JoinCommand implements PonjoCommand {
 

@@ -3,11 +3,9 @@ import SqLite3 from "../resources/SqLite3";
 export default class DatabaseUtil {
 
     public static getSqlQuery(index: number): string {
-
         const queries = [
             "CREATE TABLE IF NOT EXISTS statistics(version MESSAGE_TEXT NOT NULL PRIMARY KEY, commandsExecuted INTEGER NOT NULL, songsPlayed INTEGER NOT NULL, playlistsPlayed INTEGER NOT NULL)"
         ];
-
         return queries[index];
     }
 
@@ -46,6 +44,4 @@ export default class DatabaseUtil {
         const total = SqLite3.master.prepare("SELECT playlistsPlayed FROM statistics WHERE version=?").get("v3");
         return total.playlistsPlayed;
     }
-
-
 }

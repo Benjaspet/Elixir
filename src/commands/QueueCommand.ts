@@ -1,10 +1,9 @@
+import * as Discord from "discord.js";
 import {Client} from "discord.js";
 import {PonjoCommand} from "../interfaces/PonjoCommand";
+import {player} from "../Elixir";
 import DatabaseUtil from "../utils/DatabaseUtil";
 import EmbedUtil from "../utils/EmbedUtil";
-import {player} from "../Elixir";
-import * as Discord from "discord.js";
-import SpotifyAPIUtil from "../utils/SpotifyAPIUtil";
 
 export default class QueueCommand implements PonjoCommand {
 

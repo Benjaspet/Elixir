@@ -1,6 +1,5 @@
 import DatabaseUtil from "../utils/DatabaseUtil";
 import SqLite3 from "../resources/SqLite3";
-import Elixir from "../Elixir";
 import ElixirUtil from "../utils/ElixirUtil";
 
 export default class DatabaseManager {
@@ -14,5 +13,4 @@ export default class DatabaseManager {
         await ElixirUtil.sleep(2000);
         console.log("✔ Database loaded.")
     }
-
 }

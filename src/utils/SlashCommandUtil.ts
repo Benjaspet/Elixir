@@ -1,5 +1,7 @@
 import config from "../resources/Config";
 import {Client} from "discord.js";
+const {REST} = require("@discordjs/rest");
+const {Routes} = require("discord-api-types/v9");
 import ElixirUtil from "./ElixirUtil";
 import InfoCommand from "../commands/InfoCommand";
 import FilterCommand from "../commands/FilterCommand";
@@ -14,8 +16,6 @@ import SkipCommand from "../commands/SkipCommand";
 import StopCommand from "../commands/StopCommand";
 import VolumeCommand from "../commands/VolumeCommand";
 import PlayCommand from "../commands/PlayCommand";
-const {REST} = require("@discordjs/rest");
-const {Routes} = require('discord-api-types/v9');
 
 export default class SlashCommandUtil {
 
@@ -81,7 +81,8 @@ export default class SlashCommandUtil {
             "USER": 6,
             "CHANNEL": 7,
             "ROLE": 8,
-            "MENTIONABLE": 9
+            "MENTIONABLE": 9,
+            "NUMBER": 10
         }
         return types[type];
     }
@@ -92,14 +93,14 @@ export default class SlashCommandUtil {
             new FilterCommand(client).getSlashData(),
             new HelpCommand(client).getSlashData(),
             new JoinCommand(client).getSlashData(),
-            // new NowPlayingCommand(client).getSlashData(),
-            // new PauseCommand(client).getSlashData(),
+            new NowPlayingCommand(client).getSlashData(),
+            new PauseCommand(client).getSlashData(),
             new QueueCommand(client).getSlashData(),
-            // new ResumeCommand(client).getSlashData(),
-            // new ShuffleCommand(client).getSlashData(),
-            // new SkipCommand(client).getSlashData(),
-            // new StopCommand(client).getSlashData(),
-            // new VolumeCommand(client).getSlashData(),
+            new ResumeCommand(client).getSlashData(),
+            new ShuffleCommand(client).getSlashData(),
+            new SkipCommand(client).getSlashData(),
+            new StopCommand(client).getSlashData(),
+            new VolumeCommand(client).getSlashData(),
             new PlayCommand(client).getSlashData()
         ]
     }

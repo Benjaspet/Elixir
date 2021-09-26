@@ -1,21 +1,29 @@
 const config = {
     token: "",
     invite: "",
-    developer: {
-        owner: "",
-        ponjoGuild: "",
-        deploySlashCommands: false
-    },
-    ponjo_development: {
-        id: "",
-        verificationRole: "",
-        verificationChannel: "",
-        welcomeChannel: ""
+    version: "",
+    clientId: "",
+    guild: "",
+    owner: "",
+    spotifyApi: {
+        cliendId: "",
+        clientSecret: "",
+        postUri: "",
+        base64Auth: ""
     },
     emojis: {
         success: "",
         error: "",
-        loading: ""
+        loading: "",
+        servers: "",
+        developer: "",
+        users: "",
+        websocket: "",
+        uptime: "",
+        libraries: "",
+        songs: "",
+        commands: "",
+        playlists: ""
     }
 }
 

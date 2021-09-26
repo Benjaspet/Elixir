@@ -1,4 +1,4 @@
-import {player, client} from "../../Elixir";
+import {player} from "../../Elixir";
 import * as Discord from "discord.js";
 
 player.on("empty", queue => {

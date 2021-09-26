@@ -1,8 +1,8 @@
 import {Client} from "discord.js";
 import {PonjoCommand} from "../interfaces/PonjoCommand";
+import {player} from "../Elixir";
 import DatabaseUtil from "../utils/DatabaseUtil";
 import EmbedUtil from "../utils/EmbedUtil";
-import {player} from "../Elixir";
 
 export default class SkipCommand implements PonjoCommand {
 
@@ -34,8 +34,9 @@ export default class SkipCommand implements PonjoCommand {
                             "error", "You must be in a voice channel.")]});
                 }
                 if (queue.songs.length <= 1) {
+                    await player.stop(queue)
                     return await interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(this.client,
-                            "error", "There are no more songs in the queue.")]});
+                            "default", "There were no more songs in the queue, so I left the voice channel.")]});
                 }
                 await player.skip(interaction.guild.id);
                 return await interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(this.client,

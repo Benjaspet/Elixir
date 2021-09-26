@@ -1,4 +1,4 @@
-import {player, client} from "../../Elixir";
+import {player} from "../../Elixir";
 
 player.on("initQueue", queue => {
     queue.autoplay = false;
