@@ -16,6 +16,7 @@ import SkipCommand from "../commands/SkipCommand";
 import StopCommand from "../commands/StopCommand";
 import VolumeCommand from "../commands/VolumeCommand";
 import PlayCommand from "../commands/PlayCommand";
+import LoopCommand from "../commands/LoopCommand";
 
 export default class SlashCommandUtil {
 
@@ -101,7 +102,8 @@ export default class SlashCommandUtil {
             new SkipCommand(client).getSlashData(),
             new StopCommand(client).getSlashData(),
             new VolumeCommand(client).getSlashData(),
-            new PlayCommand(client).getSlashData()
+            new PlayCommand(client).getSlashData(),
+            new LoopCommand(client).getSlashData()
         ]
     }
 

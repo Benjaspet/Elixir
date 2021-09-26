@@ -2,12 +2,14 @@ import * as Discord from "discord.js";
 import {getData, getTracks} from "spotify-url-info";
 import {Client} from "discord.js";
 import {PonjoCommand} from "../interfaces/PonjoCommand";
-import {player} from "../Elixir";
+import {client, player} from "../Elixir";
 import config from "../resources/Config";
 import DatabaseUtil from "../utils/DatabaseUtil";
 import EmbedUtil from "../utils/EmbedUtil";
 import SlashCommandUtil from "../utils/SlashCommandUtil";
 import SpotifyAPIUtil from "../utils/SpotifyAPIUtil";
+import ElixirUtil from "../utils/ElixirUtil";
+import VoiceManager from "../managers/VoiceManager";
 
 export default class PlayCommand implements PonjoCommand {
 
@@ -17,6 +19,8 @@ export default class PlayCommand implements PonjoCommand {
     public description: string = "Play a song in a voice channel with a link or query.";
     public aliases: string[] = [];
     protected client: Client;
+
+    public songManager = [];
 
     constructor(client: Client) {
         this.enabled = true;
@@ -54,6 +58,7 @@ export default class PlayCommand implements PonjoCommand {
                             .setFooter(`Requested by: ${interaction.member.user.tag}`, interaction.member.user.displayAvatarURL({dynamic: true}))
                             .setTimestamp()
                         await interaction.editReply({embeds: [embed]});
+                        VoiceManager.sendFollowUp[0] = true;
                         return await player.playVoiceChannel(channel, song, {textChannel: interaction.channel});
                     });
                 } else {
@@ -74,6 +79,7 @@ export default class PlayCommand implements PonjoCommand {
                                         .setTimestamp()
                                     await interaction.editReply({embeds: [embed]});
                                     DatabaseUtil.addPlayedSong(1);
+                                    VoiceManager.sendFollowUp[0] = false;
                                     return await player.playVoiceChannel(channel, song, {textChannel: interaction.channel});
                                 })
                         } catch (error) {
@@ -82,21 +88,36 @@ export default class PlayCommand implements PonjoCommand {
                                     "error", "An error occurred during playback.")]});
                         }
                     } else {
-                        const data = await SpotifyAPIUtil.getSpotifyTrack(song);
-                        const songName = data.name ? data.name : song.name;
-                        const artist = data.artist ? data.artist : song.uploader.name;
-                        const artistUrl = data.artistUrl ? data.artistUrl : "https://www.spotify.com/us"
-                        const url = data.trackUrl ? data.trackUrl : "https://www.spotify.com/us";
-                        const embed = new Discord.MessageEmbed()
-                            .setDescription(`` +
-                                `**Queued:** [${songName}](${url})` + "\n" +
-                                `**Artist:** [${artist}](${artistUrl})`)
-                            .setColor("PURPLE")
-                            .setFooter(`Requested by: ${interaction.member.user.tag}`, interaction.member.user.displayAvatarURL({dynamic: true}))
-                            .setTimestamp()
-                        await interaction.editReply({embeds: [embed]});
-                        DatabaseUtil.addPlayedSong(1);
-                        return await player.playVoiceChannel(channel, song, {textChannel: interaction.channel});
+                        if (song.toLowerCase().includes("youtube.com/watch")) {
+                            return await interaction.editReply({embeds: [EmbedUtil.fetchEmbedByType(this.client,
+                                    "error", "**Official removal of YouTube support**" +
+                                    "\n\n" +
+                                    "Unfortunately, Elixir has officially removed support for YouTube. However, " +
+                                    "you can try to find your song through another platform or by simply typing the song's name.")]});
+                        } else {
+                            const data = await SpotifyAPIUtil.getSpotifyTrack(song);
+                            const songName = data.name ? data.name : undefined;
+                            const artist = data.artist ? data.artist : undefined;
+                            const artistUrl = data.artistUrl ? data.artistUrl : "https://www.spotify.com/us"
+                            const url = data.trackUrl ? data.trackUrl : "https://www.spotify.com/us";
+                            await ElixirUtil.sleep(1000);
+                            const embed = new Discord.MessageEmbed()
+                                .setDescription(`` +
+                                    `**Queued:** [${songName}](${url})` + "\n" +
+                                    `**Artist:** [${artist}](${artistUrl})`)
+                                .setColor("PURPLE")
+                                .setFooter(`Requested by: ${interaction.member.user.tag}`, interaction.member.user.displayAvatarURL({dynamic: true}))
+                                .setTimestamp()
+                            if (!songName || !artist) {
+                                VoiceManager.sendFollowUp[0] = true;
+                                DatabaseUtil.addPlayedSong(1);
+                                await interaction.editReply({embeds: [EmbedUtil.fetchEmbedByType(client, "default", "Searching for the song...")]});
+                                return await player.playVoiceChannel(channel, song, {textChannel: interaction.channel});
+                            }
+                            DatabaseUtil.addPlayedSong(1);
+                            await interaction.editReply({embeds: [embed]});
+                            return await player.playVoiceChannel(channel, song, {textChannel: interaction.channel});
+                        }
                     }
                 }
             } catch (error) {

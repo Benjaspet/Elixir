@@ -13,6 +13,7 @@ import SkipCommand from "../commands/SkipCommand";
 import StopCommand from "../commands/StopCommand";
 import VolumeCommand from "../commands/VolumeCommand";
 import PlayCommand from "../commands/PlayCommand";
+import LoopCommand from "../commands/LoopCommand";
 
 export default class PonjoBuilder {
 
@@ -57,6 +58,7 @@ export default class PonjoBuilder {
             new StopCommand(client).execute(...args).then(() => {});
             new VolumeCommand(client).execute(...args).then(() => {});
             new PlayCommand(client).execute(...args).then(() => {});
+            new LoopCommand(client).execute(...args).then(() => {});
         });
     }
 }
