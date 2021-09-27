@@ -1,16 +1,32 @@
 {
   "name": "elixir",
-  "version": "3.0.1",
-  "author": "Eerie6560",
+  "version": "3.5.0",
+  "author": "Ben Petrillo (Eerie6560)",
   "description": "An advanced music bot for Discord.",
   "license": "MIT",
-  "main": "src/Elixir.js",
+  "main": "src/Elixir.ts",
+  "scripts": {
+    "start": "ts-node src/Elixir.ts",
+    "start:dev": "nodemon src/Elixir.ts",
+    "stop": "node src/scripts/StopProcess.ts"
+  },
   "dependencies": {
     "@discordjs/opus": "^0.5.3",
-    "@discordjs/voice": "^0.5.5",
-    "discord.js": "^13.0.0",
-    "distube": "^3.0.0-alpha.18",
-    "ffmpeg-static": "^4.4.0",
-    "libsodium-wrappers": "^0.7.9"
+    "@discordjs/rest": "^0.1.0-canary.0",
+    "@discordjs/voice": "^0.5.6",
+    "@distube/spotify": "^0.6.3",
+    "axios": "^0.21.4",
+    "better-sqlite3": "^7.4.3",
+    "discord-api-types": "^0.20.2",
+    "discord.js": "^13.1.0",
+    "distube": "^3.0.0-beta.39",
+    "fetch": "^1.1.0",
+    "libsodium-wrappers": "^0.7.9",
+    "nodemon": "^2.0.12",
+    "quick-spotify-wrapper": "^1.0.3",
+    "spotify-url-info": "^2.2.3",
+    "spotify-web-api-node": "^5.0.2",
+    "ts-node": "^10.2.1",
+    "ytdl-core": "^4.9.1"
   }
 }
