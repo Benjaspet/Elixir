@@ -3,5 +3,5 @@ import EmbedUtil from "../../utils/EmbedUtil";
 
 player.on("error", (channel, error) => {
     console.log(error);
-    channel.send({embeds: [EmbedUtil.fetchEmbedByType(client, "error", "An error occurred.")]}).then(() => {});
+    channel.send({embeds: [EmbedUtil.fetchEmbedByType(client, "error", "Could not play that song.")]}).then(() => {});
 });
