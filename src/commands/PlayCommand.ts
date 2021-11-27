@@ -88,13 +88,12 @@ export default class PlayCommand implements Command {
                     } else {
                         if (song.toLowerCase().includes("youtube.com/watch")) {
                             const embed = new Discord.MessageEmbed()
-                                .setDescription(`` +
-                                    `**Queued:** [${song.name}](${song.url})` + "\n" +
-                                    `**Artist:** ${song.uploader}`)
+                                .setDescription(`Searching for the song...`)
                                 .setColor("PURPLE")
                                 .setFooter(`Requested by: ${interaction.member.user.tag}`, interaction.member.user.displayAvatarURL({dynamic: true}))
                                 .setTimestamp()
-                            return await interaction.editReply({embeds: [embed]});
+                            await interaction.editReply({embeds: [embed]});
+                            return await player.playVoiceChannel(channel, song, {textChannel: interaction.channel});
                         } else {
                             const data = await SpotifyAPIUtil.getSpotifyTrack(song);
                             const songName = data.name ? data.name : undefined;
