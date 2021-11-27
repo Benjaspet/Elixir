@@ -1,6 +1,6 @@
 import * as Discord from "discord.js";
 import {getData, getTracks} from "spotify-url-info";
-import {Client} from "discord.js";
+import {Client, Snowflake} from "discord.js";
 import {Command} from "../interfaces/Command";
 import {client, player} from "../Elixir";
 import config from "../resources/Config";
@@ -24,6 +24,8 @@ export default class PlayCommand implements Command {
         this.enabled = true;
         this.client = client;
     }
+
+    public followUp: Discord.Collection<Snowflake, boolean>;
 
     public async execute(interaction) {
         if (!interaction.isCommand()) return;
@@ -56,7 +58,7 @@ export default class PlayCommand implements Command {
                             .setFooter(`Requested by: ${interaction.member.user.tag}`, interaction.member.user.displayAvatarURL({dynamic: true}))
                             .setTimestamp()
                         await interaction.editReply({embeds: [embed]});
-                        VoiceManager.sendFollowUp[0] = true;
+                        await this.followUp.set(interaction.guild.id, false);
                         return await player.playVoiceChannel(channel, song, {textChannel: interaction.channel});
                     });
                 } else {
@@ -77,7 +79,7 @@ export default class PlayCommand implements Command {
                                         .setTimestamp()
                                     await interaction.editReply({embeds: [embed]});
                                     DatabaseUtil.addPlayedSong(1);
-                                    VoiceManager.sendFollowUp[0] = false;
+                                    await this.followUp.set(interaction.guild.id, false);
                                     return await player.playVoiceChannel(channel, song, {textChannel: interaction.channel});
                                 })
                         } catch (error) {
@@ -93,6 +95,7 @@ export default class PlayCommand implements Command {
                                 .setFooter(`Requested by: ${interaction.member.user.tag}`, interaction.member.user.displayAvatarURL({dynamic: true}))
                                 .setTimestamp()
                             await interaction.editReply({embeds: [embed]});
+                            await this.followUp.set(interaction.guild.id, true);
                             return await player.playVoiceChannel(channel, song, {textChannel: interaction.channel});
                         } else {
                             const data = await SpotifyAPIUtil.getSpotifyTrack(song);
@@ -109,11 +112,11 @@ export default class PlayCommand implements Command {
                                 .setFooter(`Requested by: ${interaction.member.user.tag}`, interaction.member.user.displayAvatarURL({dynamic: true}))
                                 .setTimestamp()
                             if (!songName || !artist) {
-                                VoiceManager.sendFollowUp[0] = true;
                                 DatabaseUtil.addPlayedSong(1);
                                 return await interaction.editReply({embeds: [EmbedUtil.fetchEmbedByType(client, "error", "Cannot play that song.")]});
                             }
                             DatabaseUtil.addPlayedSong(1);
+                            await this.followUp.set(interaction.guild.id, false);
                             await interaction.editReply({embeds: [embed]});
                             return await player.playVoiceChannel(channel, song, {textChannel: interaction.channel});
                         }
