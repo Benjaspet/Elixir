@@ -1,12 +1,12 @@
 import {Client} from "discord.js";
 import {RepeatMode} from "distube";
-import {PonjoCommand} from "../interfaces/PonjoCommand";
+import {Command} from "../interfaces/Command";
 import {player} from "../Elixir";
 import DatabaseUtil from "../utils/DatabaseUtil";
 import EmbedUtil from "../utils/EmbedUtil";
 import SlashCommandUtil from "../utils/SlashCommandUtil";
 
-export default class LoopCommand implements PonjoCommand {
+export default class LoopCommand implements Command {
 
     public name: string = "loop";
     public once: boolean = false;

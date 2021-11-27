@@ -1,11 +1,11 @@
 import * as Discord from "discord.js";
 import {Client} from "discord.js";
-import {PonjoCommand} from "../interfaces/PonjoCommand";
+import {Command} from "../interfaces/Command";
 import DatabaseUtil from "../utils/DatabaseUtil";
 import EmbedUtil from "../utils/EmbedUtil";
 import VoiceManager from "../managers/VoiceManager";
 
-export default class JoinCommand implements PonjoCommand {
+export default class JoinCommand implements Command {
 
     public name: string = "join";
     public once: boolean = false;

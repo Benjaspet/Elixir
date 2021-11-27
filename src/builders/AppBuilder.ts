@@ -3,7 +3,7 @@ import config from "../resources/Config";
 
 export default class AppBuilder {
 
-    private client: Client;
+    private readonly client: Client;
 
     constructor(client: Client) {
         this.client = client;

@@ -1,9 +1,9 @@
 import {Client} from "discord.js";
-import {PonjoCommand} from "../interfaces/PonjoCommand";
+import {Command} from "../interfaces/Command";
 import DatabaseUtil from "../utils/DatabaseUtil";
 import EmbedUtil from "../utils/EmbedUtil";
 
-export default class InfoCommand implements PonjoCommand {
+export default class InfoCommand implements Command {
 
     public name: string = "info";
     public once: boolean = false;

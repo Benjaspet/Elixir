@@ -1,7 +1,7 @@
 import * as Discord from "discord.js";
 import {getData, getTracks} from "spotify-url-info";
 import {Client} from "discord.js";
-import {PonjoCommand} from "../interfaces/PonjoCommand";
+import {Command} from "../interfaces/Command";
 import {client, player} from "../Elixir";
 import config from "../resources/Config";
 import DatabaseUtil from "../utils/DatabaseUtil";
@@ -11,16 +11,14 @@ import SpotifyAPIUtil from "../utils/SpotifyAPIUtil";
 import ElixirUtil from "../utils/ElixirUtil";
 import VoiceManager from "../managers/VoiceManager";
 
-export default class PlayCommand implements PonjoCommand {
+export default class PlayCommand implements Command {
 
     public name: string = "play";
     public once: boolean = false;
     public enabled: boolean = true;
     public description: string = "Play a song in a voice channel with a link or query.";
     public aliases: string[] = [];
-    protected client: Client;
-
-    public songManager = [];
+    private readonly client: Client;
 
     constructor(client: Client) {
         this.enabled = true;
@@ -89,11 +87,14 @@ export default class PlayCommand implements PonjoCommand {
                         }
                     } else {
                         if (song.toLowerCase().includes("youtube.com/watch")) {
-                            return await interaction.editReply({embeds: [EmbedUtil.fetchEmbedByType(this.client,
-                                    "error", "**Official removal of YouTube support**" +
-                                    "\n\n" +
-                                    "Unfortunately, Elixir has officially removed support for YouTube. However, " +
-                                    "you can try to find your song through another platform or by simply typing the song's name.")]});
+                            const embed = new Discord.MessageEmbed()
+                                .setDescription(`` +
+                                    `**Queued:** [${song.name}](${song.url})` + "\n" +
+                                    `**Artist:** ${song.uploader}`)
+                                .setColor("PURPLE")
+                                .setFooter(`Requested by: ${interaction.member.user.tag}`, interaction.member.user.displayAvatarURL({dynamic: true}))
+                                .setTimestamp()
+                            return await interaction.editReply({embeds: [embed]});
                         } else {
                             const data = await SpotifyAPIUtil.getSpotifyTrack(song);
                             const songName = data.name ? data.name : undefined;
@@ -111,8 +112,7 @@ export default class PlayCommand implements PonjoCommand {
                             if (!songName || !artist) {
                                 VoiceManager.sendFollowUp[0] = true;
                                 DatabaseUtil.addPlayedSong(1);
-                                await interaction.editReply({embeds: [EmbedUtil.fetchEmbedByType(client, "default", "Searching for the song...")]});
-                                return await player.playVoiceChannel(channel, song, {textChannel: interaction.channel});
+                                return await interaction.editReply({embeds: [EmbedUtil.fetchEmbedByType(client, "error", "Cannot play that song.")]});
                             }
                             DatabaseUtil.addPlayedSong(1);
                             await interaction.editReply({embeds: [embed]});

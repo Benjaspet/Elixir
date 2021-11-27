@@ -1,11 +1,11 @@
 import * as Discord from "discord.js";
 import {Client} from "discord.js";
-import {PonjoCommand} from "../interfaces/PonjoCommand";
+import {Command} from "../interfaces/Command";
 import {player} from "../Elixir";
 import DatabaseUtil from "../utils/DatabaseUtil";
 import EmbedUtil from "../utils/EmbedUtil";
 
-export default class QueueCommand implements PonjoCommand {
+export default class QueueCommand implements Command {
 
     public name: string = "queue";
     public once: boolean = false;

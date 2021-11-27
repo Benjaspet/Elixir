@@ -1,4 +1,4 @@
-export interface PonjoCommand {
+export interface Command {
     name: string,
     once: boolean,
     enabled: boolean,

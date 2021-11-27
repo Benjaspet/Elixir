@@ -1,12 +1,12 @@
 import {Client} from "discord.js";
 import {player} from "../Elixir";
-import {PonjoCommand} from "../interfaces/PonjoCommand";
+import {Command} from "../interfaces/Command";
 import DatabaseUtil from "../utils/DatabaseUtil";
 import EmbedUtil from "../utils/EmbedUtil";
 import ElixirUtil from "../utils/ElixirUtil";
 import SlashCommandUtil from "../utils/SlashCommandUtil";
 
-export default class FilterCommand implements PonjoCommand {
+export default class FilterCommand implements Command {
 
     public name: string = "filter";
     public once: boolean = false;

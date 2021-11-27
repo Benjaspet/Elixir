@@ -1,12 +1,12 @@
 import {Client} from "discord.js";
-import {PonjoCommand} from "../interfaces/PonjoCommand";
+import {Command} from "../interfaces/Command";
 import {player} from "../Elixir";
 import DatabaseUtil from "../utils/DatabaseUtil";
 import EmbedUtil from "../utils/EmbedUtil";
 import ElixirUtil from "../utils/ElixirUtil";
 import SlashCommandUtil from "../utils/SlashCommandUtil";
 
-export default class VolumeCommand implements PonjoCommand {
+export default class VolumeCommand implements Command {
 
     public name: string = "volume";
     public once: boolean = false;

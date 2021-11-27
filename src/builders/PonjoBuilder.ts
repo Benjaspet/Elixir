@@ -30,9 +30,7 @@ export default class PonjoBuilder {
     }
 
     public static initAllMusicEvents(client: Client) {
-
         const interactions = fs.readdirSync(__dirname + "/../events/music").filter(file => file.endsWith('.ts'));
-
         for (const file of interactions) {
             const interaction = require(__dirname + `/../events/music/${file}`);
             if (interaction.once) {

@@ -1,10 +1,10 @@
 import {Client} from "discord.js";
-import {PonjoCommand} from "../interfaces/PonjoCommand";
+import {Command} from "../interfaces/Command";
 import {player} from "../Elixir";
 import DatabaseUtil from "../utils/DatabaseUtil";
 import EmbedUtil from "../utils/EmbedUtil";
 
-export default class ShuffleCommand implements PonjoCommand {
+export default class ShuffleCommand implements Command {
 
     public name: string = "shuffle";
     public once: boolean = false;

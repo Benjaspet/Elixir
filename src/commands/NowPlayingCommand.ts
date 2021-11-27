@@ -1,12 +1,12 @@
 import * as Discord from "discord.js";
 import {Client} from "discord.js";
 import {player} from "../Elixir";
-import {PonjoCommand} from "../interfaces/PonjoCommand";
+import {Command} from "../interfaces/Command";
 import DatabaseUtil from "../utils/DatabaseUtil";
 import EmbedUtil from "../utils/EmbedUtil";
 
 
-export default class NowPlayingCommand implements PonjoCommand {
+export default class NowPlayingCommand implements Command {
 
     public name: string = "nowplaying";
     public once: boolean = false;

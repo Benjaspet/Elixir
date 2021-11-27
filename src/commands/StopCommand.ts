@@ -1,10 +1,10 @@
 import {Client} from "discord.js";
-import {PonjoCommand} from "../interfaces/PonjoCommand";
+import {Command} from "../interfaces/Command";
 import {player} from "../Elixir";
 import DatabaseUtil from "../utils/DatabaseUtil";
 import EmbedUtil from "../utils/EmbedUtil";
 
-export default class StopCommand implements PonjoCommand {
+export default class StopCommand implements Command {
 
     public name: string = "stop";
     public once: boolean = false;
