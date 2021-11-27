@@ -6,7 +6,7 @@ import PlayCommand from "../../commands/PlayCommand";
 
 player.on("addSong", async (queue, song) => {
 
-    if (new PlayCommand(client).followUp.get(queue.textChannel.guild.id) == true) {
+    if (PlayCommand.followUp.get(queue.textChannel.guild.id) == true) {
 
         const embed = new MessageEmbed()
             .setThumbnail(song.thumbnail)
@@ -21,4 +21,5 @@ player.on("addSong", async (queue, song) => {
         DatabaseUtil.addPlayedSong(1);
         queue.textChannel.send({embeds: [embed]}).then(() => {});
     }
+
 });
