@@ -4,8 +4,6 @@ const {joinVoiceChannel,
 
 export default class VoiceManager {
 
-    public static sendFollowUp = [];
-
     public static async connectToVoiceChannel(channel) {
         const connection = joinVoiceChannel({
             channelId: channel.id,

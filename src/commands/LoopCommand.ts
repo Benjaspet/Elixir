@@ -1,22 +1,18 @@
 import {Client} from "discord.js";
 import {RepeatMode} from "distube";
-import {PonjoCommand} from "../interfaces/PonjoCommand";
+import {ICommand} from "../interfaces/ICommand";
 import {player} from "../Elixir";
-import DatabaseUtil from "../utils/DatabaseUtil";
 import EmbedUtil from "../utils/EmbedUtil";
 import SlashCommandUtil from "../utils/SlashCommandUtil";
+import Logger from "../Logger";
 
-export default class LoopCommand implements PonjoCommand {
+export default class LoopCommand implements ICommand {
 
     public name: string = "loop";
-    public once: boolean = false;
-    public enabled: boolean = true;
     public description: string = "Loop a song or queue.";
-    public aliases: string[] = [];
-    protected client: Client;
+    private readonly client: Client;
 
     constructor(client: Client) {
-        this.enabled = true;
         this.client = client;
     }
 
@@ -24,36 +20,29 @@ export default class LoopCommand implements PonjoCommand {
         if (!interaction.isCommand()) return;
         if (interaction.commandName === this.name) {
             try {
-                DatabaseUtil.addExecutedCommand(1);
                 const mode = interaction.options.getInteger("mode");
                 const channel = interaction.member?.voice.channel;
                 const queue = player.getQueue(interaction.guild.id);
                 if (!channel) {
-                    return interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(this.client,
-                            "error", "You must be in a voice channel to run this command.")]});
+                    return interaction.reply({embeds: [EmbedUtil.getErrorEmbed("You must be in a voice channel to run this command.")]});
                 }
                 if (!queue) {
-                    return await interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(this.client,
-                            "error", "There is no queue for the server.")]});
+                    return await interaction.reply({embeds: [EmbedUtil.getErrorEmbed("There is no queue for the server.")]});
                 }
                 switch (mode) {
                     case RepeatMode.QUEUE:
                         player.setRepeatMode(interaction.guild.id, mode);
-                        return await interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(this.client,
-                                "default", "Set the loop mode to **queue**.")]});
+                        return await interaction.reply({embeds: [EmbedUtil.getDefaultEmbed("Set the loop mode to **queue**.")]});
                     case RepeatMode.SONG:
                         player.setRepeatMode(interaction.guild.id, mode);
-                        return await interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(this.client,
-                                "default", "Set the loop mode to **song**.")]});
+                        return await interaction.reply({embeds: [EmbedUtil.getDefaultEmbed("Set the loop mode to **song**.")]});
                     case RepeatMode.DISABLED:
                         player.setRepeatMode(interaction.guild.id, mode);
-                        return await interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(this.client,
-                                "default", "Loop mode has been disabled.")]});
+                        return await interaction.reply({embeds: [EmbedUtil.getDefaultEmbed("Loop mode has been disabled.")]});
                 }
             } catch (error) {
-                console.log(error)
-                return await interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(this.client,
-                        "error", "The song is already paused.")]});
+                Logger.error(error)
+                return await interaction.reply({embeds: [EmbedUtil.getErrorEmbed("The song is already paused.")]});
             }
         }
     }

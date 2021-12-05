@@ -1,47 +1,46 @@
-import SqLite3 from "../resources/SqLite3";
+import Stats from "../schemas/StatsSchema";
+import {Collection} from "mongoose";
 
 export default class DatabaseUtil {
 
-    public static getSqlQuery(index: number): string {
-        const queries = [
-            "CREATE TABLE IF NOT EXISTS statistics(version MESSAGE_TEXT NOT NULL PRIMARY KEY, commandsExecuted INTEGER NOT NULL, songsPlayed INTEGER NOT NULL, playlistsPlayed INTEGER NOT NULL)"
-        ];
-        return queries[index];
+    public static async initializeCollections(): Promise<void> {
+        await Stats.create({
+            commandsRan: 0,
+            songsPlayed: 0,
+            playlistsQueued: 0
+        });
     }
 
-    public static addExecutedCommand(amount: number): void {
-        const currentCommands = this.getTotalCommandsExecuted();
-        const currentSongs = this.getTotalSongsPlayed();
-        const currentPlaylists = this.getTotalPlaylistsPlayed();
-        SqLite3.master.prepare("INSERT OR REPLACE INTO statistics (version, commandsExecuted, songsPlayed, playlistsPlayed) VALUES (?, ?, ?, ?)").run("v3", currentCommands + amount, currentSongs, currentPlaylists);
+    public static async addPlayedSong(amount: number): Promise<void> {
+        const stats = await Stats.findOne();
+        stats.songsPlayed += amount;
+        await stats.save();
     }
 
-    public static addPlayedSong(amount: number): void {
-        const currentCommands = this.getTotalCommandsExecuted();
-        const currentSongs = this.getTotalSongsPlayed();
-        const currentPlaylists = this.getTotalPlaylistsPlayed();
-        SqLite3.master.prepare("INSERT OR REPLACE INTO statistics (version, commandsExecuted, songsPlayed, playlistsPlayed) VALUES (?, ?, ?, ?)").run("v3", currentCommands, currentSongs + amount, currentPlaylists);
+    public static async addExecutedCommand(amount: number): Promise<void> {
+        const stats = await Stats.findOne();
+        stats.commandsRan += amount;
+        await stats.save();
     }
 
-    public static addPlaylistPlayed(amount: number): void {
-        const currentCommands = this.getTotalCommandsExecuted();
-        const currentSongs = this.getTotalSongsPlayed();
-        const currentPlaylists = this.getTotalPlaylistsPlayed();
-        SqLite3.master.prepare("INSERT OR REPLACE INTO statistics (version, commandsExecuted, songsPlayed, playlistsPlayed) VALUES (?, ?, ?, ?)").run("v3", currentCommands, currentSongs, currentPlaylists + amount);
+    public static async addPlaylistPlayed(amount: number): Promise<void> {
+        const stats = await Stats.findOne();
+        stats.playlistsQueued += amount;
+        await stats.save();
     }
 
-    public static getTotalCommandsExecuted(): number {
-        const total = SqLite3.master.prepare("SELECT commandsExecuted FROM statistics WHERE version=?").get("v3");
-        return total.commandsExecuted;
+    public static async getTotalCommandsExecuted(): Promise<number> {
+        const stats = await Stats.findOne();
+        return stats.commandsRan as number;
     }
 
-    public static getTotalSongsPlayed(): number {
-        const total = SqLite3.master.prepare("SELECT songsPlayed FROM statistics WHERE version=?").get("v3");
-        return total.songsPlayed;
+    public static async getTotalSongsPlayed(): Promise<number> {
+        const stats = await Stats.findOne();
+        return stats.songsPlayed as number;
     }
 
-    public static getTotalPlaylistsPlayed(): number {
-        const total = SqLite3.master.prepare("SELECT playlistsPlayed FROM statistics WHERE version=?").get("v3");
-        return total.playlistsPlayed;
+    public static async getTotalPlaylistedQueued(): Promise<number> {
+        const stats = await Stats.findOne();
+        return stats.playlistsQueued as number;
     }
 }

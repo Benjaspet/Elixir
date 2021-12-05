@@ -1,16 +1,11 @@
-import DatabaseUtil from "../utils/DatabaseUtil";
-import SqLite3 from "../resources/SqLite3";
-import ElixirUtil from "../utils/ElixirUtil";
+import Logger from "../Logger";
+import * as mongoose from "mongoose";
+import Config from "../Config";
 
 export default class DatabaseManager {
 
-    constructor() {
-        this.createAllTables().then(() => {});
-    }
-
-    private async createAllTables(): Promise<void> {
-        SqLite3.master.exec(DatabaseUtil.getSqlQuery(0));
-        await ElixirUtil.sleep(2000);
-        console.log("✔ Database loaded.")
+    public static async connect(): Promise<void> {
+        await mongoose.connect(Config.get("MONGO-URI"));
+        Logger.info("Connected to database.");
     }
 }

@@ -1,21 +1,16 @@
 import * as Discord from "discord.js";
 import {Client} from "discord.js";
-import {PonjoCommand} from "../interfaces/PonjoCommand";
+import {ICommand} from "../interfaces/ICommand";
 import {player} from "../Elixir";
-import DatabaseUtil from "../utils/DatabaseUtil";
 import EmbedUtil from "../utils/EmbedUtil";
 
-export default class QueueCommand implements PonjoCommand {
+export default class QueueCommand implements ICommand {
 
     public name: string = "queue";
-    public once: boolean = false;
-    public enabled: boolean = true;
     public description: string = "View all songs in the queue.";
-    public aliases: string[] = [];
-    protected client: Client;
+    private readonly client: Client;
 
     constructor(client: Client) {
-        this.enabled = true;
         this.client = client;
     }
 
@@ -23,7 +18,6 @@ export default class QueueCommand implements PonjoCommand {
         if (!interaction.isCommand()) return;
         if (interaction.commandName === this.name) {
             try {
-                DatabaseUtil.addExecutedCommand(1);
                 const queue = player.getQueue(interaction.guild.id);
                 if (queue.songs.length > 20) {
                     const embed = new Discord.MessageEmbed()
@@ -34,7 +28,7 @@ export default class QueueCommand implements PonjoCommand {
                 const embed = new Discord.MessageEmbed()
                     .setTitle(`Queue for ${interaction.guild.name}`)
                     .setColor("PURPLE")
-                    .setFooter(`ponjo.club/elixir`, this.client.user.displayAvatarURL({dynamic: true}))
+                    .setFooter(`Elixir Music`, this.client.user.displayAvatarURL({dynamic: true}))
                 let counter = 0;
                 for (let i = 0; i < queue.songs.length; i += 20) {
                     if (counter >= 10) break;
@@ -43,13 +37,11 @@ export default class QueueCommand implements PonjoCommand {
                     counter++;
                 }
                 if (queue.songs.length > 25) {
-                    return interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(this.client,
-                            "error", "Cannot display queue: too many songs.")]});
+                    return interaction.reply({embeds: [EmbedUtil.getErrorEmbed("Cannot display queue: too many songs.")]});
                 }
                 return await interaction.reply({embeds: [embed]});
             } catch (err) {
-                return await interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(this.client,
-                        "error", "There are no songs currently queued.")]});
+                return await interaction.reply({embeds: [EmbedUtil.getErrorEmbed("There are no songs currently queued.")]});
             }
         }
     }
