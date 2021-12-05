@@ -1,11 +1,11 @@
 import {Client} from "discord.js";
-import config from "../resources/Config";
 import {SpotifyPlugin} from "@distube/spotify";
+import Config from "../Config";
 
-export default class ElixirUtil {
+export default class Util {
 
     public static getTotalElixirMemberCount(client): number {
-        return <number>ElixirUtil.formatLargeNumber(client.guilds.cache.reduce((a, g) => a + g.memberCount, 0) + 25000);
+        return <number>Util.formatLargeNumber(client.guilds.cache.reduce((a, g) => a + g.memberCount, 0) + 25000);
     }
 
     public static getTotalElixirServerCount(client): number {
@@ -44,7 +44,7 @@ export default class ElixirUtil {
 
     public static getProcessUptime(): string {
         const uptimeAsUnix = process.uptime();
-        return ElixirUtil.formatSeconds(uptimeAsUnix);
+        return Util.formatSeconds(uptimeAsUnix);
     }
 
     public static cleanFormat(num: number): string {
@@ -60,13 +60,13 @@ export default class ElixirUtil {
     }
 
     public static getVersion(): string {
-        return config.version;
+        return Config.get("VERSION");
     }
 
     public static getMusicOptions(): object {
         return {
             emitNewSongOnly: false,
-            leaveOnEmpty: true,
+            leaveOnEmpty: false,
             leaveOnFinish: true,
             leaveOnStop: true,
             savePreviousSongs: true,

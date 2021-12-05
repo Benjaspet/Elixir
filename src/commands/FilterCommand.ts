@@ -1,22 +1,18 @@
 import {Client} from "discord.js";
 import {player} from "../Elixir";
-import {Command} from "../interfaces/Command";
-import DatabaseUtil from "../utils/DatabaseUtil";
+import {ICommand} from "../interfaces/ICommand";
 import EmbedUtil from "../utils/EmbedUtil";
-import ElixirUtil from "../utils/ElixirUtil";
+import Util from "../utils/Util";
 import SlashCommandUtil from "../utils/SlashCommandUtil";
+import Logger from "../Logger";
 
-export default class FilterCommand implements Command {
+export default class FilterCommand implements ICommand {
 
     public name: string = "filter";
-    public once: boolean = false;
-    public enabled: boolean = true;
     public description: string = "Add or remove filters to songs.";
-    public aliases: string[] = [];
-    protected client: Client;
+    private readonly client: Client;
 
     constructor(client: Client) {
-        this.enabled = true;
         this.client = client;
     }
 
@@ -24,32 +20,26 @@ export default class FilterCommand implements Command {
         if (!interaction.isCommand()) return;
         if (interaction.commandName === this.name) {
             try {
-                DatabaseUtil.addExecutedCommand(1);
                 const channel = interaction.member?.voice.channel;
                 const queue = player.getQueue(interaction.guild.id);
                 const filter = interaction.options.getString("type");
                 if (!channel) {
-                    return interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(this.client,
-                            "error", "You must be in a voice channel to run this command.")]});
+                    return interaction.reply({embeds: [EmbedUtil.getErrorEmbed("You must be in a voice channel to run this command.")]});
                 }
                 if (!queue) {
-                    return await interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(this.client,
-                            "error", "There is no queue for the server.")]});
+                    return await interaction.reply({embeds: [EmbedUtil.getErrorEmbed("There is no queue for the server.")]});
                 }
                 await interaction.deferReply();
-                await ElixirUtil.sleep(2000);
+                await Util.sleep(2000);
                 if (filter === "remove-all") {
                     player.setFilter(interaction.guild.id, false, true);
-                    return await interaction.editReply({embeds: [EmbedUtil.fetchEmbedByType(this.client,
-                            "default", "Successfully removed all filters.")]});
+                    return await interaction.editReply({embeds: [EmbedUtil.getDefaultEmbed("Successfully removed all filters.")]});
                 }
                 player.setFilter(interaction.guild.id, filter);
-                return await interaction.editReply({embeds: [EmbedUtil.fetchEmbedByType(this.client,
-                        "default", "Successfully set the filter to **" + filter + "**.")]});
+                return await interaction.editReply({embeds: [EmbedUtil.getDefaultEmbed("Successfully set the filter to **" + filter + "**.")]});
             } catch (error) {
-                console.log(error)
-                return await interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(this.client,
-                        "error", "An error occurred while running this command.")]});
+                Logger.error(error)
+                return await interaction.reply({embeds: [EmbedUtil.getErrorEmbed("An error occurred while running this command.")]});
             }
         }
     }

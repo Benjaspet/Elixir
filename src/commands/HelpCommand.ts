@@ -1,42 +1,36 @@
 import {Client} from "discord.js";
-import {Command} from "../interfaces/Command";
-import DatabaseUtil from "../utils/DatabaseUtil";
+import {ICommand} from "../interfaces/ICommand";
 import EmbedUtil from "../utils/EmbedUtil";
 import SlashCommandUtil from "../utils/SlashCommandUtil";
 
-export default class HelpCommand implements Command {
+export default class HelpCommand implements ICommand {
 
     public name: string = "help";
-    public once: boolean = false;
-    public enabled: boolean = true;
     public description: string = "Displays a list of all available commands for Elixir.";
-    public aliases: string[] = [];
-    protected client: Client;
+    private readonly client: Client;
 
     constructor(client: Client) {
-        this.enabled = true;
         this.client = client;
     }
 
     public async execute(interaction) {
         if (!interaction.isCommand()) return;
         if (interaction.commandName === this.name) {
-            DatabaseUtil.addExecutedCommand(1);
             if (!interaction.options.get("category")) {
-                return await interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(this.client, "help-default")]});
+                return await interaction.reply({embeds: [EmbedUtil.getHelpMenuEmbed(this.client)]});
             }
             const {value: string} = interaction.options.get("category");
             switch (string) {
                 case "help-faq":
-                    return await interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(this.client, "help-faq")]});
+                    return await interaction.reply({embeds: [EmbedUtil.getFaqEmbed(this.client)]});
                 case "help-invite":
-                    return await interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(this.client, "help-invite")]});
+                    return await interaction.reply({embeds: [EmbedUtil.getInviteEmbed()]});
                 case "help-support":
-                    return await interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(this.client, "help-support")]});
+                    return await interaction.reply({embeds: [EmbedUtil.getSupportServerEmbed()]});
                 case "help-commands":
-                    return await interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(this.client, "help-default")]});
+                    return await interaction.reply({embeds: [EmbedUtil.getHelpMenuEmbed(this.client)]});
                 case "help-terms":
-                    return await interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(this.client, "help-terms")]});
+                    return await interaction.reply({embeds: [EmbedUtil.getTermsEmbed(this.client)]});
             }
         }
     }

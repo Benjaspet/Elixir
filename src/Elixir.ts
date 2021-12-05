@@ -1,9 +1,9 @@
 import {Client} from "discord.js";
-import CommandBuilder from "./builders/CommandBuilder";
-import AppBuilder from "./builders/AppBuilder";
-import IntentsBuilder from "./builders/IntentsBuilder";
-import * as Distube from "distube";
-import ElixirUtil from "./utils/ElixirUtil";
+import IntentsBuilder from "./utils/IntentHandler";
+import {DisTube} from "distube";
+import Util from "./utils/Util";
+import BaseApp from "./base/BaseApp";
+import BaseEvent from "./base/BaseEvent";
 
 export const client = new Client({
     allowedMentions: {
@@ -14,10 +14,10 @@ export const client = new Client({
     intents: IntentsBuilder.getIntents()
 });
 
-export const player = new Distube.DisTube(client, ElixirUtil.getMusicOptions());
+export const player = new DisTube(client, Util.getMusicOptions());
 
-new AppBuilder(client);
-new CommandBuilder(client);
+new BaseApp(client).login();
+new BaseEvent(client);
 
 export default {
     client, player

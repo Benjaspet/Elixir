@@ -1,22 +1,19 @@
 import {Client} from "discord.js";
-import {Command} from "../interfaces/Command";
+import {ICommand} from "../interfaces/ICommand";
 import {player} from "../Elixir";
 import DatabaseUtil from "../utils/DatabaseUtil";
 import EmbedUtil from "../utils/EmbedUtil";
-import ElixirUtil from "../utils/ElixirUtil";
+import Util from "../utils/Util";
 import SlashCommandUtil from "../utils/SlashCommandUtil";
+import Logger from "../Logger";
 
-export default class VolumeCommand implements Command {
+export default class VolumeCommand implements ICommand {
 
     public name: string = "volume";
-    public once: boolean = false;
-    public enabled: boolean = true;
     public description: string = "Amplify or lower the music volume.";
-    public aliases: string[] = [];
-    protected client: Client;
+    private readonly client: Client;
 
     constructor(client: Client) {
-        this.enabled = true;
         this.client = client;
     }
 
@@ -24,27 +21,22 @@ export default class VolumeCommand implements Command {
         if (!interaction.isCommand()) return;
         if (interaction.commandName === this.name) {
             try {
-                DatabaseUtil.addExecutedCommand(1);
                 const channel = interaction.member?.voice.channel;
                 const queue = player.getQueue(interaction.guild.id);
                 const volume = interaction.options.getNumber("amplifier");
                 if (!channel) {
-                    return interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(this.client,
-                            "error", "You must be in a voice channel to run this command.")]});
+                    return interaction.reply({embeds: [EmbedUtil.getErrorEmbed("You must be in a voice channel to run this command.")]});
                 }
                 if (!queue) {
-                    return await interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(this.client,
-                            "error", "There is no queue for the server.")]});
+                    return await interaction.reply({embeds: [EmbedUtil.getErrorEmbed("There is no queue for the server.")]});
                 }
                 await interaction.deferReply();
-                await ElixirUtil.sleep(1000);
+                await Util.sleep(1000);
                 await player.setVolume(interaction.guild.id, volume);
-                return await interaction.editReply({embeds: [EmbedUtil.fetchEmbedByType(this.client,
-                        "default", "Successfully set the volume to **" + volume + "**.")]});
+                return await interaction.editReply({embeds: [EmbedUtil.getDefaultEmbed("Successfully set the volume to **" + volume + "**.")]});
             } catch (error) {
-                console.log(error)
-                return await interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(this.client,
-                        "error", "An error occurred while running this command.")]});
+                Logger.error(error);
+                return await interaction.reply({embeds: [EmbedUtil.getErrorEmbed("An error occurred while running this command.")]});
             }
         }
     }

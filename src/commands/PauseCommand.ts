@@ -1,20 +1,16 @@
 import {Client} from "discord.js";
-import {Command} from "../interfaces/Command";
+import {ICommand} from "../interfaces/ICommand";
 import {player} from "../Elixir";
-import DatabaseUtil from "../utils/DatabaseUtil";
 import EmbedUtil from "../utils/EmbedUtil";
+import Logger from "../Logger";
 
-export default class PauseCommand implements Command {
+export default class PauseCommand implements ICommand {
 
     public name: string = "pause";
-    public once: boolean = false;
-    public enabled: boolean = true;
     public description: string = "Pause the current song.";
-    public aliases: string[] = [];
-    protected client: Client;
+    private readonly client: Client;
 
     constructor(client: Client) {
-        this.enabled = true;
         this.client = client;
     }
 
@@ -22,24 +18,19 @@ export default class PauseCommand implements Command {
         if (!interaction.isCommand()) return;
         if (interaction.commandName === this.name) {
             try {
-                DatabaseUtil.addExecutedCommand(1);
                 const channel = interaction.member?.voice.channel;
                 const queue = player.getQueue(interaction.guild.id);
                 if (!channel) {
-                    return interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(this.client,
-                            "error", "You must be in a voice channel to run this command.")]});
+                    return interaction.reply({embeds: [EmbedUtil.getErrorEmbed("You must be in a voice channel to run this command.")]});
                 }
                 if (!queue) {
-                    return await interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(this.client,
-                            "error", "There is no queue for the server.")]});
+                    return await interaction.reply({embeds: [EmbedUtil.getErrorEmbed("There is no queue for the server.")]});
                 }
                 await player.pause(interaction.guild.id);
-                return await interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(this.client,
-                        "default", "Successfully paused the current song.")]});
+                return await interaction.reply({embeds: [EmbedUtil.getDefaultEmbed("Successfully paused the current song.")]});
             } catch (error) {
-                console.log(error)
-                return await interaction.reply({embeds: [EmbedUtil.fetchEmbedByType(this.client,
-                        "error", "The song is already paused.")]});
+                Logger.error(error)
+                return await interaction.reply({embeds: [EmbedUtil.getErrorEmbed("The song is already paused.")]});
             }
         }
     }

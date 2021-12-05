@@ -1,13 +1,13 @@
-import config from "../resources/Config";
 import axios from "axios";
+import Config from "../Config";
 
 export default class SpotifyAPIUtil {
 
     public static async getRefreshedAccessToken(): Promise<string> {
-        return await axios(config.spotifyApi.postUri, {
+        return await axios(Config.get("SPOTIFY-POST-URI"), {
             method: "post",
             headers: {
-                'Authorization': `Basic ${config.spotifyApi.base64Auth}`
+                'Authorization': `Basic ${Config.get("SPOTIFY-BASE64-AUTH")}`
             }
         }).then(async (response) => {
             if (response.status == 400) {

@@ -1,28 +1,24 @@
 import * as Discord from "discord.js";
 import {getData, getTracks} from "spotify-url-info";
 import {Client, Collection, Snowflake} from "discord.js";
-import {Command} from "../interfaces/Command";
-import {client, player} from "../Elixir";
-import config from "../resources/Config";
+import {ICommand} from "../interfaces/ICommand";
+import {player} from "../Elixir";
 import DatabaseUtil from "../utils/DatabaseUtil";
 import EmbedUtil from "../utils/EmbedUtil";
 import SlashCommandUtil from "../utils/SlashCommandUtil";
-import ElixirUtil from "../utils/ElixirUtil";
+import Util from "../utils/Util";
 import SpotifyAPIUtil from "../utils/SpotifyAPIUtil";
+import Logger from "../Logger";
+import Config from "../Config";
 
-export default class PlayCommand implements Command {
+export default class PlayCommand implements ICommand {
 
     public name: string = "play";
-    public once: boolean = false;
-    public enabled: boolean = true;
     public description: string = "Play a song in a voice channel with a link or query.";
-    public aliases: string[] = [];
     private readonly client: Client;
-
     public static followUp: Collection<Snowflake, boolean> = new Collection<Snowflake, boolean>();
 
     constructor(client: Client) {
-        this.enabled = true;
         this.client = client;
     }
 
@@ -33,14 +29,13 @@ export default class PlayCommand implements Command {
             const song = interaction.options.getString("song");
             const channel = interaction.member?.voice.channel;
             if (!channel) return interaction.editReply({
-                embeds: [EmbedUtil.fetchEmbedByType(
-                    this.client, "error", "You must be in a voice channel to run this command.")]
+                embeds: [EmbedUtil.getErrorEmbed("You must be in a voice channel to run this command.")]
             });
             try {
                 await DatabaseUtil.addExecutedCommand(1);
                 if (song.toLowerCase().includes("spotify") && song.toLowerCase().includes("playlist")) {
                     getTracks(song).then(async result => {
-                        if (result.length > 99 && interaction.user.id !== config.guild) {
+                        if (result.length > 99 && interaction.user.id !== Config.get("GUILD-ID")) {
                             const embed = new Discord.MessageEmbed()
                                 .setColor("PURPLE")
                                 .setDescription("To avoid ratelimiting, only 100 songs can be queued at once. Therefore, only the first " +
@@ -83,7 +78,7 @@ export default class PlayCommand implements Command {
                         })
                 } else if (song.toLowerCase().includes("youtube.com/watch")) {
                     const embed2 = new Discord.MessageEmbed()
-                        .setDescription(`Searching for the song...`)
+                        .setDescription("Searching for the song...")
                         .setColor("PURPLE")
                         .setFooter(`Requested by: ${interaction.member.user.tag}`, interaction.member.user.displayAvatarURL({dynamic: true}))
                         .setTimestamp()
@@ -96,7 +91,7 @@ export default class PlayCommand implements Command {
                     const artist = data.artist ? data.artist : undefined;
                     const artistUrl = data.artistUrl ? data.artistUrl : "https://www.spotify.com/us"
                     const url = data.trackUrl ? data.trackUrl : "https://www.spotify.com/us";
-                    await ElixirUtil.sleep(1000);
+                    await Util.sleep(1000);
                     const embed = new Discord.MessageEmbed()
                         .setDescription(`` +
                             `**Queued:** [${songName}](${url})` + "\n" +
@@ -105,18 +100,17 @@ export default class PlayCommand implements Command {
                         .setFooter(`Requested by: ${interaction.member.user.tag}`, interaction.member.user.displayAvatarURL({dynamic: true}))
                         .setTimestamp()
                     if (!songName || !artist) {
-                        DatabaseUtil.addPlayedSong(1);
-                        return await interaction.editReply({embeds: [EmbedUtil.fetchEmbedByType(client, "error", "Cannot play that song.")]});
+                        await DatabaseUtil.addPlayedSong(1);
+                        return await interaction.editReply({embeds: [EmbedUtil.getErrorEmbed("Cannot play that song.")]});
                     }
                     await PlayCommand.followUp.set(interaction.guild.id, false);
-                    DatabaseUtil.addPlayedSong(1);
+                    await DatabaseUtil.addPlayedSong(1);
                     await interaction.editReply({embeds: [embed]});
                     return await player.playVoiceChannel(channel, song, {textChannel: interaction.channel});
                 }
             } catch (error) {
-                console.log(error)
-                return await interaction.editReply({embeds: [EmbedUtil.fetchEmbedByType(this.client,
-                        "error", "An error occurred during playback.")]});
+                Logger.error(error);
+                return await interaction.editReply({embeds: [EmbedUtil.getErrorEmbed("An error occurred during playback.")]});
             }
         }
     }
