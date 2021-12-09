@@ -15,7 +15,7 @@ export default class MessageEvent implements IEvent {
     }
 
     public async execute(message: Message): Promise<void> {
-        if (message.mentions.has(this.client.user)) {
+        if (message.mentions.users.first()) {
             await message.reply({
                 embeds: [EmbedUtil.getControlPanelEmbed(this.client)],
                 components: [EmbedUtil.getControlPanelButtons()]})
