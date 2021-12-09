@@ -1,6 +1,6 @@
-import {model, Schema} from "mongoose";
+import {Model, model, Schema} from "mongoose";
 
-const StatsSchema = new Schema(
+const StatsSchema: Schema = new Schema(
     {
         commandsRan: Number,
         songsPlayed: Number,
@@ -11,5 +11,5 @@ const StatsSchema = new Schema(
     }
 );
 
-const Stats = model("stats", StatsSchema);
+const Stats: Model<any> = model("stats", StatsSchema);
 export default Stats;

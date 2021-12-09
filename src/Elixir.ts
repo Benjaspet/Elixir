@@ -5,7 +5,7 @@ import Util from "./utils/Util";
 import BaseApp from "./base/BaseApp";
 import BaseEvent from "./base/BaseEvent";
 
-export const client = new Client({
+export const client: Client = new Client({
     allowedMentions: {
         parse: ["users", "roles", "everyone"],
         repliedUser: false,
@@ -14,7 +14,7 @@ export const client = new Client({
     intents: IntentsBuilder.getIntents()
 });
 
-export const player = new DisTube(client, Util.getMusicOptions());
+export const player: DisTube = new DisTube(client, Util.getMusicOptions());
 
 new BaseApp(client).login();
 new BaseEvent(client);
