@@ -18,7 +18,7 @@
 
 ### Credits
 
-- Developer & sole maintainer: Ben Petrillo (Eerie6560)
+- Developer & sole maintainer: Ben Petrillo
 
 ### Features
  
