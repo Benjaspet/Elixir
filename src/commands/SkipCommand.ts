@@ -47,6 +47,8 @@ export default class SkipCommand implements ICommand {
                         const embed = EmbedUtil.getDefaultEmbed("Skipped to the next track.");
                         return await interaction.reply({embeds: [embed]});
                     }
+                } else {
+                    return await interaction.reply({content: "This command must be run in a guild."});
                 }
             } catch (error) {
                 Logger.error(error);

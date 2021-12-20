@@ -1,4 +1,4 @@
-import {Client, CommandInteraction} from "discord.js";
+import {Client, CommandInteraction, GuildMember} from "discord.js";
 import {ICommand} from "../interfaces/ICommand";
 import {Queue} from "discord-player";
 import {ApplicationCommandOptionTypes} from "discord.js/typings/enums";
@@ -19,18 +19,23 @@ export default class VolumeCommand implements ICommand {
     public async execute(interaction: CommandInteraction): Promise<any> {
         try {
             const queue: Queue = player.getQueue(interaction.guild);
-            if (!queue || !queue.playing) {
-                const embed = EmbedUtil.getErrorEmbed("There are no songs in the queue.")
-                return await interaction.reply({embeds: [embed]});
+            const member = interaction.member;
+            if (member instanceof GuildMember) {
+                const volume = interaction.options.getNumber("amplifier");
+                if (!queue || !queue.playing) {
+                    const embed = EmbedUtil.getErrorEmbed("There are no songs in the queue.")
+                    return await interaction.reply({embeds: [embed]});
+                } else if (queue.volume == volume) {
+                    const embed = EmbedUtil.getErrorEmbed("Please select a volume different from the current.");
+                    return await interaction.reply({embeds: [embed]});
+                } else {
+                    queue.setVolume(volume);
+                    const embed = EmbedUtil.getDefaultEmbed("Successfully set the volume to **" + volume + "**.");
+                    return await interaction.editReply({embeds: [embed]});
+                }
+            } else {
+                return await interaction.reply({content: "This command must be run in a guild."});
             }
-            const volume = interaction.options.getNumber("amplifier");
-            if (queue.volume == volume) {
-                const embed = EmbedUtil.getErrorEmbed("Please select a volume different from the current.");
-                return await interaction.reply({embeds: [embed]});
-            }
-            queue.setVolume(volume);
-            const embed = EmbedUtil.getDefaultEmbed("Successfully set the volume to **" + volume + "**.");
-            return await interaction.editReply({embeds: [embed]});
         } catch (error: any) {
             Logger.error(error);
             const embed = EmbedUtil.getErrorEmbed("An error occurred while running this command.");
