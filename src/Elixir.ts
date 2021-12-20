@@ -1,8 +1,8 @@
 import {Client} from "discord.js";
+import {Player} from "discord-player";
 import IntentsBuilder from "./utils/IntentHandler";
 import BaseApp from "./base/BaseApp";
 import BaseEvent from "./base/BaseEvent";
-import {Player} from "discord-player";
 import MusicPlayer from "./utils/Player";
 
 export const client: Client = new Client({

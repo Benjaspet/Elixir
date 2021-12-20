@@ -1,7 +1,9 @@
-import {Client} from "discord.js";
+import {Client, CommandInteraction, GuildMember} from "discord.js";
 import {player} from "../Elixir";
 import {ICommand} from "../interfaces/ICommand";
 import EmbedUtil from "../utils/EmbedUtil";
+import {Queue} from "discord-player";
+import Logger from "../Logger";
 
 export default class ResumeCommand implements ICommand {
 
@@ -13,22 +15,31 @@ export default class ResumeCommand implements ICommand {
         this.client = client;
     }
 
-    public async execute(interaction) {
+    public async execute(interaction: CommandInteraction): Promise<any> {
         if (!interaction.isCommand()) return;
         if (interaction.commandName === this.name) {
             try {
-                const channel = interaction.member?.voice.channel;
-                const queue = player.getQueue(interaction.guild.id);
-                if (!channel) {
-                    return interaction.reply({embeds: [EmbedUtil.getErrorEmbed("You must be in a voice channel to run this command.")]});
+                const queue: Queue = player.getQueue(interaction.guild);
+                const member = interaction.member;
+                if (member instanceof GuildMember) {
+                    if (!queue) {
+                        const embed = EmbedUtil.getErrorEmbed("There's no queue in this server.");
+                        return await interaction.reply({embeds: [embed]});
+                    } else if (!member.voice.channel) {
+                        const embed = EmbedUtil.getErrorEmbed("You must be in a voice channel.");
+                        return await interaction.reply({embeds: [embed]});
+                    } else {
+                        queue.setPaused(false);
+                        const embed = EmbedUtil.getErrorEmbed("Resumed the current track successfully.");
+                        return await interaction.reply({embeds: [embed]});
+                    }
+                } else {
+                    return await interaction.reply({content: "This command must be run in a guild."});
                 }
-                if (!queue) {
-                    return await interaction.reply({embeds: [EmbedUtil.getErrorEmbed("There is no queue for the server.")]});
-                }
-                await player.resume(interaction.guild.id);
-                return await interaction.reply({embeds: [EmbedUtil.getDefaultEmbed("Successfully resumed the current song.")]});
             } catch (error) {
-                return await interaction.reply({embeds: [EmbedUtil.getErrorEmbed("The song is already playing.")]});
+                Logger.error(error);
+                const embed = EmbedUtil.getErrorEmbed("An error ocurred while running this command.");
+                return await interaction.reply({embeds: [embed]});
             }
         }
     }
