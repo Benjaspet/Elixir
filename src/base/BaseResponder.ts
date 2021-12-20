@@ -1,4 +1,4 @@
-import {Client, Interaction} from "discord.js";
+import {Client, CommandInteraction, Interaction} from "discord.js";
 import FilterCommand from "../commands/FilterCommand";
 import HelpCommand from "../commands/HelpCommand";
 import InfoCommand from "../commands/InfoCommand";
@@ -17,7 +17,7 @@ import VolumeCommand from "../commands/VolumeCommand";
 
 export default class BaseResponder {
 
-    public static async respondToApplicationCommands(client: Client, interaction: Interaction): Promise<void> {
+    public static async respondToApplicationCommands(client: Client, interaction: CommandInteraction): Promise<void> {
         new FilterCommand(client).execute(interaction).then(() => {});
         new HelpCommand(client).execute(interaction).then(() => {});
         new InfoCommand(client).execute(interaction).then(() => {});

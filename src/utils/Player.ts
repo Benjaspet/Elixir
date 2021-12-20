@@ -1,5 +1,5 @@
 import {PlayerOptions} from "discord-player";
-import {Permissions} from "discord.js";
+import {PermissionResolvable, Permissions} from "discord.js";
 
 export default class MusicPlayer {
 
@@ -16,21 +16,16 @@ export default class MusicPlayer {
         }
     }
 
-    public static getRequiredVoicePermission(): bigint[] {
+    public static getRequiredPermissions(): PermissionResolvable[] {
         return [
-            Permissions.FLAGS.VIEW_CHANNEL,
-            Permissions.FLAGS.CONNECT,
-            Permissions.FLAGS.SPEAK
-        ];
-    }
-
-    public static getRequiredTextPermissions(): bigint[] {
-        return [
-            Permissions.FLAGS.VIEW_CHANNEL,
-            Permissions.FLAGS.SEND_MESSAGES,
-            Permissions.FLAGS.READ_MESSAGE_HISTORY,
-            Permissions.FLAGS.ADD_REACTIONS,
-            Permissions.FLAGS.EMBED_LINKS
+            "VIEW_CHANNEL",
+            "SEND_MESSAGES",
+            "READ_MESSAGE_HISTORY",
+            "ADD_REACTIONS",
+            "EMBED_LINKS",
+            "CONNECT",
+            "SPEAK",
+            "PRIORITY_SPEAKER"
         ];
     }
 }

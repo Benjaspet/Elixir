@@ -1,10 +1,10 @@
 import {Client, CommandInteraction} from "discord.js";
 import {ICommand} from "../interfaces/ICommand";
+import {Queue} from "discord-player";
+import {ApplicationCommandOptionTypes} from "discord.js/typings/enums";
 import {player} from "../Elixir";
 import EmbedUtil from "../utils/EmbedUtil";
 import Logger from "../Logger";
-import {Queue} from "discord-player";
-import {ApplicationCommandOptionTypes} from "discord.js/typings/enums";
 
 export default class VolumeCommand implements ICommand {
 
@@ -32,8 +32,8 @@ export default class VolumeCommand implements ICommand {
             const embed = EmbedUtil.getDefaultEmbed("Successfully set the volume to **" + volume + "**.");
             return await interaction.editReply({embeds: [embed]});
         } catch (error: any) {
-            const embed = EmbedUtil.getErrorEmbed("An error occurred while running this command.");
             Logger.error(error);
+            const embed = EmbedUtil.getErrorEmbed("An error occurred while running this command.");
             return await interaction.reply({embeds: [embed]});
         }
     }

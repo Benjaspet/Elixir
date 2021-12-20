@@ -1,10 +1,11 @@
-import {Client} from "discord.js";
+import {Client, GuildMember} from "discord.js";
 import ReadyEvent from "../events/ReadyEvent";
 import BaseResponder from "./BaseResponder";
 import SearchResultEvent from "../events/SearchResultEvent";
 import MessageEvent from "../events/MessageEvent";
 import DatabaseUtil from "../utils/DatabaseUtil";
 import ButtonClickEvent from "../events/ButtonClickEvent";
+import MusicPlayer from "../utils/Player";
 
 export default class BaseEvent {
 
@@ -25,8 +26,17 @@ export default class BaseEvent {
             })
             .on("interactionCreate", async interaction => {
                 if (interaction.isCommand()) {
-                    await DatabaseUtil.addExecutedCommand(1);
-                    await BaseResponder.respondToApplicationCommands(this.client, interaction);
+                    if (interaction.member instanceof GuildMember) {
+                        MusicPlayer.getRequiredPermissions().forEach(perm => {
+                            if (!interaction.guild.me.permissions.has(perm)) {
+                                return interaction.reply({content: "I don't have sufficient permissions."});
+                            }
+                        });
+                        await DatabaseUtil.addExecutedCommand(1);
+                        await BaseResponder.respondToApplicationCommands(this.client, interaction);
+                    } else {
+                        return await interaction.reply({content: "You can only execute commands in a guild."});
+                    }
                 } else if (interaction.isButton()) {
                     await new ButtonClickEvent(this.client, "interactionCreate", false).execute(interaction);
                 } else if (interaction.isAutocomplete()) {
