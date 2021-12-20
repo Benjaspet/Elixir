@@ -1,9 +1,9 @@
 import {Client} from "discord.js";
 import IntentsBuilder from "./utils/IntentHandler";
-import {DisTube} from "distube";
-import Util from "./utils/Util";
 import BaseApp from "./base/BaseApp";
 import BaseEvent from "./base/BaseEvent";
+import {Player} from "discord-player";
+import MusicPlayer from "./utils/Player";
 
 export const client: Client = new Client({
     allowedMentions: {
@@ -14,7 +14,7 @@ export const client: Client = new Client({
     intents: IntentsBuilder.getIntents()
 });
 
-export const player: DisTube = new DisTube(client, Util.getMusicOptions());
+export const player: Player = new Player(client, MusicPlayer.getOptions());
 
 new BaseApp(client).login();
 new BaseEvent(client);

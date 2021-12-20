@@ -6,6 +6,7 @@ import {MessageEmbed} from "discord.js";
 import Util from "../utils/Util";
 import Logger from "../Logger";
 import EmbedUtil from "../utils/EmbedUtil";
+import {PlayerError, Queue} from "discord-player";
 
 player.on("addList", async (queue, playlist) => {
     await DatabaseUtil.addPlaylistPlayed(1);
@@ -38,7 +39,20 @@ player.on("initQueue", async queue => {
     queue.volume = 110;
 });
 
-player.on("error", async (channel, error) => {
-    Logger.error(error.message);
-    channel.send({embeds: [EmbedUtil.getErrorEmbed("Could not play that song.")]}).then(() => {});
+/**
+ * Emits when the client encounters an error.
+ * @return void
+ */
+
+player.on("error", async (queue: Queue, error: PlayerError) => {
+   Logger.error(`[${queue.guild.name}] Error: ${error.message}`) ;
+});
+
+/**
+ * Emits when the client is unable to connect to a voice channel.
+ * @return void
+ */
+
+player.on("connectionError", async (queue: Queue, error: PlayerError) => {
+   Logger.error(`[${queue.guild.name}] ConnectionError: ${error.message}`)
 });
