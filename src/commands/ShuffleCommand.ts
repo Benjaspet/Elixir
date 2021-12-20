@@ -1,4 +1,4 @@
-import {Client} from "discord.js";
+import {Client, CommandInteraction, GuildMember} from "discord.js";
 import {ICommand} from "../interfaces/ICommand";
 import {player} from "../Elixir";
 import EmbedUtil from "../utils/EmbedUtil";
@@ -14,26 +14,34 @@ export default class ShuffleCommand implements ICommand {
         this.client = client;
     }
 
-    public async execute(interaction) {
+    public async execute(interaction: CommandInteraction): Promise<any> {
         if (!interaction.isCommand()) return;
         if (interaction.commandName === this.name) {
             try {
                 const queue = player.getQueue(interaction.guild.id);
-                const channel = interaction.member?.voice.channel;
-                if (!queue) {
-                    return await interaction.reply({embeds: [EmbedUtil.getErrorEmbed("There is no queue for the server.")]});
+                const member = interaction.member;
+                if (member instanceof GuildMember) {
+                    if (!queue || !queue.playing) {
+                        const embed = EmbedUtil.getErrorEmbed("There are no songs in the queue.");
+                        return await interaction.reply({embeds: [embed]});
+                    } else if (!member.voice.channel) {
+                        const embed = EmbedUtil.getErrorEmbed("You must be in a voice channel.");
+                        return await interaction.reply({embeds: [embed]});
+                    } else if (queue.tracks.length <= 1) {
+                        const embed = EmbedUtil.getErrorEmbed("The queue isn't large enough to be shuffled.");
+                        return await interaction.reply({embeds: [embed]});
+                    } else {
+                        queue.shuffle();
+                        const embed = EmbedUtil.getDefaultEmbed("Shuffled the queue successfully.");
+                        return await interaction.reply({embeds: [embed]});
+                    }
+                } else {
+                    return await interaction.reply({content: "This command must be run in a guild."});
                 }
-                if (!channel) {
-                    return await interaction.reply({embeds: [EmbedUtil.getErrorEmbed("You must be in a voice channel.")]});
-                }
-                if (queue.songs.length <= 1) {
-                    return await interaction.reply({embeds: [EmbedUtil.getErrorEmbed("You cannot shuffle the queue. There is one song.")]});
-                }
-                await player.shuffle(interaction.guild.id);
-                return await interaction.reply({embeds: [EmbedUtil.getDefaultEmbed("Successfully shuffled the queue.")]});
-            } catch (error) {
+            } catch (error: any) {
                 Logger.error(error);
-                return await interaction.reply({embeds: [EmbedUtil.getErrorEmbed("An error occurred while running this command.")]});
+                const embed = EmbedUtil.getErrorEmbed("An error occurred while running this command.");
+                return await interaction.reply({embeds: [embed]});
             }
         }
     }
