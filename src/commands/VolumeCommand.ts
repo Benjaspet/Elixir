@@ -1,10 +1,9 @@
-import {Client} from "discord.js";
+import {Client, CommandInteraction, GuildMember} from "discord.js";
 import {ICommand} from "../interfaces/ICommand";
+import {Queue} from "discord-player";
+import {ApplicationCommandOptionTypes} from "discord.js/typings/enums";
 import {player} from "../Elixir";
-import DatabaseUtil from "../utils/DatabaseUtil";
 import EmbedUtil from "../utils/EmbedUtil";
-import Util from "../utils/Util";
-import SlashCommandUtil from "../utils/SlashCommandUtil";
 import Logger from "../Logger";
 
 export default class VolumeCommand implements ICommand {
@@ -17,26 +16,33 @@ export default class VolumeCommand implements ICommand {
         this.client = client;
     }
 
-    public async execute(interaction) {
+    public async execute(interaction: CommandInteraction): Promise<any> {
         if (!interaction.isCommand()) return;
         if (interaction.commandName === this.name) {
+            await interaction.deferReply();
             try {
-                const channel = interaction.member?.voice.channel;
-                const queue = player.getQueue(interaction.guild.id);
-                const volume = interaction.options.getNumber("amplifier");
-                if (!channel) {
-                    return interaction.reply({embeds: [EmbedUtil.getErrorEmbed("You must be in a voice channel to run this command.")]});
+                const queue: Queue = player.getQueue(interaction.guild);
+                const member = interaction.member;
+                if (member instanceof GuildMember) {
+                    const volume = interaction.options.getNumber("amplifier");
+                    if (!queue) {
+                        const embed = EmbedUtil.getErrorEmbed("There's no queue in this server.");
+                        return await interaction.editReply({embeds: [embed]});
+                    } else if (queue.volume == volume) {
+                        const embed = EmbedUtil.getErrorEmbed("Please select a volume different from the current.");
+                        return await interaction.editReply({embeds: [embed]});
+                    } else {
+                        queue.setVolume(volume);
+                        const embed = EmbedUtil.getDefaultEmbed("Successfully set the volume to **" + volume + "**.");
+                        return await interaction.editReply({embeds: [embed]});
+                    }
+                } else {
+                    return await interaction.editReply({content: "This command must be run in a guild."});
                 }
-                if (!queue) {
-                    return await interaction.reply({embeds: [EmbedUtil.getErrorEmbed("There is no queue for the server.")]});
-                }
-                await interaction.deferReply();
-                await Util.sleep(1000);
-                await player.setVolume(interaction.guild.id, volume);
-                return await interaction.editReply({embeds: [EmbedUtil.getDefaultEmbed("Successfully set the volume to **" + volume + "**.")]});
-            } catch (error) {
+            } catch (error: any) {
                 Logger.error(error);
-                return await interaction.reply({embeds: [EmbedUtil.getErrorEmbed("An error occurred while running this command.")]});
+                const embed = EmbedUtil.getErrorEmbed("An error occurred while running this command.");
+                return await interaction.editReply({embeds: [embed]});
             }
         }
     }
@@ -52,32 +58,32 @@ export default class VolumeCommand implements ICommand {
             {
                 name: "amplifier",
                 description: "The volume amplifier.",
-                type: SlashCommandUtil.slashCommandTypeToInt("NUMBER"),
+                type: ApplicationCommandOptionTypes.NUMBER,
                 required: true,
                 choices: [
                     {
-                        name: "200",
-                        value: 200
+                        name: "100",
+                        value: 100
                     },
                     {
-                        name: "150",
-                        value: 150
+                        name: "80",
+                        value: 80
                     },
                     {
-                        name: "125",
-                        value: 125
-                    },
-                    {
-                        name: "75",
-                        value: 75
+                        name: "60",
+                        value: 60
                     },
                     {
                         name: "50",
                         value: 50
                     },
                     {
-                        name: "25",
-                        value: 25
+                        name: "40",
+                        value: 40
+                    },
+                    {
+                        name: "20",
+                        value: 20
                     }
                 ]
             }

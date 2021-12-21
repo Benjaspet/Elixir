@@ -1,5 +1,4 @@
 import Stats from "../schemas/StatsSchema";
-import {Collection} from "mongoose";
 
 export default class DatabaseUtil {
 

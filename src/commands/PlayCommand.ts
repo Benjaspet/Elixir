@@ -1,116 +1,99 @@
-import * as Discord from "discord.js";
-import {getData, getTracks} from "spotify-url-info";
-import {Client, Collection, Snowflake} from "discord.js";
+import {Client, CommandInteraction, GuildMember} from "discord.js";
 import {ICommand} from "../interfaces/ICommand";
+import {QueryType, Queue, Track, TrackSource} from "discord-player";
+import {ApplicationCommandOptionTypes} from "discord.js/typings/enums";
 import {player} from "../Elixir";
-import DatabaseUtil from "../utils/DatabaseUtil";
 import EmbedUtil from "../utils/EmbedUtil";
-import SlashCommandUtil from "../utils/SlashCommandUtil";
-import Util from "../utils/Util";
-import SpotifyAPIUtil from "../utils/SpotifyAPIUtil";
 import Logger from "../Logger";
-import Config from "../Config";
+import playdl from "play-dl";
+import MusicPlayer from "../utils/MusicPlayer";
+import DatabaseUtil from "../utils/DatabaseUtil";
 
 export default class PlayCommand implements ICommand {
 
     public name: string = "play";
     public description: string = "Play a song in a voice channel with a link or query.";
     private readonly client: Client;
-    public static followUp: Collection<Snowflake, boolean> = new Collection<Snowflake, boolean>();
 
     constructor(client: Client) {
         this.client = client;
     }
 
-    public async execute(interaction) {
+    public async execute(interaction: CommandInteraction): Promise<any> {
         if (!interaction.isCommand()) return;
         if (interaction.commandName === this.name) {
-            await interaction.deferReply();
-            const song = interaction.options.getString("song");
-            const channel = interaction.member?.voice.channel;
-            if (!channel) return interaction.editReply({
-                embeds: [EmbedUtil.getErrorEmbed("You must be in a voice channel to run this command.")]
-            });
             try {
-                await DatabaseUtil.addExecutedCommand(1);
-                if (song.toLowerCase().includes("spotify") && song.toLowerCase().includes("playlist")) {
-                    getTracks(song).then(async result => {
-                        if (result.length > 99 && interaction.user.id !== Config.get("GUILD-ID")) {
-                            const embed = new Discord.MessageEmbed()
-                                .setColor("PURPLE")
-                                .setDescription("To avoid ratelimiting, only 100 songs can be queued at once. Therefore, only the first " +
-                                    "100 songs of this playlist will be queued." + "\n\n" + "**Total songs:** " + result.length)
-                                .setFooter(`Requested by: ${interaction.member.user.tag}`, interaction.member.user.displayAvatarURL({dynamic: true}))
-                                .setTimestamp()
-                            await PlayCommand.followUp.set(interaction.guild.id, false);
-                            await interaction.editReply({embeds: [embed]});
-                            return await player.playVoiceChannel(channel, song, {textChannel: interaction.channel});
-                        } else {
-                            const embed = new Discord.MessageEmbed()
-                                .setTitle("Searching for the playlist...")
-                                .setColor("PURPLE")
-                                .setDescription("Total songs: " + result.length)
-                                .setFooter(`Requested by: ${interaction.member.user.tag}`, interaction.member.user.displayAvatarURL({dynamic: true}))
-                                .setTimestamp()
-                            await PlayCommand.followUp.set(interaction.guild.id, false);
-                            await interaction.editReply({embeds: [embed]});
-                            return await player.playVoiceChannel(channel, song, {textChannel: interaction.channel});
+                const track = interaction.options.getString("song");
+                const member = interaction.member;
+                if (member instanceof GuildMember) {
+                    if (!member.voice.channel) {
+                        const embed = EmbedUtil.getErrorEmbed("You must be in a voice channel.");
+                        return await interaction.reply({embeds: [embed]});
+                    } else {
+                        const searchResult = await player.search(track, {requestedBy: interaction.user, searchEngine: QueryType.AUTO});
+                        if (!searchResult || !searchResult.tracks.length) {
+                            const embed = EmbedUtil.getErrorEmbed("No results found.");
+                            return await interaction.reply({embeds: [embed]});
                         }
-                    });
-                } else if (song.includes("https://open.spotify.com")) {
-                    await getData(song)
-                        .then(async data => {
-                            const songName = data.name;
-                            const songUrl = data.external_urls.spotify;
-                            const artist = data.artists[0].name;
-                            const artistUrl = data.artists[0].external_urls.spotify;
-                            const embed = new Discord.MessageEmbed()
-                                .setColor("PURPLE")
-                                .setDescription(`` +
-                                    `**Queued:** [${songName}](${songUrl})` + "\n" +
-                                    `**Artist:** [${artist}](${artistUrl})`)
-                                .setFooter(`Requested by: ${interaction.member.user.tag}`, interaction.member.user.displayAvatarURL({dynamic: true}))
-                                .setTimestamp()
-                            await PlayCommand.followUp.set(interaction.guild.id, false);
-                            await interaction.editReply({embeds: [embed]});
-                            await DatabaseUtil.addPlayedSong(1);
-                            return await player.playVoiceChannel(channel, song, {textChannel: interaction.channel});
-                        })
-                } else if (song.toLowerCase().includes("youtube.com/watch")) {
-                    const embed2 = new Discord.MessageEmbed()
-                        .setDescription("Searching for the song...")
-                        .setColor("PURPLE")
-                        .setFooter(`Requested by: ${interaction.member.user.tag}`, interaction.member.user.displayAvatarURL({dynamic: true}))
-                        .setTimestamp()
-                    await PlayCommand.followUp.set(interaction.guild.id, true);
-                    await interaction.editReply({embeds: [embed2]});
-                    return await player.playVoiceChannel(channel, song, {textChannel: interaction.channel});
-                } else {
-                    const data = await SpotifyAPIUtil.getSpotifyTrack(song);
-                    const songName = data.name ? data.name : undefined;
-                    const artist = data.artist ? data.artist : undefined;
-                    const artistUrl = data.artistUrl ? data.artistUrl : "https://www.spotify.com/us"
-                    const url = data.trackUrl ? data.trackUrl : "https://www.spotify.com/us";
-                    await Util.sleep(1000);
-                    const embed = new Discord.MessageEmbed()
-                        .setDescription(`` +
-                            `**Queued:** [${songName}](${url})` + "\n" +
-                            `**Artist:** [${artist}](${artistUrl})`)
-                        .setColor("PURPLE")
-                        .setFooter(`Requested by: ${interaction.member.user.tag}`, interaction.member.user.displayAvatarURL({dynamic: true}))
-                        .setTimestamp()
-                    if (!songName || !artist) {
+                        const embed = EmbedUtil.getDefaultEmbed("Searching for the track...");
+                        await interaction.reply({embeds: [embed]});
+                        const queue = await player.createQueue(interaction.guild, {
+                            metadata: {
+                                channel: interaction.channel
+                            },
+                            bufferingTimeout: 500,
+                            disableVolume: false,
+                            leaveOnEnd: true,
+                            leaveOnStop: true,
+                            leaveOnEmpty: false,
+                            leaveOnEmptyCooldown: 30000,
+                            async onBeforeCreateStream(track: Track, source: TrackSource, _queue: Queue) {
+                                let vid;
+                                try {
+                                    if (track.url.includes("youtube.com")) {
+                                        vid = (await playdl.stream(track.url)).stream;
+                                    } else {
+                                        vid = (await playdl.stream(
+                                            await playdl.search(`${track.author} ${track.title} lyric`, {
+                                                limit: 1,
+                                                source: {
+                                                    youtube: "video"
+                                                }
+                                            }).then(x => x[0].url))).stream;
+                                    }
+                                } catch {
+                                    const embed = EmbedUtil.getErrorEmbed("An error ocurred while attempting to play that track.");
+                                    vid = (await playdl.stream("https://www.youtube.com/watch?v=Wch3gJG2GJ4", {quality: 0})).stream;
+                                    return await interaction.reply({embeds: [embed]});
+                                }
+                                return vid;
+                            }
+                        });
+                        let justConnected;
+                        try {
+                            if (!queue.connection) {
+                                justConnected = true;
+                                await queue.connect(member.voice.channel);
+                            }
+                        } catch {
+                            const embed = EmbedUtil.getErrorEmbed("Unable to join your voice channel.");
+                            await player.deleteQueue(interaction.guild);
+                            return await interaction.reply({embeds: [embed]});
+                        }
+                        if (searchResult.playlist) {
+                            searchResult.tracks[0].playlist = searchResult.playlist;
+                            await DatabaseUtil.addPlaylistPlayed(1);
+                        }
+                        await searchResult.playlist ? queue.addTracks(searchResult.tracks) : queue.addTrack(searchResult.tracks[0]);
+                        if (justConnected) queue.play();
                         await DatabaseUtil.addPlayedSong(1);
-                        return await interaction.editReply({embeds: [EmbedUtil.getErrorEmbed("Cannot play that song.")]});
+                        MusicPlayer.setPlaying(queue, true);
                     }
-                    await PlayCommand.followUp.set(interaction.guild.id, false);
-                    await DatabaseUtil.addPlayedSong(1);
-                    await interaction.editReply({embeds: [embed]});
-                    return await player.playVoiceChannel(channel, song, {textChannel: interaction.channel});
                 }
-            } catch (error) {
+            } catch (error: any) {
                 Logger.error(error);
-                return await interaction.editReply({embeds: [EmbedUtil.getErrorEmbed("An error occurred during playback.")]});
+                const embed = EmbedUtil.getErrorEmbed("An error ocurred while running this command.");
+                return await interaction.reply({embeds: [embed]});
             }
         }
     }
@@ -126,7 +109,7 @@ export default class PlayCommand implements ICommand {
             {
                 name: "song",
                 description: "The URL or song query.",
-                type: SlashCommandUtil.slashCommandTypeToInt("STRING"),
+                type: ApplicationCommandOptionTypes.STRING,
                 required: true
             }
         ],
