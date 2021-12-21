@@ -36,22 +36,22 @@ export default class SlashCommandUtil {
 
     public static getAllSlashCommandData(client: Client): object[] {
         return [
-            // new ControlsCommand(client).getSlashData(),
-            // new InfoCommand(client).getSlashData(),
-            // new HelpCommand(client).getSlashData(),
-            // new JoinCommand(client).getSlashData(),
-            // new NowPlayingCommand(client).getSlashData(),
-            // new PauseCommand(client).getSlashData(),
-            // new QueueCommand(client).getSlashData(),
-            // new ResumeCommand(client).getSlashData(),
-            // new SearchCommand(client).getSlashData(),
-            // new ShuffleCommand(client).getSlashData(),
-            // new SkipCommand(client).getSlashData(),
+            new ControlsCommand(client).getSlashData(),
+            new InfoCommand(client).getSlashData(),
+            new HelpCommand(client).getSlashData(),
+            new JoinCommand(client).getSlashData(),
+            new NowPlayingCommand(client).getSlashData(),
+            new PauseCommand(client).getSlashData(),
+            new QueueCommand(client).getSlashData(),
+            new ResumeCommand(client).getSlashData(),
+            new SearchCommand(client).getSlashData(),
+            new ShuffleCommand(client).getSlashData(),
+            new SkipCommand(client).getSlashData(),
             new StopCommand(client).getSlashData(),
-            // new VolumeCommand(client).getSlashData(),
+            new VolumeCommand(client).getSlashData(),
             new PlayCommand(client).getSlashData(),
-            // new LoopCommand(client).getSlashData(),
-            // new LyricsCommand(client).getSlashData()
+            new LoopCommand(client).getSlashData(),
+            new LyricsCommand(client).getSlashData()
         ];
     }
 }

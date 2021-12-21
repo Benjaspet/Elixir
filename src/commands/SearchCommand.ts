@@ -1,11 +1,9 @@
-import {Client, CommandInteraction, GuildMember, MessageEmbed} from "discord.js";
+import {Client, CommandInteraction, GuildMember} from "discord.js";
 import {player} from "../Elixir";
 import {ICommand} from "../interfaces/ICommand";
-import DatabaseUtil from "../utils/DatabaseUtil";
 import EmbedUtil from "../utils/EmbedUtil";
 import SlashCommandUtil from "../utils/SlashCommandUtil";
 import Logger from "../Logger";
-import PlayCommand from "./PlayCommand";
 import {QueryType, Queue, Track, TrackSource} from "discord-player";
 import playdl from "play-dl";
 

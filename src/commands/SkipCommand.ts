@@ -30,9 +30,6 @@ export default class SkipCommand implements ICommand {
                     } else if (!member.voice.channel) {
                         const embed = EmbedUtil.getErrorEmbed("You must be in a voice channel.");
                         return await interaction.reply({embeds: [embed]});
-                    } else if (queue.tracks.length <= 1) {
-                        const embed = EmbedUtil.getDefaultEmbed("There were no more tracks, so I left.");
-                        return await interaction.reply({embeds: [embed]});
                     } else if (skipTo) {
                         try {
                             queue.skipTo(skipTo);
