@@ -5,7 +5,7 @@ import SearchResultEvent from "../events/SearchResultEvent";
 import MessageEvent from "../events/MessageEvent";
 import DatabaseUtil from "../utils/DatabaseUtil";
 import ButtonClickEvent from "../events/ButtonClickEvent";
-import MusicPlayer from "../utils/Player";
+import MusicPlayer from "../utils/MusicPlayer";
 
 export default class BaseEvent {
 

@@ -1,5 +1,4 @@
-import {Client} from "discord.js";
-import {SpotifyPlugin} from "@distube/spotify";
+import {Client, Intents} from "discord.js";
 import Config from "../Config";
 
 export default class Util {
@@ -15,13 +14,6 @@ export default class Util {
     public static formatLargeNumber(num: number): number | string {
         if (num < 1e3) return num;
         if (num >= 1e3) return +(num / 1e3).toFixed(2) + "K";
-    }
-
-    public static cleanDurationFormat(ms): string {
-        const sec = Math.floor((ms / 1000) % 60).toString();
-        const min = Math.floor((ms / (60 * 1000)) % 60).toString();
-        const hrs = Math.floor((ms / (60 * 60 * 1000)) % 60).toString();
-        return `${hrs}h ${min}m ${sec}s.`;
     }
 
     public static formatSeconds(seconds: number){
@@ -51,51 +43,21 @@ export default class Util {
         return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
-    public static capitalize(phrase: string) {
-        return phrase
-            .toLowerCase()
-            .split(" ")
-            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-            .join(" ");
-    }
-
-    public static getVersion(): string {
-        return Config.get("VERSION");
-    }
-
-    public static getMusicOptions(): object {
-        return {
-            emitNewSongOnly: false,
-            leaveOnEmpty: false,
-            leaveOnFinish: true,
-            leaveOnStop: true,
-            savePreviousSongs: true,
-            emitAddListWhenCreatingQueue: true,
-            emitAddSongWhenCreatingQueue: true,
-            customFilters: {
-                "clear": "dynaudnorm=f=200",
-                "lowbass": "bass=g=6,dynaudnorm=f=200",
-                "bassboost": "bass=g=20,dynaudnorm=f=200",
-                "purebass": "bass=g=20,dynaudnorm=f=200,asubboost,apulsator=hz=0.08",
-                "8D": "apulsator=hz=0.08",
-                "vaporwave": "aresample=48000,asetrate=48000*0.8",
-                "nightcore": "aresample=48000,asetrate=48000*1.25",
-                "phaser": "aphaser=in_gain=0.4",
-                "tremolo": "tremolo",
-                "vibrato": "vibrato=f=6.5",
-                "reverse": "areverse",
-                "treble": "treble=g=5",
-                "normalizer": "dynaudnorm=f=200",
-                "surrounding": "surround",
-                "pulsator": "apulsator=hz=1",
-                "subboost": "asubboost",
-                "karaoke": "stereotools=mlev=0.03",
-                "flanger": "flanger",
-                "gate": "agate",
-                "haas": "haas",
-                "mcompand": "mcompand"
-            },
-            plugins: [new SpotifyPlugin()]
-        }
+    public static getIntents(): any[] {
+        return [
+            Intents.FLAGS.GUILDS,
+            Intents.FLAGS.GUILD_BANS,
+            Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
+            Intents.FLAGS.GUILD_INTEGRATIONS,
+            Intents.FLAGS.GUILD_WEBHOOKS,
+            Intents.FLAGS.GUILD_INVITES,
+            Intents.FLAGS.GUILD_MESSAGES,
+            Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+            Intents.FLAGS.GUILD_VOICE_STATES,
+            Intents.FLAGS.GUILD_MESSAGE_TYPING,
+            Intents.FLAGS.DIRECT_MESSAGES,
+            Intents.FLAGS.DIRECT_MESSAGE_TYPING,
+            Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+        ];
     }
 }

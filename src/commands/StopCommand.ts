@@ -4,6 +4,7 @@ import {Queue} from "discord-player";
 import {player} from "../Elixir";
 import EmbedUtil from "../utils/EmbedUtil";
 import Logger from "../Logger";
+import MusicPlayer from "../utils/MusicPlayer";
 
 export default class StopCommand implements ICommand {
 
@@ -29,6 +30,7 @@ export default class StopCommand implements ICommand {
                         const embed = EmbedUtil.getErrorEmbed("You must be in a voice channel.");
                         return await interaction.reply({embeds: [embed]});
                     } else {
+                        MusicPlayer.setPlaying(queue, false);
                         await queue.destroy(true);
                         const embed = EmbedUtil.getDefaultEmbed("Cleared the queue and left the voice channel.");
                         return await interaction.reply({embeds: [embed]});

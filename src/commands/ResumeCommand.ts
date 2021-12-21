@@ -4,6 +4,7 @@ import {ICommand} from "../interfaces/ICommand";
 import EmbedUtil from "../utils/EmbedUtil";
 import {Queue} from "discord-player";
 import Logger from "../Logger";
+import MusicPlayer from "../utils/MusicPlayer";
 
 export default class ResumeCommand implements ICommand {
 
@@ -30,6 +31,7 @@ export default class ResumeCommand implements ICommand {
                         return await interaction.reply({embeds: [embed]});
                     } else {
                         queue.setPaused(false);
+                        MusicPlayer.setPlaying(queue, true);
                         const embed = EmbedUtil.getErrorEmbed("Resumed the current track successfully.");
                         return await interaction.reply({embeds: [embed]});
                     }

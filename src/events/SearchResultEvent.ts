@@ -27,12 +27,12 @@ export default class SearchResultEvent implements IEvent {
                         }
                     ]);
                 }
-                await player.search(focused, {limit: 6, type: "video"})
+                await player.search(focused, {requestedBy: interaction.user})
                     .then(async result => {
-                        return await interaction.respond(result.map(element => ({
-                            name: element.name,
-                            value: element.url
-                        })));
+                       return await interaction.respond(result.tracks.map(track => ({
+                           name: track.title,
+                           value: track.url
+                       })))
                     });
         }
     }

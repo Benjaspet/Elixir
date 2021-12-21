@@ -17,29 +17,33 @@ export default class VolumeCommand implements ICommand {
     }
 
     public async execute(interaction: CommandInteraction): Promise<any> {
-        try {
-            const queue: Queue = player.getQueue(interaction.guild);
-            const member = interaction.member;
-            if (member instanceof GuildMember) {
-                const volume = interaction.options.getNumber("amplifier");
-                if (!queue || !queue.playing) {
-                    const embed = EmbedUtil.getErrorEmbed("There are no songs in the queue.")
-                    return await interaction.reply({embeds: [embed]});
-                } else if (queue.volume == volume) {
-                    const embed = EmbedUtil.getErrorEmbed("Please select a volume different from the current.");
-                    return await interaction.reply({embeds: [embed]});
+        if (!interaction.isCommand()) return;
+        if (interaction.commandName === this.name) {
+            await interaction.deferReply();
+            try {
+                const queue: Queue = player.getQueue(interaction.guild);
+                const member = interaction.member;
+                if (member instanceof GuildMember) {
+                    const volume = interaction.options.getNumber("amplifier");
+                    if (!queue) {
+                        const embed = EmbedUtil.getErrorEmbed("There's no queue in this server.");
+                        return await interaction.editReply({embeds: [embed]});
+                    } else if (queue.volume == volume) {
+                        const embed = EmbedUtil.getErrorEmbed("Please select a volume different from the current.");
+                        return await interaction.editReply({embeds: [embed]});
+                    } else {
+                        queue.setVolume(volume);
+                        const embed = EmbedUtil.getDefaultEmbed("Successfully set the volume to **" + volume + "**.");
+                        return await interaction.editReply({embeds: [embed]});
+                    }
                 } else {
-                    queue.setVolume(volume);
-                    const embed = EmbedUtil.getDefaultEmbed("Successfully set the volume to **" + volume + "**.");
-                    return await interaction.editReply({embeds: [embed]});
+                    return await interaction.editReply({content: "This command must be run in a guild."});
                 }
-            } else {
-                return await interaction.reply({content: "This command must be run in a guild."});
+            } catch (error: any) {
+                Logger.error(error);
+                const embed = EmbedUtil.getErrorEmbed("An error occurred while running this command.");
+                return await interaction.editReply({embeds: [embed]});
             }
-        } catch (error: any) {
-            Logger.error(error);
-            const embed = EmbedUtil.getErrorEmbed("An error occurred while running this command.");
-            return await interaction.reply({embeds: [embed]});
         }
     }
 

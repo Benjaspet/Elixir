@@ -1,10 +1,10 @@
 import {Client} from "discord.js";
-import Config from "../Config";
-import Logger from "../Logger";
 import {REST} from "@discordjs/rest";
 import {Routes} from "discord-api-types/v9";
 import SlashCommandUtil from "../utils/SlashCommandUtil";
 import Util from "../utils/Util";
+import Config from "../Config";
+import Logger from "../Logger";
 
 export default class BaseCommand {
 

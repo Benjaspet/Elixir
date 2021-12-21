@@ -1,10 +1,9 @@
-const {joinVoiceChannel,
-    entersState,
-    VoiceConnectionStatus} = require("@discordjs/voice");
+import {joinVoiceChannel, entersState, VoiceConnectionStatus} from "@discordjs/voice";
+import {StageChannel, VoiceChannel} from "discord.js";
 
 export default class VoiceManager {
 
-    public static async connectToVoiceChannel(channel) {
+    public static async connectToVoiceChannel(channel: VoiceChannel|StageChannel) {
         const connection = joinVoiceChannel({
             channelId: channel.id,
             guildId: channel.guild.id,

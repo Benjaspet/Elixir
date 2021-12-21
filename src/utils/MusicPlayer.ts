@@ -1,7 +1,9 @@
-import {PlayerOptions} from "discord-player";
-import {PermissionResolvable, Permissions} from "discord.js";
+import {PlayerOptions, Queue} from "discord-player";
+import {Collection, PermissionResolvable, Snowflake} from "discord.js";
 
 export default class MusicPlayer {
+
+    public static playing = new Collection<Snowflake, boolean>();
 
     public static getOptions(): PlayerOptions {
         return {
@@ -27,5 +29,13 @@ export default class MusicPlayer {
             "SPEAK",
             "PRIORITY_SPEAKER"
         ];
+    }
+
+    public static setPlaying(queue: Queue, value: boolean): void {
+        this.playing.set(queue.guild.id, value);
+    }
+
+    public static isPlaying(queue: Queue): boolean {
+        return this.playing.get(queue.guild.id);
     }
 }

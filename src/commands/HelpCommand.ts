@@ -1,4 +1,4 @@
-import {Client} from "discord.js";
+import {Client, CommandInteraction} from "discord.js";
 import {ICommand} from "../interfaces/ICommand";
 import EmbedUtil from "../utils/EmbedUtil";
 import SlashCommandUtil from "../utils/SlashCommandUtil";
@@ -13,7 +13,7 @@ export default class HelpCommand implements ICommand {
         this.client = client;
     }
 
-    public async execute(interaction) {
+    public async execute(interaction: CommandInteraction): Promise<any> {
         if (!interaction.isCommand()) return;
         if (interaction.commandName === this.name) {
             if (!interaction.options.get("category")) {
