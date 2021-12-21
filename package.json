@@ -6,8 +6,8 @@
   "license": "MIT",
   "main": "src/Elixir.ts",
   "scripts": {
-    "start": "ts-node src/Elixir.ts",
-    "start:dev": "nodemon src/Elixir.ts",
+    "start": "../../PonjoTeam/Elixir/node_modules/.bin/ts-node src/Elixir.ts",
+    "start:dev": "../../PonjoTeam/Elixir/node_modules/.bin/nodemon src/Elixir.ts",
     "stop": "node src/scripts/StopProcess.ts"
   },
   "dependencies": {

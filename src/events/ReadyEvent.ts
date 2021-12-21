@@ -29,7 +29,7 @@ export default class ReadyEvent implements IEvent {
         if (JSON.parse(Config.get("MONGO-SETUP")) == true) {
             await DatabaseUtil.initializeCollections();
         }
-        require("../events/PlayerListener");
+        require("./PlayerListener");
     }
 
     private handlePresence(): void {
