@@ -19,28 +19,27 @@ export default class LyricsCommand implements ICommand {
     public async execute(interaction: CommandInteraction): Promise<any> {
         if (!interaction.isCommand()) return;
         if (interaction.commandName === this.name) {
+            await interaction.deferReply();
             try {
                 const track = interaction.options.getString("track");
-                const result = await LyricUtil.base.search(track);
+                const result = await LyricUtil.getLyrics(track);
                 if (!result) {
                     const embed = EmbedUtil.getErrorEmbed("No lyrics found.");
-                    return await interaction.reply({embeds: [embed]});
+                    return await interaction.editReply({embeds: [embed]});
                 } else {
                     const trimmed = result.lyrics.length > 4095 ? result.lyrics.substring(0, 4092) + "..." : result.lyrics;
                     const embed = new MessageEmbed()
-                        .setTitle(result.title + " ─ " + result.artist.name)
-                        .setURL(result.url)
-                        .setThumbnail(result.thumbnail)
+                        .setAuthor("Lyrics Found", null, result.source.link)
                         .setDescription(trimmed)
                         .setColor(Vars.DEFAULT_EMBED_COLOR)
                         .setFooter("Elixir Music", this.client.user.displayAvatarURL({dynamic: true}))
                         .setTimestamp()
-                    return await interaction.reply({embeds: [embed]});
+                    return await interaction.editReply({embeds: [embed]});
                 }
             } catch (error: any) {
                 Logger.error(error);
                 const embed = EmbedUtil.getErrorEmbed("An error occurred while running this command.");
-                return await interaction.reply({embeds: [embed]});
+                return await interaction.editReply({embeds: [embed]});
             }
         }
     }

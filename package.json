@@ -6,8 +6,8 @@
   "license": "MIT",
   "main": "src/Elixir.ts",
   "scripts": {
-    "start": "../../PonjoTeam/Elixir/node_modules/.bin/ts-node src/Elixir.ts",
-    "start:dev": "../../PonjoTeam/Elixir/node_modules/.bin/nodemon src/Elixir.ts",
+    "start": "ts-node src/Elixir.ts",
+    "start:dev": "nodemon src/Elixir.ts",
     "stop": "node src/scripts/StopProcess.ts"
   },
   "dependencies": {
@@ -25,6 +25,7 @@
     "mongoose": "^6.0.14",
     "nodemon": "^2.0.12",
     "play-dl": "^1.6.2",
+    "songlyrics": "^2.2.4",
     "ts-node": "^10.2.1"
   }
 }

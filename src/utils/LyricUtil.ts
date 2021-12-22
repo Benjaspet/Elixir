@@ -1,8 +1,12 @@
-import {Lyrics} from "@discord-player/extractor";
-import Config from "../Config";
+import songlyrics from "songlyrics";
 
 export default class LyricUtil {
 
-    public static base = Lyrics.init(Config.get("GENIUS-API-KEY"));
-
+    public static async getLyrics(song: string): Promise<any> {
+        return await new Promise(async (resolve, reject) => {
+            await songlyrics(song)
+                .then(async result => resolve({source: result.source, lyrics: result.lyrics}))
+                .catch(error => reject(error))
+        });
+    }
 }
