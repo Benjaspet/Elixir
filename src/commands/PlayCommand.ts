@@ -8,6 +8,7 @@ import Logger from "../Logger";
 import playdl from "play-dl";
 import MusicPlayer from "../utils/MusicPlayer";
 import DatabaseUtil from "../utils/DatabaseUtil";
+import VoiceManager from "../managers/VoiceManager";
 
 export default class PlayCommand implements ICommand {
 
@@ -30,6 +31,8 @@ export default class PlayCommand implements ICommand {
                         const embed = EmbedUtil.getErrorEmbed("You must be in a voice channel.");
                         return await interaction.reply({embeds: [embed]});
                     } else {
+                        const channel = member.voice.channel;
+                        await VoiceManager.connectToVoiceChannel(channel);
                         const searchResult = await player.search(track, {requestedBy: interaction.user, searchEngine: QueryType.AUTO});
                         if (!searchResult || !searchResult.tracks.length) {
                             const embed = EmbedUtil.getErrorEmbed("No results found.");

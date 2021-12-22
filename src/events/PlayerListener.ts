@@ -6,6 +6,7 @@ import MusicPlayer from "../utils/MusicPlayer";
 
 player.on("botDisconnect", async queue => {
    MusicPlayer.setPlaying(queue, false);
+   queue.stop();
 });
 
 player.on("trackEnd", async (queue: Queue, track: Track) => { });
