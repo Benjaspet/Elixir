@@ -84,6 +84,10 @@ export default class PlayCommand implements ICommand {
                             return await interaction.reply({embeds: [embed]});
                         }
                         if (searchResult.playlist) {
+                            if (searchResult.playlist.tracks.length > 300) {
+                                const embed = EmbedUtil.getErrorEmbed("You cannot add playlists with over 300 tracks.");
+                                return void await interaction.reply({embeds: [embed]});
+                            }
                             searchResult.tracks[0].playlist = searchResult.playlist;
                             await DatabaseUtil.addPlaylistPlayed(1);
                         }
