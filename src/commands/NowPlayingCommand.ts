@@ -25,10 +25,10 @@ export default class NowPlayingCommand implements ICommand {
                 if (member instanceof GuildMember) {
                     if (!queue || !queue.playing) {
                         const embed = EmbedUtil.getErrorEmbed("There's no queue in this server.");
-                        return await interaction.reply({embeds: [embed]});
+                        return void await interaction.reply({embeds: [embed]});
                     } else if (!member.voice.channel) {
                         const embed = EmbedUtil.getErrorEmbed("You must be in a voice channel.");
-                        return await interaction.reply({embeds: [embed]});
+                        return void await interaction.reply({embeds: [embed]});
                     } else {
                         const progress = queue.createProgressBar({timecodes: true, length: 8});
                         const embed = new MessageEmbed()
@@ -38,7 +38,7 @@ export default class NowPlayingCommand implements ICommand {
                             .setThumbnail(queue.current.thumbnail)
                             .setFooter("Elixir Music", this.client.user.displayAvatarURL({dynamic: true}))
                             .setTimestamp()
-                        return await interaction.reply({embeds: [embed]})
+                        return void await interaction.reply({embeds: [embed]})
                     }
                 } else {
                     return await interaction.reply({content: "This command must be run in a guild."});
@@ -46,7 +46,7 @@ export default class NowPlayingCommand implements ICommand {
             } catch (error: any) {
                 Logger.error(error);
                 const embed = EmbedUtil.getErrorEmbed("An error ocurred while running this command.");
-                return await interaction.reply({embeds: [embed]});
+                return void await interaction.reply({embeds: [embed]});
             }
         }
     }

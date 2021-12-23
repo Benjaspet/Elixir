@@ -15,7 +15,7 @@ export default class ControlsCommand implements ICommand {
     public async execute(interaction: CommandInteraction): Promise<any> {
         if (!interaction.isCommand()) return;
         if (interaction.commandName === this.name) {
-            return await interaction.reply({
+            return void await interaction.reply({
                 embeds: [EmbedUtil.getControlPanelEmbed(this.client)],
                 components: [EmbedUtil.getControlPanelButtons()]
             });

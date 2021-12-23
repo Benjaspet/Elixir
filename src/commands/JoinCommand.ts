@@ -22,20 +22,20 @@ export default class JoinCommand implements ICommand {
                 if (member instanceof GuildMember) {
                     if (!member.voice.channel) {
                         const embed = EmbedUtil.getErrorEmbed("You must be in a voice channel.");
-                        return await interaction.reply({embeds: [embed]});
+                        return void await interaction.reply({embeds: [embed]});
                     } else {
                         const channel = member.voice.channel;
                         await VoiceManager.connectToVoiceChannel(channel);
                         const embed = EmbedUtil.getDefaultEmbed("I've joined and bound myself to the voice channel.");
-                        return await interaction.reply({embeds: [embed]});
+                        return void await interaction.reply({embeds: [embed]});
                     }
                 } else {
-                    return await interaction.reply({content: "This command must be run in a guild."});
+                    return void await interaction.reply({content: "This command must be run in a guild."});
                 }
             } catch (error: any) {
                 Logger.error(error);
                 const embed = EmbedUtil.getErrorEmbed("I'm unable to join the voice channel.");
-                return await interaction.reply({embeds: [embed]});
+                return void await interaction.reply({embeds: [embed]});
             }
         }
     }

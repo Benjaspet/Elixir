@@ -5,6 +5,7 @@ import EmbedUtil from "../utils/EmbedUtil";
 import SlashCommandUtil from "../utils/SlashCommandUtil";
 import Logger from "../Logger";
 import {Queue, QueueRepeatMode} from "discord-player";
+import {ApplicationCommandOptionTypes} from "discord.js/typings/enums";
 
 export default class LoopCommand implements ICommand {
 
@@ -26,33 +27,33 @@ export default class LoopCommand implements ICommand {
                 if (member instanceof GuildMember) {
                     if (!queue) {
                         const embed = EmbedUtil.getErrorEmbed("There's no queue in this server.");
-                        return await interaction.reply({embeds: [embed]});
+                        return void await interaction.reply({embeds: [embed]});
                     } else if (!member.voice.channel) {
                         const embed = EmbedUtil.getErrorEmbed("You must be in a voice channel.");
-                        return await interaction.reply({embeds: [embed]});
+                        return void await interaction.reply({embeds: [embed]});
                     } else {
                         switch (mode) {
                             case QueueRepeatMode.TRACK:
                                 queue.setRepeatMode(QueueRepeatMode.TRACK);
-                                return await interaction.reply({embeds: [EmbedUtil.getDefaultEmbed("Set the loop mode to **track**.")]});
+                                return void await interaction.reply({embeds: [EmbedUtil.getDefaultEmbed("Set the loop mode to **track**.")]});
                             case QueueRepeatMode.QUEUE:
                                 queue.setRepeatMode(QueueRepeatMode.QUEUE);
-                                return await interaction.reply({embeds: [EmbedUtil.getDefaultEmbed("Set the loop mode to **queue**.")]});
+                                return void await interaction.reply({embeds: [EmbedUtil.getDefaultEmbed("Set the loop mode to **queue**.")]});
                             case QueueRepeatMode.AUTOPLAY:
                                 queue.setRepeatMode(QueueRepeatMode.AUTOPLAY);
-                                return await interaction.reply({embeds: [EmbedUtil.getDefaultEmbed("Set the loop mode to **autoplay**.")]});
+                                return void await interaction.reply({embeds: [EmbedUtil.getDefaultEmbed("Set the loop mode to **autoplay**.")]});
                             case QueueRepeatMode.OFF:
                                 queue.setRepeatMode(QueueRepeatMode.OFF);
-                                return await interaction.reply({embeds: [EmbedUtil.getDefaultEmbed("Turned **off** repeat mode.")]});
+                                return void await interaction.reply({embeds: [EmbedUtil.getDefaultEmbed("Turned **off** repeat mode.")]});
                         }
                     }
                 } else {
-                    return await interaction.reply({content: "This command must be run in a guild."});
+                    return void await interaction.reply({content: "This command must be run in a guild."});
                 }
             } catch (error) {
                 Logger.error(error);
                 const embed = EmbedUtil.getErrorEmbed("An error ocurred while running this command.");
-                return await interaction.reply({embeds: [embed]});
+                return void await interaction.reply({embeds: [embed]});
             }
         }
     }
@@ -68,7 +69,7 @@ export default class LoopCommand implements ICommand {
             {
                 name: "mode",
                 description: "The type of loop to apply.",
-                type: SlashCommandUtil.slashCommandTypeToInt("INTEGER"),
+                type: ApplicationCommandOptionTypes.INTEGER,
                 required: true,
                 choices: [
                     {

@@ -15,7 +15,7 @@ export default class InfoCommand implements ICommand {
     public async execute(interaction: CommandInteraction): Promise<any> {
         if (!interaction.isCommand()) return;
         if (interaction.commandName === this.name) {
-            return await interaction.reply({embeds: [await EmbedUtil.getInformationEmbed(this.client)]});
+            return void await interaction.reply({embeds: [await EmbedUtil.getInformationEmbed(this.client)]});
         }
     }
 

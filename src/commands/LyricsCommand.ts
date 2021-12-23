@@ -25,7 +25,7 @@ export default class LyricsCommand implements ICommand {
                 const result = await LyricUtil.getLyrics(track);
                 if (!result) {
                     const embed = EmbedUtil.getErrorEmbed("No lyrics found.");
-                    return await interaction.editReply({embeds: [embed]});
+                    return void await interaction.editReply({embeds: [embed]});
                 } else {
                     const trimmed = result.lyrics.length > 4095 ? result.lyrics.substring(0, 4092) + "..." : result.lyrics;
                     const embed = new MessageEmbed()
@@ -34,12 +34,12 @@ export default class LyricsCommand implements ICommand {
                         .setColor(Vars.DEFAULT_EMBED_COLOR)
                         .setFooter("Elixir Music", this.client.user.displayAvatarURL({dynamic: true}))
                         .setTimestamp()
-                    return await interaction.editReply({embeds: [embed]});
+                    return void await interaction.editReply({embeds: [embed]});
                 }
             } catch (error: any) {
                 Logger.error(error);
                 const embed = EmbedUtil.getErrorEmbed("An error occurred while running this command.");
-                return await interaction.editReply({embeds: [embed]});
+                return void await interaction.editReply({embeds: [embed]});
             }
         }
     }

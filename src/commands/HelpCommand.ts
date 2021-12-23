@@ -1,7 +1,7 @@
 import {Client, CommandInteraction} from "discord.js";
 import {ICommand} from "../interfaces/ICommand";
 import EmbedUtil from "../utils/EmbedUtil";
-import SlashCommandUtil from "../utils/SlashCommandUtil";
+import {ApplicationCommandOptionTypes} from "discord.js/typings/enums";
 
 export default class HelpCommand implements ICommand {
 
@@ -17,20 +17,20 @@ export default class HelpCommand implements ICommand {
         if (!interaction.isCommand()) return;
         if (interaction.commandName === this.name) {
             if (!interaction.options.get("category")) {
-                return await interaction.reply({embeds: [EmbedUtil.getHelpMenuEmbed(this.client)]});
+                return void await interaction.reply({embeds: [EmbedUtil.getHelpMenuEmbed(this.client)]});
             }
             const {value: string} = interaction.options.get("category");
             switch (string) {
                 case "help-faq":
-                    return await interaction.reply({embeds: [EmbedUtil.getFaqEmbed(this.client)]});
+                    return void await interaction.reply({embeds: [EmbedUtil.getFaqEmbed(this.client)]});
                 case "help-invite":
-                    return await interaction.reply({embeds: [EmbedUtil.getInviteEmbed()]});
+                    return void await interaction.reply({embeds: [EmbedUtil.getInviteEmbed()]});
                 case "help-support":
-                    return await interaction.reply({embeds: [EmbedUtil.getSupportServerEmbed()]});
+                    return void await interaction.reply({embeds: [EmbedUtil.getSupportServerEmbed()]});
                 case "help-commands":
-                    return await interaction.reply({embeds: [EmbedUtil.getHelpMenuEmbed(this.client)]});
+                    return void await interaction.reply({embeds: [EmbedUtil.getHelpMenuEmbed(this.client)]});
                 case "help-terms":
-                    return await interaction.reply({embeds: [EmbedUtil.getTermsEmbed(this.client)]});
+                    return void await interaction.reply({embeds: [EmbedUtil.getTermsEmbed(this.client)]});
             }
         }
     }
@@ -46,7 +46,7 @@ export default class HelpCommand implements ICommand {
             {
                 name: "category",
                 description: "Learn how to use Elixir and its commands.",
-                type: SlashCommandUtil.slashCommandTypeToInt("STRING"),
+                type: ApplicationCommandOptionTypes.STRING,
                 required: false,
                 choices: [
                     {

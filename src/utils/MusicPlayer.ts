@@ -4,6 +4,7 @@ import {Collection, PermissionResolvable, Snowflake} from "discord.js";
 export default class MusicPlayer {
 
     public static playing = new Collection<Snowflake, boolean>();
+    public static streamCount: number = 0;
 
     public static getOptions(): PlayerOptions {
         return {
@@ -37,5 +38,17 @@ export default class MusicPlayer {
 
     public static isPlaying(queue: Queue): boolean {
         return this.playing.get(queue.guild.id);
+    }
+
+    public static getCurrentStreamCount(): number {
+        return this.streamCount;
+    }
+
+    public static addStream(): void {
+        this.streamCount++;
+    }
+
+    public static removeStream(): void {
+        this.streamCount--;
     }
 }
