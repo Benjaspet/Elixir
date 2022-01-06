@@ -30,13 +30,13 @@ export default class NowPlayingCommand implements ICommand {
                         const embed = EmbedUtil.getErrorEmbed("You must be in a voice channel.");
                         return void await interaction.reply({embeds: [embed]});
                     } else {
-                        const progress = queue.createProgressBar({timecodes: true, length: 8});
+                        const progress = queue.createProgressBar({timecodes: false, length: 8});
                         const embed = new MessageEmbed()
                             .setTitle("Currently Playing")
                             .setColor(Vars.DEFAULT_EMBED_COLOR)
-                            .setDescription(`[${queue.current.title}](${queue.current.url})` + "\n\n" + progress.replace(/ 0:00/g, " ◉ LIVE"))
+                            .setDescription(`[${queue.current.title}](${queue.current.url})` + "\n\nProgress:" + "┃" + progress + "┃")
                             .setThumbnail(queue.current.thumbnail)
-                            .setFooter("Elixir Music", this.client.user.displayAvatarURL({dynamic: true}))
+                            .setFooter({text: "Elixir Music", iconURL: this.client.user.displayAvatarURL({dynamic: false})})
                             .setTimestamp()
                         return void await interaction.reply({embeds: [embed]})
                     }

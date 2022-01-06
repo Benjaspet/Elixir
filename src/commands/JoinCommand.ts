@@ -1,7 +1,7 @@
 import {Client, CommandInteraction, GuildMember} from "discord.js";
 import {ICommand} from "../interfaces/ICommand";
+const {joinVoiceChannel} = require("@discordjs/voice");
 import EmbedUtil from "../utils/EmbedUtil";
-import VoiceManager from "../managers/VoiceManager";
 import Logger from "../Logger";
 
 export default class JoinCommand implements ICommand {
@@ -25,8 +25,12 @@ export default class JoinCommand implements ICommand {
                         return void await interaction.reply({embeds: [embed]});
                     } else {
                         const channel = member.voice.channel;
-                        await VoiceManager.connectToVoiceChannel(channel);
-                        const embed = EmbedUtil.getDefaultEmbed("I've joined and bound myself to the voice channel.");
+                        await joinVoiceChannel({
+                            channelId: channel.id,
+                            guildId: channel.guild.id,
+                            adapterCreator: channel.guild.voiceAdapterCreator,
+                        });
+                        const embed = EmbedUtil.getDefaultEmbed(`I've joined **${channel.name}** successfully.`);
                         return void await interaction.reply({embeds: [embed]});
                     }
                 } else {

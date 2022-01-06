@@ -32,7 +32,7 @@ export default class SkipCommand implements ICommand {
                         return await interaction.reply({embeds: [embed]});
                     } else if (skipTo) {
                         try {
-                            queue.skipTo(skipTo);
+                            queue.skipTo(skipTo + 1);
                             const embed = EmbedUtil.getDefaultEmbed("Skipped to track **#" + skipTo + "**.");
                             return await interaction.reply({embeds: [embed]});
                         } catch (error: any) {

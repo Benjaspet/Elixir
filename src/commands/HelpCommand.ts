@@ -16,11 +16,7 @@ export default class HelpCommand implements ICommand {
     public async execute(interaction: CommandInteraction): Promise<any> {
         if (!interaction.isCommand()) return;
         if (interaction.commandName === this.name) {
-            if (!interaction.options.get("category")) {
-                return void await interaction.reply({embeds: [EmbedUtil.getHelpMenuEmbed(this.client)]});
-            }
-            const {value: string} = interaction.options.get("category");
-            switch (string) {
+            switch (interaction.options.getString("category")) {
                 case "help-faq":
                     return void await interaction.reply({embeds: [EmbedUtil.getFaqEmbed(this.client)]});
                 case "help-invite":
@@ -31,6 +27,8 @@ export default class HelpCommand implements ICommand {
                     return void await interaction.reply({embeds: [EmbedUtil.getHelpMenuEmbed(this.client)]});
                 case "help-terms":
                     return void await interaction.reply({embeds: [EmbedUtil.getTermsEmbed(this.client)]});
+                default:
+                    return void await interaction.reply({embeds: [EmbedUtil.getHelpMenuEmbed(this.client)]});
             }
         }
     }

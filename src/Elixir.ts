@@ -3,7 +3,7 @@ import {Player} from "discord-player";
 import BaseApp from "./base/BaseApp";
 import BaseEvent from "./base/BaseEvent";
 import MusicPlayer from "./utils/MusicPlayer";
-import Util from "./utils/Util";
+import Utilities from "./utils/Utilities";
 
 export const client: Client = new Client({
     allowedMentions: {
@@ -11,7 +11,7 @@ export const client: Client = new Client({
         repliedUser: false,
     },
     partials: ["CHANNEL", "MESSAGE", "REACTION"],
-    intents: Util.getIntents()
+    intents: Utilities.getIntents()
 });
 
 export const player: Player = new Player(client, MusicPlayer.getOptions());

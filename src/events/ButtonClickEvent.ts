@@ -37,13 +37,6 @@ export default class ButtonClickEvent implements IEvent {
                             } catch (error: any) {
                                 return await interaction.reply({content: "Unable to perform that action.", ephemeral: true});
                             }
-                        case "track-rewind":
-                            try {
-                                await queue.seek(0);
-                                return await interaction.reply({content: "Rewinded the current song.", ephemeral: true});
-                            } catch (error: any) {
-                                return await interaction.reply({content: "Unable to perform that action.", ephemeral: true});
-                            }
                         case "play-pause":
                             try {
                                 if (MusicPlayer.isPlaying(queue)) {
@@ -55,13 +48,6 @@ export default class ButtonClickEvent implements IEvent {
                                     MusicPlayer.setPlaying(queue, true);
                                     return await interaction.reply({content: "Resumed the current song.", ephemeral: true});
                                 }
-                            } catch (error: any) {
-                                return await interaction.reply({content: "Unable to perform that action.", ephemeral: true});
-                            }
-                        case "fast-forward":
-                            try {
-                                await queue.seek(queue.streamTime + 5000);
-                                return await interaction.reply({content: "Fast-forwarded by 5 seconds.", ephemeral: true});
                             } catch (error: any) {
                                 return await interaction.reply({content: "Unable to perform that action.", ephemeral: true});
                             }

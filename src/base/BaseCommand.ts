@@ -2,7 +2,7 @@ import {Client} from "discord.js";
 import {REST} from "@discordjs/rest";
 import {Routes} from "discord-api-types/v9";
 import SlashCommandUtil from "../utils/SlashCommandUtil";
-import Util from "../utils/Util";
+import Utilities from "../utils/Utilities";
 import Config from "../Config";
 import Logger from "../Logger";
 
@@ -32,7 +32,7 @@ export default class BaseCommand {
                     Logger.info("Refreshing all guild slash commands..");
                     await rest.put(Routes.applicationGuildCommands(this.clientId, this.guildId), {
                         body: SlashCommandUtil.getAllSlashCommandData(this.client)});
-                    await Util.sleep(1000);
+                    await Utilities.sleep(1000);
                     Logger.info("Successfully updated all guild slash commands.");
                 } catch (error) {
                     Logger.error(error);
@@ -43,7 +43,7 @@ export default class BaseCommand {
                     await rest.put(Routes.applicationCommands(this.clientId), {
                         body: SlashCommandUtil.getAllSlashCommandData(this.client)
                     });
-                    await Util.sleep(1000);
+                    await Utilities.sleep(1000);
                     Logger.info("Successfully updated all global slash commands.");
                 } catch (error) {
                     Logger.error(error);

@@ -32,7 +32,7 @@ export default class ResumeCommand implements ICommand {
                     } else {
                         queue.setPaused(false);
                         MusicPlayer.setPlaying(queue, true);
-                        const embed = EmbedUtil.getErrorEmbed("Resumed the current track successfully.");
+                        const embed = EmbedUtil.getDefaultEmbed("Resumed the current track successfully.");
                         return await interaction.reply({embeds: [embed]});
                     }
                 } else {

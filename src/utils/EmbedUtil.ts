@@ -1,10 +1,11 @@
 import * as Discord from "discord.js";
 import {Client, MessageActionRow, MessageButton, MessageEmbed, version} from "discord.js";
-import Util from "./Util";
+import Utilities from "./Utilities";
 import DatabaseUtil from "./DatabaseUtil";
 import {MessageButtonStyles} from "discord.js/typings/enums";
 import Config from "../Config";
 import Vars from "../constants/Vars";
+import MusicPlayer from "./MusicPlayer";
 
 export default class EmbedUtil {
 
@@ -24,7 +25,7 @@ export default class EmbedUtil {
             .addField("Informational Commands", "```" + "help, info, invite" + "```")
             .addField("Control Panel", "Elixir now has a fully functional control panel to easily manage " +
                 "songs in your server. To use it, simply mention Elixir using `@Elixir`.")
-            .setFooter("Elixir Music", client.user.displayAvatarURL({dynamic: false}))
+            .setFooter({text: "Elixir Music", iconURL: client.user.displayAvatarURL({dynamic: false})})
             .setTimestamp();
     }
 
@@ -38,7 +39,7 @@ export default class EmbedUtil {
             .addField("Why aren't commands in my server?", "This is because you used an older link to invite Elixir. You can re-authorize slash commands [here](" + Config.get("INVITE") + ").")
             .addField("How do I contribute to the bot?", "If you'd like to contribute to Elixir, that's great! Don't hesitate to send an email to [benpetrillo@ponjo.club](mailto:benpetrillo@ponjo.club) or to contact me on Discord at `Eerie#6560`.")
             .addField("Where are your Terms/Privacy Policy?", "You can view more information about Elixir's official Terms of Conditions & Privacy Policy by running `/help terms`.")
-            .setFooter("Elixir Music", client.user.displayAvatarURL({dynamic: false}))
+            .setFooter({text: "Elixir Music", iconURL: client.user.displayAvatarURL({dynamic: false})})
             .setTimestamp();
     }
 
@@ -80,25 +81,26 @@ export default class EmbedUtil {
                 "Upon sending a request to delete your data, we will proceed with " +
                 "the process, and all data we store with respect to you, will be deleted promptly. To view more on Elixir's Privacy Policy, " +
                 "[click here](https://ponjo.club/privacy/elixir).")
-            .setFooter("Elixir Music", client.user.displayAvatarURL({dynamic: false}))
+            .setFooter({text: "Elixir Music", iconURL: client.user.displayAvatarURL({dynamic: false})})
             .setTimestamp();
     }
 
     public static async getInformationEmbed(client: Client): Promise<MessageEmbed> {
         return new MessageEmbed()
             .setTitle("Elixir | Information")
+            .setAuthor("Total Playing Streams: " + MusicPlayer.getCurrentStreamCount(), null, null)
             .setColor(Vars.DEFAULT_EMBED_COLOR)
             .setDescription("" +
                 Config.get("EMOJI-LIBRARIES") + " Powered by: Discord.js " + version + "\n" +
-                Config.get("EMOJI-SERVERS") + " Server count: " + Util.getTotalElixirServerCount(client) + "\n" +
-                Config.get("EMOJI-USERS") + " User count: " + Util.getTotalElixirMemberCount(client) + "\n" +
-                Config.get("EMOJI-WEBSOCKET") + " Websocket latency: " + Util.getWebsocketLatency(client) + "ms" + "\n" +
-                Config.get("EMOJI-UPTIME") + " Uptime: " + Util.getProcessUptime() + "\n" +
-                Config.get("EMOJI-COMMANDS") + " Commands ran: " + Util.cleanFormat(await DatabaseUtil.getTotalCommandsExecuted()) + "\n" +
-                Config.get("EMOJI-SONGS") + " Songs played: " + Util.cleanFormat(await DatabaseUtil.getTotalSongsPlayed()) + "\n" +
-                Config.get("EMOJI-PLAYLISTS") + " Playlists queued: " + Util.cleanFormat(await DatabaseUtil.getTotalPlaylistedQueued()) + "\n" +
+                Config.get("EMOJI-SERVERS") + " Server count: " + Utilities.getTotalElixirServerCount(client) + "\n" +
+                Config.get("EMOJI-USERS") + " User count: " + Utilities.getTotalElixirMemberCount(client) + "\n" +
+                Config.get("EMOJI-WEBSOCKET") + " Websocket latency: " + Utilities.getWebsocketLatency(client) + "ms" + "\n" +
+                Config.get("EMOJI-UPTIME") + " Uptime: " + Utilities.getProcessUptime() + "\n" +
+                Config.get("EMOJI-COMMANDS") + " Commands ran: " + Utilities.cleanFormat(await DatabaseUtil.getTotalCommandsExecuted()) + "\n" +
+                Config.get("EMOJI-SONGS") + " Songs played: " + Utilities.cleanFormat(await DatabaseUtil.getTotalSongsPlayed()) + "\n" +
+                Config.get("EMOJI-PLAYLISTS") + " Playlists queued: " + Utilities.cleanFormat(await DatabaseUtil.getTotalPlaylistedQueued()) + "\n" +
                 Config.get("EMOJI-DEVELOPER") + " Bot Developer: Eerie#6560")
-            .setFooter("Elixir Music", client.user.displayAvatarURL({dynamic: true}))
+            .setFooter({text: "Elixir Music", iconURL: client.user.displayAvatarURL({dynamic: false})})
             .setTimestamp()
     }
 
@@ -110,17 +112,9 @@ export default class EmbedUtil {
                     .setStyle(MessageButtonStyles.SECONDARY)
                     .setEmoji("⏮️"),
                 new MessageButton()
-                    .setCustomId("track-rewind")
-                    .setStyle(MessageButtonStyles.SECONDARY)
-                    .setEmoji("⏪"),
-                new MessageButton()
                     .setCustomId("play-pause")
                     .setStyle(MessageButtonStyles.SECONDARY)
                     .setEmoji("⏯️"),
-                new MessageButton()
-                    .setCustomId("fast-forward")
-                    .setStyle(MessageButtonStyles.SECONDARY)
-                    .setEmoji("⏩"),
                 new MessageButton()
                     .setCustomId("track-next")
                     .setStyle(MessageButtonStyles.SECONDARY)
@@ -136,7 +130,7 @@ export default class EmbedUtil {
                 "easily be able to control your music using the buttons below. Current features include playing tracks, " +
                 "pausing tracks, rewinding tracks, fast-forwarding tracks, going to the previous track, and going to the " +
                 "next track.")
-            .setFooter("Elixir Music", client.user.displayAvatarURL({dynamic: true}))
+            .setFooter({text: "Elixir Music", iconURL: client.user.displayAvatarURL({dynamic: false})})
             .setTimestamp();
     }
 }

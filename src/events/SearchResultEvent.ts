@@ -32,7 +32,7 @@ export default class SearchResultEvent implements IEvent {
                        return await interaction.respond(result.tracks.map(track => ({
                            name: track.title,
                            value: track.url
-                       })))
+                       })).slice(0, 10 - 1))
                     });
         }
     }

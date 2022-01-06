@@ -22,6 +22,7 @@
     "discordjs-button-pagination": "^2.0.1",
     "dotenv": "^10.0.0",
     "fetch": "^1.1.0",
+    "ffmpeg-static": "^4.4.1",
     "mongoose": "^6.0.14",
     "nodemon": "^2.0.12",
     "play-dl": "^1.6.2",

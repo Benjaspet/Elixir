@@ -1,52 +1,6 @@
-import {Snowflake} from "discord.js";
 import Stats from "../schemas/StatsSchema";
-import DJRole from "../schemas/DJSchema";
 
 export default class DatabaseUtil {
-
-    /**
-     * Fetch the DJ role for a specific guild, if any.
-     * @param guild: Snowflake
-     * @return Promise<any>
-     */
-
-    public static async getDJRole(guild: Snowflake): Promise<any> {
-        return void await new Promise(async(resolve, reject) => {
-           try {
-               const result = await DJRole.findOne({guildId: guild});
-               resolve({
-                   guild: result.guildId,
-                   role: result.roleId
-               });
-           } catch (error: any) {
-               reject({
-                   msg: "An error ocurred."
-               });
-           }
-        });
-    }
-
-    /**
-     * Set the DJ role for a specific guild.
-     * @param guild
-     * @param role
-     */
-
-    public static async setDJRole(guild: Snowflake, role: Snowflake): Promise<any> {
-        return await new Promise(async(resolve, reject) => {
-            try {
-                const result = await DJRole.findOneAndUpdate({guild: guild}, {roleId: role});
-                resolve({
-                    guild: result.guildId,
-                    role: result.roleId
-                });
-            } catch (error: any) {
-                reject({
-                    msg: "An error ocurred."
-                });
-            }
-        });
-    }
 
     public static async initializeCollections(): Promise<void> {
         await Stats.create({

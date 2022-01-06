@@ -1,10 +1,10 @@
-import {Client, Intents} from "discord.js";
+import {Client, Intents, MessageEmbed, Webhook, WebhookClient} from "discord.js";
 import Config from "../Config";
 
-export default class Util {
+export default class Utilities {
 
     public static getTotalElixirMemberCount(client): number {
-        return <number>Util.formatLargeNumber(client.guilds.cache.reduce((a, g) => a + g.memberCount, 0) + 25000);
+        return <number>Utilities.formatLargeNumber(client.guilds.cache.reduce((a, g) => a + g.memberCount, 0) + 25000);
     }
 
     public static getTotalElixirServerCount(client): number {
@@ -36,7 +36,7 @@ export default class Util {
 
     public static getProcessUptime(): string {
         const uptimeAsUnix = process.uptime();
-        return Util.formatSeconds(uptimeAsUnix);
+        return Utilities.formatSeconds(uptimeAsUnix);
     }
 
     public static cleanFormat(num: number): string {
@@ -59,5 +59,16 @@ export default class Util {
             Intents.FLAGS.DIRECT_MESSAGE_TYPING,
             Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
         ];
+    }
+
+    public static sendWebhookMessage(debugMessage: any): void {
+        const webhook: WebhookClient = new WebhookClient({url: Config.get("DEBUG-WEBHOOK")});
+        const embed: MessageEmbed = new MessageEmbed()
+            .setTitle("Elixir | Debug")
+            .setColor("PURPLE")
+            .setDescription("```" + "\n" + debugMessage + "\n" + "```")
+            .setFooter({text: "Elixir Music"})
+            .setTimestamp()
+        webhook.send({embeds: [embed]}).then(() => {});
     }
 }

@@ -2,7 +2,7 @@ import {IEvent} from "../interfaces/IEvent";
 import {Client, ClientEvents} from "discord.js";
 import Logger from "../Logger";
 import Config from "../Config";
-import Util from "../utils/Util";
+import Utilities from "../utils/Utilities";
 import BaseCommand from "../base/BaseCommand";
 import SlashCommandUtil from "../utils/SlashCommandUtil";
 import DatabaseManager from "../managers/DatabaseManager";
@@ -40,7 +40,7 @@ export default class ReadyEvent implements IEvent {
     }
 
     private async updatePresence(): Promise<void> {
-        const activity = Config.get("ACTIVITY").replace("{users}", Util.getTotalElixirMemberCount(this.client));
+        const activity = Config.get("ACTIVITY").replace("{users}", Utilities.getTotalElixirMemberCount(this.client));
         this.client.user.setActivity({type: "LISTENING", name: activity});
     }
 

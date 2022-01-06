@@ -54,7 +54,7 @@ export default class QueueCommand implements ICommand {
                             embed.setDescription(`${tracks.join("\n")}${queueLength > pageEnd ? `\n\n...${queueLength - pageEnd} more track(s).` : ""}`);
                             embed.setColor(Vars.DEFAULT_EMBED_COLOR);
                             if (page === 1) {
-                                embed.setAuthor(`Now playing: ${queue.current.title}`, null, `${queue.current.url}`);
+                                embed.setAuthor({name: `Now playing: ${queue.current.title}`, iconURL: null, url: `${queue.current.url}`});
                             }
                             pages.push(embed);
                             page++;
@@ -64,7 +64,7 @@ export default class QueueCommand implements ICommand {
                                 const embed = new MessageEmbed();
                                 embed.setColor(Vars.DEFAULT_EMBED_COLOR);
                                 embed.setDescription("There are no songs in the queue.");
-                                embed.setAuthor(`Now playing: ${queue.current.title}`, null, `${queue.current.url}`);
+                                embed.setAuthor({name: `Now playing: ${queue.current.title}`, iconURL: null, url: `${queue.current.url}`});
                                 return await interaction.reply({embeds: [embed]});
                             }
                             if (page === 2) {

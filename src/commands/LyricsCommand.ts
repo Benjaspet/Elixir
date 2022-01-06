@@ -32,7 +32,7 @@ export default class LyricsCommand implements ICommand {
                         .setAuthor("Lyrics Found", null, result.source.link)
                         .setDescription(trimmed)
                         .setColor(Vars.DEFAULT_EMBED_COLOR)
-                        .setFooter("Elixir Music", this.client.user.displayAvatarURL({dynamic: true}))
+                        .setFooter({text: "Elixir Music", iconURL: this.client.user.displayAvatarURL({dynamic: false})})
                         .setTimestamp()
                     return void await interaction.editReply({embeds: [embed]});
                 }
