@@ -5,6 +5,7 @@ import {ApplicationCommandOptionTypes} from "discord.js/typings/enums";
 import {player} from "../Elixir";
 import EmbedUtil from "../utils/EmbedUtil";
 import Logger from "../Logger";
+import Utilities from "../utils/Utilities";
 
 export default class SkipCommand implements ICommand {
 
@@ -49,6 +50,7 @@ export default class SkipCommand implements ICommand {
                 }
             } catch (error) {
                 Logger.error(error);
+                Utilities.sendWebhookMessage(error, true, interaction.guild.id);
                 const embed = EmbedUtil.getErrorEmbed("An error ocurred while running this command.");
                 return await interaction.reply({embeds: [embed]});
             }

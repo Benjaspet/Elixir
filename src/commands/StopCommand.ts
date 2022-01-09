@@ -5,6 +5,7 @@ import {player} from "../Elixir";
 import EmbedUtil from "../utils/EmbedUtil";
 import Logger from "../Logger";
 import MusicPlayer from "../utils/MusicPlayer";
+import Utilities from "../utils/Utilities";
 
 export default class StopCommand implements ICommand {
 
@@ -40,6 +41,7 @@ export default class StopCommand implements ICommand {
                 }
             } catch (error: any) {
                 Logger.error(error);
+                Utilities.sendWebhookMessage(error, true, interaction.guild.id);
                 const embed = EmbedUtil.getErrorEmbed("An error ocurred while running this command.");
                 return await interaction.reply({embeds: [embed]});
             }

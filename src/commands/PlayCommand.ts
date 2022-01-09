@@ -1,11 +1,10 @@
 import {Client, CommandInteraction, GuildMember, MessageEmbed, StageChannel, VoiceChannel} from "discord.js";
 import {ICommand} from "../interfaces/ICommand";
-import {QueryType, Queue, Track, TrackSource} from "discord-player";
+import {QueryType, Queue} from "discord-player";
 import {ApplicationCommandOptionTypes} from "discord.js/typings/enums";
 import {player} from "../Elixir";
 import EmbedUtil from "../utils/EmbedUtil";
 import Logger from "../Logger";
-import playdl from "play-dl";
 import MusicPlayer from "../utils/MusicPlayer";
 import Utilities from "../utils/Utilities";
 
@@ -72,7 +71,7 @@ export default class PlayCommand implements ICommand {
                 }
             } catch (error: any) {
                 Logger.error(error);
-                Utilities.sendWebhookMessage(error);
+                Utilities.sendWebhookMessage(error, true, interaction.guild.id);
                 const embed = EmbedUtil.getErrorEmbed("An error ocurred while running this command.");
                 return void await interaction.followUp({embeds: [embed]});
             }

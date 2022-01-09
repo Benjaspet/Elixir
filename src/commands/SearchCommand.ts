@@ -6,6 +6,7 @@ import SlashCommandUtil from "../utils/SlashCommandUtil";
 import Logger from "../Logger";
 import {QueryType, Queue, Track, TrackSource} from "discord-player";
 import playdl from "play-dl";
+import Utilities from "../utils/Utilities";
 
 export default class SearchCommand implements ICommand {
 
@@ -88,6 +89,7 @@ export default class SearchCommand implements ICommand {
                 }
             } catch (error) {
                 Logger.error(error);
+                Utilities.sendWebhookMessage(error, true, interaction.guild.id);
                 return await interaction.editReply({embeds: [EmbedUtil.getErrorEmbed("An error ocurred.")]});
             }
         }

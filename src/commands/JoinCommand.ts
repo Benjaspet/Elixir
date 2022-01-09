@@ -3,6 +3,7 @@ import {ICommand} from "../interfaces/ICommand";
 const {joinVoiceChannel} = require("@discordjs/voice");
 import EmbedUtil from "../utils/EmbedUtil";
 import Logger from "../Logger";
+import Utilities from "../utils/Utilities";
 
 export default class JoinCommand implements ICommand {
 
@@ -38,6 +39,7 @@ export default class JoinCommand implements ICommand {
                 }
             } catch (error: any) {
                 Logger.error(error);
+                Utilities.sendWebhookMessage(error, true, interaction.guild.id);
                 const embed = EmbedUtil.getErrorEmbed("I'm unable to join the voice channel.");
                 return void await interaction.reply({embeds: [embed]});
             }

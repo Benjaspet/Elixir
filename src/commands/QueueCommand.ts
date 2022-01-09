@@ -5,6 +5,7 @@ import EmbedUtil from "../utils/EmbedUtil";
 import {Queue} from "discord-player";
 import Logger from "../Logger";
 import Vars from "../constants/Vars";
+import Utilities from "../utils/Utilities";
 
 const pagination = require("discordjs-button-pagination");
 
@@ -78,6 +79,7 @@ export default class QueueCommand implements ICommand {
                 }
             } catch (error: any) {
                 Logger.error(error);
+                Utilities.sendWebhookMessage(error, true, interaction.guild.id);
                 const embed = EmbedUtil.getErrorEmbed("An error ocurred while running this command.");
                 return await interaction.reply({embeds: [embed]});
             }

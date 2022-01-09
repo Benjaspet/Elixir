@@ -6,6 +6,7 @@ import SlashCommandUtil from "../utils/SlashCommandUtil";
 import Logger from "../Logger";
 import {Queue, QueueRepeatMode} from "discord-player";
 import {ApplicationCommandOptionTypes} from "discord.js/typings/enums";
+import Utilities from "../utils/Utilities";
 
 export default class LoopCommand implements ICommand {
 
@@ -52,6 +53,7 @@ export default class LoopCommand implements ICommand {
                 }
             } catch (error) {
                 Logger.error(error);
+                Utilities.sendWebhookMessage(error, true, interaction.guild.id);
                 const embed = EmbedUtil.getErrorEmbed("An error ocurred while running this command.");
                 return void await interaction.reply({embeds: [embed]});
             }

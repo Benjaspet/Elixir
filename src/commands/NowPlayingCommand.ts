@@ -5,6 +5,7 @@ import EmbedUtil from "../utils/EmbedUtil";
 import Logger from "../Logger";
 import {Queue} from "discord-player";
 import Vars from "../constants/Vars";
+import Utilities from "../utils/Utilities";
 
 export default class NowPlayingCommand implements ICommand {
 
@@ -30,21 +31,25 @@ export default class NowPlayingCommand implements ICommand {
                         const embed = EmbedUtil.getErrorEmbed("You must be in a voice channel.");
                         return void await interaction.reply({embeds: [embed]});
                     } else {
-                        const progress = queue.createProgressBar({timecodes: false, length: 8});
+                        const divisor: number = queue.streamTime / queue.current.durationMS;
+                        const percentage: string = divisor >= 100 ? "Completed" : (divisor * 100).toString();
                         const embed = new MessageEmbed()
                             .setTitle("Currently Playing")
                             .setColor(Vars.DEFAULT_EMBED_COLOR)
-                            .setDescription(`[${queue.current.title}](${queue.current.url})` + "\n\nProgress:" + "┃" + progress + "┃")
+                            .setDescription(`[${queue.current.title}](${queue.current.url})`)
+                            .addField("Track Details", "" + "• Duration: " + queue.current.duration + "\n" +
+                            "• Percent completed: " + percentage + "\n" + "• Artist: " + queue.current.author)
                             .setThumbnail(queue.current.thumbnail)
                             .setFooter({text: "Elixir Music", iconURL: this.client.user.displayAvatarURL({dynamic: false})})
                             .setTimestamp()
                         return void await interaction.reply({embeds: [embed]})
                     }
                 } else {
-                    return await interaction.reply({content: "This command must be run in a guild."});
+                    return void await interaction.reply({content: "This command must be run in a guild."});
                 }
             } catch (error: any) {
                 Logger.error(error);
+                Utilities.sendWebhookMessage(error, true, interaction.guild.id);
                 const embed = EmbedUtil.getErrorEmbed("An error ocurred while running this command.");
                 return void await interaction.reply({embeds: [embed]});
             }

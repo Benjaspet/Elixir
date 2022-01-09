@@ -5,6 +5,7 @@ import {ApplicationCommandOptionTypes} from "discord.js/typings/enums";
 import {player} from "../Elixir";
 import EmbedUtil from "../utils/EmbedUtil";
 import Logger from "../Logger";
+import Utilities from "../utils/Utilities";
 
 export default class VolumeCommand implements ICommand {
 
@@ -41,6 +42,7 @@ export default class VolumeCommand implements ICommand {
                 }
             } catch (error: any) {
                 Logger.error(error);
+                Utilities.sendWebhookMessage(error, true, interaction.guild.id);
                 const embed = EmbedUtil.getErrorEmbed("An error occurred while running this command.");
                 return await interaction.editReply({embeds: [embed]});
             }

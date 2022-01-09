@@ -5,6 +5,7 @@ import {ApplicationCommandOptionTypes} from "discord.js/typings/enums";
 import LyricUtil from "../utils/LyricUtil";
 import Logger from "../Logger";
 import Vars from "../constants/Vars";
+import Utilities from "../utils/Utilities";
 
 export default class LyricsCommand implements ICommand {
 
@@ -29,7 +30,7 @@ export default class LyricsCommand implements ICommand {
                 } else {
                     const trimmed = result.lyrics.length > 4095 ? result.lyrics.substring(0, 4092) + "..." : result.lyrics;
                     const embed = new MessageEmbed()
-                        .setAuthor("Lyrics Found", null, result.source.link)
+                        .setAuthor({name: "Lyrics Found", iconURL: null, url: result.source.link})
                         .setDescription(trimmed)
                         .setColor(Vars.DEFAULT_EMBED_COLOR)
                         .setFooter({text: "Elixir Music", iconURL: this.client.user.displayAvatarURL({dynamic: false})})
@@ -38,6 +39,7 @@ export default class LyricsCommand implements ICommand {
                 }
             } catch (error: any) {
                 Logger.error(error);
+                Utilities.sendWebhookMessage(error, true, interaction.guild.id);
                 const embed = EmbedUtil.getErrorEmbed("An error occurred while running this command.");
                 return void await interaction.editReply({embeds: [embed]});
             }

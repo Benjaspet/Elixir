@@ -5,6 +5,7 @@ import EmbedUtil from "../utils/EmbedUtil";
 import Logger from "../Logger";
 import {Queue} from "discord-player";
 import MusicPlayer from "../utils/MusicPlayer";
+import Utilities from "../utils/Utilities";
 
 export default class PauseCommand implements ICommand {
 
@@ -25,23 +26,27 @@ export default class PauseCommand implements ICommand {
                 if (member instanceof GuildMember) {
                     if (!queue) {
                         const embed = EmbedUtil.getErrorEmbed("There's no queue in this server.");
-                        return await interaction.reply({embeds: [embed]});
+                        return void await interaction.reply({embeds: [embed]});
                     } else if (!member.voice.channel) {
                         const embed = EmbedUtil.getErrorEmbed("You must be in a voice channel.");
-                        return await interaction.reply({embeds: [embed]});
+                        return void await interaction.reply({embeds: [embed]});
+                    } else if (MusicPlayer.isPlaying(queue)) {
+                        const embed = EmbedUtil.getErrorEmbed("The track is already paused.");
+                        return void await interaction.reply({embeds: [embed]});
                     } else {
                         queue.setPaused(true);
                         MusicPlayer.setPlaying(queue, false);
                         const embed = EmbedUtil.getErrorEmbed("Paused the current track successfully.");
-                        return await interaction.reply({embeds: [embed]});
+                        return void await interaction.reply({embeds: [embed]});
                     }
                 } else {
-                    return await interaction.reply({content: "This command must be run in a guild."});
+                    return void await interaction.reply({content: "This command must be run in a guild."});
                 }
             } catch (error) {
                 Logger.error(error);
+                Utilities.sendWebhookMessage(error, true, interaction.guild.id);
                 const embed = EmbedUtil.getErrorEmbed("An error ocurred while running this command.");
-                return await interaction.reply({embeds: [embed]});
+                return void await interaction.reply({embeds: [embed]});
             }
         }
     }

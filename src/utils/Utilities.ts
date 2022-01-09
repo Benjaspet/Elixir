@@ -61,14 +61,26 @@ export default class Utilities {
         ];
     }
 
-    public static sendWebhookMessage(debugMessage: any): void {
-        const webhook: WebhookClient = new WebhookClient({url: Config.get("DEBUG-WEBHOOK")});
-        const embed: MessageEmbed = new MessageEmbed()
-            .setTitle("Elixir | Debug")
-            .setColor("PURPLE")
-            .setDescription("```" + "\n" + debugMessage + "\n" + "```")
-            .setFooter({text: "Elixir Music"})
-            .setTimestamp()
-        webhook.send({embeds: [embed]}).then(() => {});
+    public static sendWebhookMessage(debugMessage: any, guildPrefix: boolean, guild?: string): void {
+        if (guildPrefix) {
+            const webhook: WebhookClient = new WebhookClient({url: Config.get("DEBUG-WEBHOOK")});
+            const embed: MessageEmbed = new MessageEmbed()
+                .setTitle("Elixir | Debug")
+                .setColor("PURPLE")
+                .setDescription("```" + "\n" + debugMessage + "\n" + "```")
+                .addField("Guild ID", "```" + "\n" + guild + "\n" + "```")
+                .setFooter({text: "Elixir Music"})
+                .setTimestamp()
+            webhook.send({embeds: [embed]}).then(() => {});
+        } else {
+            const webhook: WebhookClient = new WebhookClient({url: Config.get("DEBUG-WEBHOOK")});
+            const embed: MessageEmbed = new MessageEmbed()
+                .setTitle("Elixir | Debug")
+                .setColor("PURPLE")
+                .setDescription("```" + "\n" + debugMessage + "\n" + "```")
+                .setFooter({text: "Elixir Music"})
+                .setTimestamp()
+            webhook.send({embeds: [embed]}).then(() => {});
+        }
     }
 }

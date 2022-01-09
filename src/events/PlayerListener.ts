@@ -33,7 +33,7 @@ player.on("trackAdd", async (queue: Queue, track: Track) => {
 
 player.on("tracksAdd", async (queue: Queue, tracks: Track[]) => {
    const metadata: any = queue.metadata;
-   const tracksHyperlink = `[${tracks[0].playlist.title}](${tracks[0].playlist.url})`;
+   const tracksHyperlink = `[${tracks[0].playlist.title}](${tracks[0].playlist.url})` || "Custom Playlist";
    if (tracksHyperlink) {
       metadata.channel.send({
          embeds: [
@@ -46,10 +46,10 @@ player.on("tracksAdd", async (queue: Queue, tracks: Track[]) => {
 
 player.on("error", async (queue: Queue, error: PlayerError) => {
    Logger.error(`[${queue.guild.name}] Error: ${error.message}`);
-   Utilities.sendWebhookMessage(error);
+   Utilities.sendWebhookMessage(error, true, queue.guild.id);
 });
 
 player.on("connectionError", async (queue: Queue, error: PlayerError) => {
    Logger.error(`[${queue.guild.name}] ConnectionError: ${error.message}`)
-   Utilities.sendWebhookMessage(error);
+   Utilities.sendWebhookMessage(error, true, queue.guild.id);
 });
