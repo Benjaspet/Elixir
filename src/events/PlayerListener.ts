@@ -10,17 +10,11 @@ player.on("connectionCreate", (queue: Queue, connection: StreamDispatcher) => {
    MusicPlayer.addStream();
 });
 
-player.on("botDisconnect", async queue => {
-   MusicPlayer.setPlaying(queue, false);
-   MusicPlayer.removeStream();
-   queue.stop();
-});
+player.on("botDisconnect", queue => { });
 
-player.on("trackEnd", async (queue: Queue, track: Track) => { });
+player.on("trackEnd", (queue: Queue, track: Track) => { });
 
-player.on("trackStart", async (queue: Queue, track: Track) => {
-   await DatabaseUtil.addPlayedSong(1);
-});
+player.on("trackStart", (queue: Queue, track: Track) => { });
 
 player.on("trackAdd", async (queue: Queue, track: Track) => {
    const metadata: any = queue.metadata;
@@ -29,6 +23,7 @@ player.on("trackAdd", async (queue: Queue, track: Track) => {
           EmbedUtil.getDefaultEmbed(`**Queued:** [${track.title}](${track.url})`)
       ]
    });
+   await DatabaseUtil.addPlayedSong(1);
 });
 
 player.on("tracksAdd", async (queue: Queue, tracks: Track[]) => {
@@ -44,12 +39,12 @@ player.on("tracksAdd", async (queue: Queue, tracks: Track[]) => {
    await DatabaseUtil.addPlaylistPlayed(1);
 });
 
-player.on("error", async (queue: Queue, error: PlayerError) => {
+player.on("error", (queue: Queue, error: PlayerError) => {
    Logger.error(`[${queue.guild.name}] Error: ${error.message}`);
    Utilities.sendWebhookMessage(error, true, queue.guild.id);
 });
 
-player.on("connectionError", async (queue: Queue, error: PlayerError) => {
+player.on("connectionError", (queue: Queue, error: PlayerError) => {
    Logger.error(`[${queue.guild.name}] ConnectionError: ${error.message}`)
    Utilities.sendWebhookMessage(error, true, queue.guild.id);
 });

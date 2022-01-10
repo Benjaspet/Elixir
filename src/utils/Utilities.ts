@@ -16,23 +16,40 @@ export default class Utilities {
         if (num >= 1e3) return +(num / 1e3).toFixed(2) + "K";
     }
 
-    public static formatSeconds(seconds: number){
+    /**
+     * Format seconds to a standard timestamp format.
+     * @param seconds The amount of seconds to process.
+     * @return string
+     */
+
+    public static formatSeconds(seconds: number): string {
         function pad(sec: number){
-            return (sec < 10 ? '0' : '') + sec;
+            return (sec < 10 ? "0" : "") + sec;
         }
         const hours = Math.floor(seconds / (60 * 60));
         const minutes = Math.floor(seconds % (60 * 60) / 60);
         const secs = Math.floor(seconds % 60);
-        return pad(hours) + ':' + pad(minutes) + ':' + pad(secs);
+        return pad(hours) + ":" + pad(minutes) + ":" + pad(secs);
     }
 
     public static sleep(ms): Promise<any> {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
+    /**
+     * Get the bot's websocket latency.
+     * @param client The client instance
+     * @return number
+     */
+
     public static getWebsocketLatency(client: Client): number {
         return client.ws.ping;
     }
+
+    /**
+     * Get the bot's uptime.
+     * @return string
+     */
 
     public static getProcessUptime(): string {
         const uptimeAsUnix = process.uptime();
@@ -42,6 +59,11 @@ export default class Utilities {
     public static cleanFormat(num: number): string {
         return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
+
+    /**
+     * Get the bot's intents.
+     * @return any[]
+     */
 
     public static getIntents(): any[] {
         return [

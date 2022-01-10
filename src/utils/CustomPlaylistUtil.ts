@@ -15,7 +15,6 @@ export default class CustomPlaylistUtil {
      */
 
     public static async createCustomPlaylist(user: string, id: string): Promise<ElixirStatus> {
-
         return await new Promise(async (resolve, reject) => {
             const result = await CustomPlaylist.findOne({playlistId: id});
             if (result) return reject({status: false});

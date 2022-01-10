@@ -2,6 +2,11 @@ import Stats from "../schemas/StatsSchema";
 
 export default class DatabaseUtil {
 
+    /**
+     * Initialize the bot statistic database.
+     * @return Promise<void>
+     */
+
     public static async initializeCollections(): Promise<void> {
         await Stats.create({
             commandsRan: 0,
@@ -10,11 +15,23 @@ export default class DatabaseUtil {
         });
     }
 
+    /**
+     * Add a played song to the database.
+     * @param amount The amount of songs to add.
+     * @return Promise<void>
+     */
+
     public static async addPlayedSong(amount: number): Promise<void> {
         const stats = await Stats.findOne();
         stats.songsPlayed += amount;
         await stats.save();
     }
+
+    /**
+     * Add an executed command to the database.
+     * @param amount The amount of commands to add.
+     * @return Promise<void>
+     */
 
     public static async addExecutedCommand(amount: number): Promise<void> {
         const stats = await Stats.findOne();
@@ -38,7 +55,7 @@ export default class DatabaseUtil {
         return stats.songsPlayed as number;
     }
 
-    public static async getTotalPlaylistedQueued(): Promise<number> {
+    public static async getTotalPlaylistsQueued(): Promise<number> {
         const stats = await Stats.findOne();
         return stats.playlistsQueued as number;
     }

@@ -32,7 +32,7 @@ export default class NowPlayingCommand implements ICommand {
                         return void await interaction.reply({embeds: [embed]});
                     } else {
                         const divisor: number = queue.streamTime / queue.current.durationMS;
-                        const percentage: string = divisor >= 100 ? "Completed" : (divisor * 100).toString();
+                        const percentage: string = divisor >= 100 ? "Completed" : Math.round((divisor * 100)).toString() + "%";
                         const embed = new MessageEmbed()
                             .setTitle("Currently Playing")
                             .setColor(Vars.DEFAULT_EMBED_COLOR)
@@ -50,7 +50,7 @@ export default class NowPlayingCommand implements ICommand {
             } catch (error: any) {
                 Logger.error(error);
                 Utilities.sendWebhookMessage(error, true, interaction.guild.id);
-                const embed = EmbedUtil.getErrorEmbed("An error ocurred while running this command.");
+                const embed = EmbedUtil.getErrorEmbed("An error occurred while running this command.");
                 return void await interaction.reply({embeds: [embed]});
             }
         }

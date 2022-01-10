@@ -88,7 +88,7 @@ export default class EmbedUtil {
     public static async getInformationEmbed(client: Client): Promise<MessageEmbed> {
         return new MessageEmbed()
             .setTitle("Elixir | Information")
-            .setAuthor("Total Playing Streams: " + MusicPlayer.getCurrentStreamCount(), null, null)
+            .setAuthor("Total Playing Streams: " + MusicPlayer.getOngoingStreamCount().toString(), null, null)
             .setColor(Vars.DEFAULT_EMBED_COLOR)
             .setDescription("" +
                 Config.get("EMOJI-LIBRARIES") + " Powered by: Discord.js " + version + "\n" +
@@ -98,7 +98,7 @@ export default class EmbedUtil {
                 Config.get("EMOJI-UPTIME") + " Uptime: " + Utilities.getProcessUptime() + "\n" +
                 Config.get("EMOJI-COMMANDS") + " Commands ran: " + Utilities.cleanFormat(await DatabaseUtil.getTotalCommandsExecuted()) + "\n" +
                 Config.get("EMOJI-SONGS") + " Songs played: " + Utilities.cleanFormat(await DatabaseUtil.getTotalSongsPlayed()) + "\n" +
-                Config.get("EMOJI-PLAYLISTS") + " Playlists queued: " + Utilities.cleanFormat(await DatabaseUtil.getTotalPlaylistedQueued()) + "\n" +
+                Config.get("EMOJI-PLAYLISTS") + " Playlists queued: " + Utilities.cleanFormat(await DatabaseUtil.getTotalPlaylistsQueued()) + "\n" +
                 Config.get("EMOJI-DEVELOPER") + " Bot Developer: Eerie#6560")
             .setFooter({text: "Elixir Music", iconURL: client.user.displayAvatarURL({dynamic: false})})
             .setTimestamp()

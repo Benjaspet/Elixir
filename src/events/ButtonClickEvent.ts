@@ -5,6 +5,7 @@ import {player} from "../Elixir";
 import Logger from "../Logger";
 import EmbedUtil from "../utils/EmbedUtil";
 import MusicPlayer from "../utils/MusicPlayer";
+import Utilities from "../utils/Utilities";
 
 export default class ButtonClickEvent implements IEvent {
 
@@ -65,7 +66,8 @@ export default class ButtonClickEvent implements IEvent {
             }
         } catch (error: any) {
             Logger.error(error);
-            const embed = EmbedUtil.getErrorEmbed("An error ocurred while performing this action.");
+            Utilities.sendWebhookMessage(error, true, interaction.guild.id);
+            const embed = EmbedUtil.getErrorEmbed("An error occurred while performing this action.");
             return await interaction.reply({embeds: [embed]});
         }
     }

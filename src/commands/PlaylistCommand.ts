@@ -3,7 +3,6 @@ import {Client, CommandInteraction, GuildMember, MessageEmbed} from "discord.js"
 import {ApplicationCommandOptionTypes} from "discord.js/typings/enums";
 import CustomPlaylistUtil from "../utils/CustomPlaylistUtil";
 import EmbedUtil from "../utils/EmbedUtil";
-import Logger from "../Logger";
 import {Queue} from "discord-player";
 import {player} from "../Elixir";
 import MusicPlayer from "../utils/MusicPlayer";
@@ -65,6 +64,7 @@ export default class PlaylistCommand implements ICommand {
                         }
                         await CustomPlaylistUtil.playCustomPlaylist(queue, id)
                             .then(async () => {
+                                embed = EmbedUtil.getDefaultEmbed(`Custom playlist **${id}** queued successfully.`);
                                 try {
                                     if (!queue.connection && interaction.member instanceof GuildMember) {
                                         await queue.connect(interaction.member.voice.channel);
@@ -77,7 +77,6 @@ export default class PlaylistCommand implements ICommand {
                                 }
                                 await queue.play();
                                 MusicPlayer.setPlaying(queue, true);
-                                embed = EmbedUtil.getDefaultEmbed(`Custom playlist **${id}** queued successfully.`);
                             })
                             .catch(async () => {
                                 embed = EmbedUtil.getErrorEmbed("A custom playlist by that ID was not found.");
