@@ -30,13 +30,13 @@ export default class PauseCommand implements ICommand {
                     } else if (!member.voice.channel) {
                         const embed = EmbedUtil.getErrorEmbed("You must be in a voice channel.");
                         return void await interaction.reply({embeds: [embed]});
-                    } else if (MusicPlayer.isPlaying(queue)) {
+                    } else if (!MusicPlayer.isPlaying(queue)) {
                         const embed = EmbedUtil.getErrorEmbed("The track is already paused.");
                         return void await interaction.reply({embeds: [embed]});
                     } else {
                         queue.setPaused(true);
                         MusicPlayer.setPlaying(queue, false);
-                        const embed = EmbedUtil.getErrorEmbed("Paused the current track successfully.");
+                        const embed = EmbedUtil.getDefaultEmbed("Paused the current track successfully.");
                         return void await interaction.reply({embeds: [embed]});
                     }
                 } else {

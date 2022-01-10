@@ -15,6 +15,7 @@ import StopCommand from "../commands/StopCommand";
 import VolumeCommand from "../commands/VolumeCommand";
 import LyricsCommand from "../commands/LyricsCommand";
 import ControlsCommand from "../commands/ControlsCommand";
+import PlaylistCommand from "../commands/PlaylistCommand";
 
 export default class BaseResponder {
 
@@ -28,6 +29,7 @@ export default class BaseResponder {
         new NowPlayingCommand(client).execute(interaction).then(() => {});
         new PauseCommand(client).execute(interaction).then(() => {});
         new PlayCommand(client).execute(interaction).then(() => {});
+        new PlaylistCommand(client).execute(interaction).then(() => {});
         new QueueCommand(client).execute(interaction).then(() => {});
         new ResumeCommand(client).execute(interaction).then(() => {});
         new SearchCommand(client).execute(interaction).then(() => {});

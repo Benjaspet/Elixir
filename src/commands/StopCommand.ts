@@ -32,9 +32,14 @@ export default class StopCommand implements ICommand {
                         return await interaction.reply({embeds: [embed]});
                     } else {
                         MusicPlayer.setPlaying(queue, false);
-                        await queue.destroy(true);
-                        const embed = EmbedUtil.getDefaultEmbed("Cleared the queue and left the voice channel.");
-                        return await interaction.reply({embeds: [embed]});
+                        if (!queue.destroyed) {
+                            await queue.destroy(true);
+                            const embed = EmbedUtil.getDefaultEmbed("Cleared the queue and left the voice channel.");
+                            return await interaction.reply({embeds: [embed]});
+                        } else {
+                            const embed = EmbedUtil.getErrorEmbed("Cleared the queue and left the voice channel.");
+                            return await interaction.reply({embeds: [embed]});
+                        }
                     }
                 } else {
                     return await interaction.reply({content: "This command must be run in a guild."});

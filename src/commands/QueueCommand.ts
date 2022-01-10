@@ -79,6 +79,7 @@ export default class QueueCommand implements ICommand {
                 }
             } catch (error: any) {
                 Logger.error(error);
+                console.log(error)
                 Utilities.sendWebhookMessage(error, true, interaction.guild.id);
                 const embed = EmbedUtil.getErrorEmbed("An error ocurred while running this command.");
                 return await interaction.reply({embeds: [embed]});

@@ -1,4 +1,4 @@
 export interface CustomPlaylistObject {
-    id: string,
+    playlistId: string,
     tracks: string[]
 }

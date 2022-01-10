@@ -15,7 +15,7 @@ export default class MusicPlayer {
             bufferingTimeout: 1000,
             initialVolume: 100,
             leaveOnEnd: true,
-            leaveOnStop: true,
+            leaveOnStop: false,
             leaveOnEmpty: false,
             leaveOnEmptyCooldown: 1000,
             spotifyBridge: true

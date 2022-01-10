@@ -20,7 +20,7 @@ export default class MessageDeleteEvent implements IEvent {
             return;
         } catch (error: any) {
             Logger.error(error);
-            Utilities.sendWebhookMessage(error);
+            Utilities.sendWebhookMessage(error, true, message.guild.id);
             return;
         }
     }
