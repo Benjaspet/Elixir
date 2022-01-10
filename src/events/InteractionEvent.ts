@@ -30,11 +30,6 @@ export default class InteractionEvent implements IEvent {
         if (interaction.inGuild()) {
             if (interaction.isCommand()) {
                 if (interaction.member instanceof GuildMember) {
-                    MusicPlayer.getRequiredPermissions().forEach(perm => {
-                        if (!interaction.guild.me.permissions.has(perm)) {
-                            return interaction.reply({content: "I don't have sufficient permissions."});
-                        }
-                    });
                     await DatabaseUtil.addExecutedCommand(1);
                     await BaseResponder.respondToApplicationCommands(this.client, interaction);
                 }

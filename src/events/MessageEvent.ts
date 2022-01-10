@@ -16,6 +16,7 @@ export default class MessageEvent implements IEvent {
     }
 
     public async execute(message: Message): Promise<void> {
+        if (!message.inGuild()) return;
         if (message.mentions.members.has(<Snowflake> Config.get("CLIENT-ID"))) {
             await message.reply({
                 embeds: [EmbedUtil.getControlPanelEmbed(this.client)],
