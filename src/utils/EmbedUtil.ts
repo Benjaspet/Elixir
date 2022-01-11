@@ -88,7 +88,7 @@ export default class EmbedUtil {
     public static async getInformationEmbed(client: Client): Promise<MessageEmbed> {
         return new MessageEmbed()
             .setTitle("Elixir | Information")
-            .setAuthor("Total Playing Streams: " + MusicPlayer.getOngoingStreamCount().toString(), null, null)
+            .setAuthor({name: "Total Playing Streams: " + MusicPlayer.getOngoingStreamCount().toString()})
             .setColor(Vars.DEFAULT_EMBED_COLOR)
             .setDescription("" +
                 Config.get("EMOJI-LIBRARIES") + " Powered by: Discord.js " + version + "\n" +

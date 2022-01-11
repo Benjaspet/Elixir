@@ -7,10 +7,12 @@ import DatabaseUtil from "../utils/DatabaseUtil";
 import Utilities from "../utils/Utilities";
 
 player.on("connectionCreate", (queue: Queue, connection: StreamDispatcher) => {
-   MusicPlayer.addStream();
+   MusicPlayer.streamCount++;
 });
 
-player.on("botDisconnect", queue => { });
+player.on("botDisconnect", queue => {
+   MusicPlayer.streamCount--;
+});
 
 player.on("trackEnd", (queue: Queue, track: Track) => { });
 
@@ -39,10 +41,7 @@ player.on("tracksAdd", async (queue: Queue, tracks: Track[]) => {
    await DatabaseUtil.addPlaylistPlayed(1);
 });
 
-player.on("error", (queue: Queue, error: PlayerError) => {
-   Logger.error(`[${queue.guild.name}] Error: ${error.message}`);
-   Utilities.sendWebhookMessage(error, true, queue.guild.id);
-});
+player.on("error", (queue: Queue, error: PlayerError) => { });
 
 player.on("connectionError", (queue: Queue, error: PlayerError) => {
    Logger.error(`[${queue.guild.name}] ConnectionError: ${error.message}`)

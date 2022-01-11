@@ -32,7 +32,8 @@ export default class StopCommand implements ICommand {
                         return void await interaction.reply({embeds: [embed]});
                     } else {
                         MusicPlayer.setPlaying(queue, false);
-                        queue.destroy(true);
+                        queue.connection.voiceConnection.disconnect();
+                        queue.stop();
                         const embed = EmbedUtil.getDefaultEmbed("Cleared the queue and left the voice channel.");
                         return void await interaction.reply({embeds: [embed]});
                     }
@@ -41,7 +42,7 @@ export default class StopCommand implements ICommand {
                 }
             } catch (error: any) {
                 Logger.error(error);
-                Utilities.sendWebhookMessage(error, true, interaction.guild.id);
+                //Utilities.sendWebhookMessage(error, true, interaction.guild.id);
                 const embed = EmbedUtil.getErrorEmbed("An error occurred while running this command.");
                 return void await interaction.reply({embeds: [embed]});
             }
