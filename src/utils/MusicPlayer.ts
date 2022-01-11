@@ -37,7 +37,7 @@ export default class MusicPlayer {
                 channel: interaction.channel
             },
             ytdlOptions: {
-                quality: "lowestaudio",
+                quality: "highestaudio",
                 filter: "audioonly",
                 highWaterMark: 1 << 25
             },

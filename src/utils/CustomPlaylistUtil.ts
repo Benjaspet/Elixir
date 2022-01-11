@@ -33,25 +33,29 @@ export default class CustomPlaylistUtil {
      * @param user The user who will add the track.
      * @param track The track to add.
      * @param id The playlist ID.
+     * @param tracksToAdd The custom playlist object.
      * @return Promise<any>
      */
 
-    public static async addTrackToCustomPlaylist(user: string, track: string, id: string): Promise<CustomPlaylistObject|null> {
+    public static async addTrackToCustomPlaylist(user: string, track: string, id: string, tracksToAdd: CustomPlaylistObject): Promise<CustomPlaylistObject> {
         return await new Promise(async (resolve, reject) => {
-            const result = await CustomPlaylist.findOne({playlistId: id, userId: user});
-            if (result) {
-                const searchResult = await player.search(track, {requestedBy: user, searchEngine: QueryType.AUTO});
-                if (!searchResult) {
-                    return reject(null);
+            const searchResult = await player.search(track, {requestedBy: user, searchEngine: QueryType.AUTO});
+            if (!searchResult) {
+                return reject(null);
+            } else {
+                if (searchResult.playlist) {
+                    console.log("a")
+                    return reject({status: false});
                 } else {
-                    result.tracks.push(searchResult.tracks[0].url);
-                    await CustomPlaylist.updateOne({playlistId: id, userId: user}, {tracks: result.tracks});
+                    tracksToAdd.tracks.push(searchResult.tracks[0].url);
+                    await CustomPlaylist.updateOne({playlistId: id, userId: user}, {tracks: tracksToAdd.tracks});
                     return resolve({
+                        status: true,
                         playlistId: id,
-                        tracks: result.tracks
+                        tracks: tracksToAdd.tracks
                     });
                 }
-            } else return reject(null);
+            }
         });
     }
 

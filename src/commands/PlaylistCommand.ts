@@ -6,6 +6,9 @@ import EmbedUtil from "../utils/EmbedUtil";
 import {Queue} from "discord-player";
 import {player} from "../Elixir";
 import MusicPlayer from "../utils/MusicPlayer";
+import CustomPlaylist from "../schemas/PlaylistSchema";
+import {ElixirStatus} from "../types/ElixirStatus";
+import {CustomPlaylistObject} from "../types/CustomPlaylistObject";
 
 export default class PlaylistCommand implements ICommand {
 
@@ -85,21 +88,29 @@ export default class PlaylistCommand implements ICommand {
                     case "addtrack":
                        id = interaction.options.getString("id");
                        track = interaction.options.getString("track");
-                       const data = await CustomPlaylistUtil.addTrackToCustomPlaylist(interaction.user.id, track, id);
-                       if (!data) return await interaction.editReply({content: "A custom playlist by that ID doesn't exist."});
-                       const endPosition: number = data.tracks.length >= 10 ? 10 - 1 : data.tracks.length;
-                       const list = data.tracks.slice(0, endPosition).map((track, i) => {
-                           return `**#${i + 1}** ─ ${track}`;
-                       });
-                       embed = new MessageEmbed()
-                           .setTitle("Success!")
-                           .setDescription(`**${id}** was updated successfully.`)
-                           .setColor("PURPLE")
-                           .addField("Playlist Data", "• Total tracks: " + data.tracks.length.toString())
-                           .addField("Sample Tracks", list.join("\n"))
-                           .setFooter({text: "Elixir Music", iconURL: this.client.user.displayAvatarURL({dynamic: false})})
-                           .setTimestamp();
-                       return await interaction.editReply({embeds: [embed]});
+                       const result = await CustomPlaylist.findOne({playlistId: id, userId: interaction.user.id});
+                       if (!result) return await interaction.editReply({content: "A custom playlist by that ID doesn't exist."});
+                       await CustomPlaylistUtil.addTrackToCustomPlaylist(interaction.user.id, track, id, result)
+                           .then(async data => {
+                               if (!data.status) return await interaction.editReply({content: "You cannot add multiple tracks to custom playlists at once."});
+                               const endPosition: number = data.tracks.length >= 10 ? 10 - 1 : data.tracks.length;
+                               const list = data.tracks.slice(0, endPosition).map((track, i) => {
+                                   return `**#${i + 1}** ─ ${track}`;
+                               });
+                               embed = new MessageEmbed()
+                                   .setTitle("Success!")
+                                   .setDescription(`**${id}** was updated successfully.`)
+                                   .setColor("PURPLE")
+                                   .addField("Playlist Data", "• Total tracks: " + data.tracks.length.toString())
+                                   .addField("Sample Tracks", list.join("\n"))
+                                   .setFooter({text: "Elixir Music", iconURL: this.client.user.displayAvatarURL({dynamic: false})})
+                                   .setTimestamp();
+                               return await interaction.editReply({embeds: [embed]});
+                           })
+                           .catch(async () => {
+                               return await interaction.editReply({content: "An error ocurred while running this."});
+                           });
+                       break;
                     case "removetrack":
                 }
             } catch (error: any) {
