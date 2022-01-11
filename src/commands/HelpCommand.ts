@@ -1,15 +1,47 @@
-import {Client, CommandInteraction} from "discord.js";
-import {ICommand} from "../interfaces/ICommand";
-import EmbedUtil from "../utils/EmbedUtil";
+import {ApplicationCommandData, Client, CommandInteraction} from "discord.js";
 import {ApplicationCommandOptionTypes} from "discord.js/typings/enums";
+import EmbedUtil from "../utils/EmbedUtil";
+import Command from "../Command";
 
-export default class HelpCommand implements ICommand {
+export default class HelpCommand extends Command {
 
-    public name: string = "help";
-    public description: string = "Displays a list of all available commands for Elixir.";
     private readonly client: Client;
 
     constructor(client: Client) {
+        super("help", {
+            name: "help",
+            description: "Displays a list of all available commands for Elixir.",
+            options: [
+                {
+                    name: "category",
+                    description: "Learn how to use Elixir and its commands.",
+                    type: ApplicationCommandOptionTypes.STRING,
+                    required: false,
+                    choices: [
+                        {
+                            name: "Frequently Asked Questions",
+                            value: "help-faq"
+                        },
+                        {
+                            name: "How to Invite Elixir to Your Server",
+                            value: "help-invite"
+                        },
+                        {
+                            name: "Join Elixir's Support Server",
+                            value: "help-support"
+                        },
+                        {
+                            name: "How to Use Commands",
+                            value: "help-commands"
+                        },
+                        {
+                            name: "Disclaimer, Terms, & Privacy Policy",
+                            value: "help-terms"
+                        }
+                    ]
+                }
+            ]
+        });
         this.client = client;
     }
 
@@ -18,57 +50,38 @@ export default class HelpCommand implements ICommand {
         if (interaction.commandName === this.name) {
             switch (interaction.options.getString("category")) {
                 case "help-faq":
-                    return void await interaction.reply({embeds: [EmbedUtil.getFaqEmbed(this.client)]});
+                    return void await interaction.reply({
+                        embeds: [EmbedUtil.getFaqEmbed(this.client)]
+                    });
                 case "help-invite":
-                    return void await interaction.reply({embeds: [EmbedUtil.getInviteEmbed()]});
+                    return void await interaction.reply({
+                        embeds: [EmbedUtil.getInviteEmbed()]
+                    });
                 case "help-support":
-                    return void await interaction.reply({embeds: [EmbedUtil.getSupportServerEmbed()]});
+                    return void await interaction.reply({
+                        embeds: [EmbedUtil.getSupportServerEmbed()]
+                    });
                 case "help-commands":
-                    return void await interaction.reply({embeds: [EmbedUtil.getHelpMenuEmbed(this.client)]});
+                    return void await interaction.reply({
+                        embeds: [EmbedUtil.getHelpMenuEmbed(this.client)]
+                    });
                 case "help-terms":
-                    return void await interaction.reply({embeds: [EmbedUtil.getTermsEmbed(this.client)]});
+                    return void await interaction.reply({
+                        embeds: [EmbedUtil.getTermsEmbed(this.client)]
+                    });
                 default:
-                    return void await interaction.reply({embeds: [EmbedUtil.getHelpMenuEmbed(this.client)]});
+                    return void await interaction.reply({
+                        embeds: [EmbedUtil.getHelpMenuEmbed(this.client)]
+                    });
             }
         }
     }
 
-    public getSlashData(): object {
-        return this.slashData;
+    public getName(): string {
+        return this.name;
     }
 
-    public slashData: object = {
-        name: this.name,
-        description: this.description,
-        options: [
-            {
-                name: "category",
-                description: "Learn how to use Elixir and its commands.",
-                type: ApplicationCommandOptionTypes.STRING,
-                required: false,
-                choices: [
-                    {
-                        name: "Frequently Asked Questions",
-                        value: "help-faq"
-                    },
-                    {
-                        name: "How to Invite Elixir to Your Server",
-                        value: "help-invite"
-                    },
-                    {
-                        name: "Join Elixir's Support Server",
-                        value: "help-support"
-                    },
-                    {
-                        name: "How to Use Commands",
-                        value: "help-commands"
-                    },
-                    {
-                        name: "Disclaimer, Terms, & Privacy Policy",
-                        value: "help-terms"
-                    }
-                ]
-            }
-        ]
-    };
+    public getCommandData(): ApplicationCommandData {
+        return this.data;
+    }
 }

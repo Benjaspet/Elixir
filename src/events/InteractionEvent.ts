@@ -13,6 +13,8 @@ import BaseResponder from "../base/BaseResponder";
 import ButtonClickEvent from "./ButtonClickEvent";
 import SearchResultEvent from "./SearchResultEvent";
 import EmbedUtil from "../utils/EmbedUtil";
+import CommandManager from "../managers/CommandManager";
+import {ApplicationCommand} from "../types/ApplicationCommand";
 
 export default class InteractionEvent implements IEvent {
 
@@ -30,13 +32,18 @@ export default class InteractionEvent implements IEvent {
         if (interaction.inGuild()) {
             if (interaction.isCommand()) {
                 if (interaction.member instanceof GuildMember) {
-                    await DatabaseUtil.addExecutedCommand(1);
-                    await BaseResponder.respondToApplicationCommands(this.client, interaction);
+                    const name: string = interaction.commandName;
+                    const command: ApplicationCommand = CommandManager.commands.get(name);
+                    if (command != null && interaction.isCommand()) {
+                        command.execute(interaction);
+                        await DatabaseUtil.addExecutedCommand(1);
+                    }
+                    //await BaseResponder.respondToApplicationCommands(this.client, interaction);
                 }
             } else if (interaction.isButton()) {
-                await new ButtonClickEvent(this.client, "interactionCreate", false).execute(interaction);
+                void await new ButtonClickEvent(this.client, "interactionCreate", false).execute(interaction);
             } else if (interaction.isAutocomplete()) {
-                await new SearchResultEvent(this.client, "interactionCreate", false).execute(interaction);
+                void await new SearchResultEvent(this.client, "interactionCreate", false).execute(interaction);
             }
         } else {
             const embed: MessageEmbed = EmbedUtil.getDefaultEmbed("Unfortunately, Elixir Music only supports " +

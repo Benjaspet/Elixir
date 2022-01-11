@@ -1,14 +1,14 @@
 import {ICommand} from "../interfaces/ICommand";
 import {Client, CommandInteraction, GuildMember, MessageEmbed} from "discord.js";
 import {ApplicationCommandOptionTypes} from "discord.js/typings/enums";
-import CustomPlaylistUtil from "../utils/CustomPlaylistUtil";
-import EmbedUtil from "../utils/EmbedUtil";
 import {Queue} from "discord-player";
 import {player} from "../Elixir";
+import CustomPlaylistUtil from "../utils/CustomPlaylistUtil";
+import EmbedUtil from "../utils/EmbedUtil";
 import MusicPlayer from "../utils/MusicPlayer";
 import CustomPlaylist from "../schemas/PlaylistSchema";
-import {ElixirStatus} from "../types/ElixirStatus";
-import {CustomPlaylistObject} from "../types/CustomPlaylistObject";
+import Utilities from "../utils/Utilities";
+import Logger from "../Logger";
 
 export default class PlaylistCommand implements ICommand {
 
@@ -42,8 +42,8 @@ export default class PlaylistCommand implements ICommand {
                         id = interaction.options.getString("id");
                         await CustomPlaylistUtil.getCustomPlaylist(id)
                             .then(async result => {
-                                const endPosition: number = result.length >= 10 ? 10 - 1 : result.length;
-                                const list = result.slice(0, endPosition).map((track, i) => {
+                                const endPosition: number = result.tracks.length >= 10 ? 10 - 1 : result.tracks.length;
+                                const list = result.tracks.slice(0, endPosition).map((track, i) => {
                                     return `**#${i + 1}** ─ ${result[i]}`;
                                 });
                                 embed = new MessageEmbed()
@@ -65,7 +65,7 @@ export default class PlaylistCommand implements ICommand {
                         if (!queue) {
                             queue = player.createQueue(interaction.guild, MusicPlayer.getQueueInitOptions(interaction));
                         }
-                        await CustomPlaylistUtil.playCustomPlaylist(queue, id)
+                        await CustomPlaylistUtil.playCustomPlaylist(queue, interaction.user, id)
                             .then(async () => {
                                 embed = EmbedUtil.getDefaultEmbed(`Custom playlist **${id}** queued successfully.`);
                                 try {
@@ -92,7 +92,9 @@ export default class PlaylistCommand implements ICommand {
                        if (!result) return await interaction.editReply({content: "A custom playlist by that ID doesn't exist."});
                        await CustomPlaylistUtil.addTrackToCustomPlaylist(interaction.user.id, track, id, result)
                            .then(async data => {
-                               if (!data.status) return await interaction.editReply({content: "You cannot add multiple tracks to custom playlists at once."});
+                               if (!data.status) return await interaction.editReply({
+                                   content: "You cannot add multiple tracks to custom playlists at once."
+                               });
                                const endPosition: number = data.tracks.length >= 10 ? 10 - 1 : data.tracks.length;
                                const list = data.tracks.slice(0, endPosition).map((track, i) => {
                                    return `**#${i + 1}** ─ ${track}`;
@@ -108,13 +110,31 @@ export default class PlaylistCommand implements ICommand {
                                return await interaction.editReply({embeds: [embed]});
                            })
                            .catch(async () => {
-                               return await interaction.editReply({content: "An error ocurred while running this."});
+                               return await interaction.editReply({
+                                   content: "An error occurred while running this."
+                               });
                            });
                        break;
                     case "removetrack":
+                        id = interaction.options.getString("id");
+                        const trackPosition: number = interaction.options.getNumber("track");
+                        await CustomPlaylistUtil.removeTrackFromCustomPlaylist(interaction.user.id, trackPosition - 1, id)
+                            .then(async result => {
+                                if (result) {
+                                    return void await interaction.editReply({
+                                        content: `Removed track **#${trackPosition}** from ${id}.`
+                                    });
+                                }
+                            })
+                            .catch(async () => {
+                                return void await interaction.editReply({
+                                    content: "A playlist by that ID does not exist."
+                                });
+                            });
                 }
             } catch (error: any) {
-
+                Logger.error(error);
+                Utilities.sendWebhookMessage(error, true, interaction.guild.id);
             }
         }
     }
@@ -214,10 +234,10 @@ export default class PlaylistCommand implements ICommand {
                     },
                     {
                         name: "track",
-                        description: "The track to remove from the playlist.",
-                        type: ApplicationCommandOptionTypes.STRING,
+                        description: "The track number to remove.",
+                        type: ApplicationCommandOptionTypes.NUMBER,
                         required: true,
-                        autocomplete: true
+                        autocomplete: false
                     }
                 ],
             }

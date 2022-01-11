@@ -1,9 +1,9 @@
 import {Client, CommandInteraction, GuildMember, MessageEmbed} from "discord.js";
 import {player} from "../Elixir";
 import {ICommand} from "../interfaces/ICommand";
+import {Queue} from "discord-player";
 import EmbedUtil from "../utils/EmbedUtil";
 import Logger from "../Logger";
-import {Queue} from "discord-player";
 import Vars from "../constants/Vars";
 import Utilities from "../utils/Utilities";
 

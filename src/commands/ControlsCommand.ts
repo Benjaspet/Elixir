@@ -1,14 +1,16 @@
-import {Client, CommandInteraction} from "discord.js";
-import {ICommand} from "../interfaces/ICommand";
+import {ApplicationCommandData, Client, CommandInteraction} from "discord.js";
 import EmbedUtil from "../utils/EmbedUtil";
+import Command from "../Command";
 
-export default class ControlsCommand implements ICommand {
+export default class ControlsCommand extends Command {
 
-    public name: string = "controls";
-    public description: string = "Access Elixir's control panel.";
     private readonly client: Client;
 
     constructor(client: Client) {
+        super("controls", {
+            name: "controls",
+            description: "Access Elixir's control panel."
+        });
         this.client = client;
     }
 
@@ -22,12 +24,11 @@ export default class ControlsCommand implements ICommand {
         }
     }
 
-    public getSlashData(): object {
-        return this.slashData;
+    public getName(): string {
+        return this.name;
     }
 
-    public slashData: object = {
-        name: this.name,
-        description: this.description
-    };
+    public getCommandData(): ApplicationCommandData {
+        return this.data;
+    }
 }
