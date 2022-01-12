@@ -17,7 +17,7 @@
  */
 
 import {Client} from "discord.js";
-import {Player} from "discord-player";
+import {DisTube} from "distube";
 import BaseApp from "./base/BaseApp";
 import BaseEvent from "./base/BaseEvent";
 import MusicPlayer from "./utils/MusicPlayer";
@@ -32,7 +32,7 @@ export const client: Client = new Client({
     intents: Utilities.getIntents()
 });
 
-export const player: Player = new Player(client, MusicPlayer.getOptions());
+export const player: DisTube = new DisTube(client, MusicPlayer.getOptions());
 
 new BaseApp(client).login();
 new BaseEvent(client);

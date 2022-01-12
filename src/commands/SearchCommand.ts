@@ -7,6 +7,7 @@ import Logger from "../Logger";
 import {QueryType, Queue, Track, TrackSource} from "discord-player";
 import playdl from "play-dl";
 import Utilities from "../utils/Utilities";
+import {ApplicationCommandOptionTypes} from "discord.js/typings/enums";
 
 export default class SearchCommand implements ICommand {
 
@@ -106,7 +107,7 @@ export default class SearchCommand implements ICommand {
             {
                 name: "song",
                 description: "The URL or song query.",
-                type: SlashCommandUtil.slashCommandTypeToInt("STRING"),
+                type: ApplicationCommandOptionTypes.STRING,
                 required: true,
                 autocomplete: true
             }

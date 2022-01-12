@@ -6,6 +6,7 @@ import {MessageButtonStyles} from "discord.js/typings/enums";
 import Config from "../Config";
 import Vars from "../constants/Vars";
 import MusicPlayer from "./MusicPlayer";
+import {Queue} from "discord-player";
 
 export default class EmbedUtil {
 
@@ -100,6 +101,8 @@ export default class EmbedUtil {
                 Config.get("EMOJI-SONGS") + " Songs played: " + Utilities.cleanFormat(await DatabaseUtil.getTotalSongsPlayed()) + "\n" +
                 Config.get("EMOJI-PLAYLISTS") + " Playlists queued: " + Utilities.cleanFormat(await DatabaseUtil.getTotalPlaylistsQueued()) + "\n" +
                 Config.get("EMOJI-DEVELOPER") + " Bot Developer: Eerie#6560")
+            .addField("Extra Data", "" +
+                    "• Verified: " + client.user.verified)
             .setFooter({text: "Elixir Music", iconURL: client.user.displayAvatarURL({dynamic: false})})
             .setTimestamp()
     }

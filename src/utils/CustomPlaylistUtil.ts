@@ -5,6 +5,7 @@ import {CustomPlaylistObject} from "../types/CustomPlaylistObject";
 import {ElixirStatus} from "../types/ElixirStatus";
 import Logger from "../Logger";
 import {User} from "discord.js";
+import MusicPlayer from "./MusicPlayer";
 
 export default class CustomPlaylistUtil {
 
@@ -127,16 +128,16 @@ export default class CustomPlaylistUtil {
             const playlist: CustomPlaylistObject = await CustomPlaylistUtil.getCustomPlaylist(id);
             return new Promise(async (resolve, reject) => {
                 if (!playlist) reject({status: false});
-                let tracks: Track[] = [];
+                MusicPlayer.sendQueuedMessage.set(queue.guild.id, false);
+                resolve({status: true, tracks: playlist.tracks});
                 for (const track of playlist.tracks) {
                     const searched: PlayerSearchResult = await player.search(track, {
                         requestedBy: user,
                         searchEngine: QueryType.AUTO
                     });
-                    tracks.push(searched.tracks[0]);
+                    queue.addTrack(searched.tracks[0]);
                 }
-                queue.addTracks(tracks);
-                resolve({status: true});
+                MusicPlayer.sendQueuedMessage.set(queue.guild.id, true);
             });
         } catch (error: any) {
             return new Promise((resolve, reject) => {

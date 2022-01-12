@@ -7,9 +7,7 @@ import {
     GuildMember,
     Interaction, MessageEmbed
 } from "discord.js";
-import MusicPlayer from "../utils/MusicPlayer";
 import DatabaseUtil from "../utils/DatabaseUtil";
-import BaseResponder from "../base/BaseResponder";
 import ButtonClickEvent from "./ButtonClickEvent";
 import SearchResultEvent from "./SearchResultEvent";
 import EmbedUtil from "../utils/EmbedUtil";
@@ -38,7 +36,6 @@ export default class InteractionEvent implements IEvent {
                         command.execute(interaction);
                         await DatabaseUtil.addExecutedCommand(1);
                     }
-                    //await BaseResponder.respondToApplicationCommands(this.client, interaction);
                 }
             } else if (interaction.isButton()) {
                 void await new ButtonClickEvent(this.client, "interactionCreate", false).execute(interaction);

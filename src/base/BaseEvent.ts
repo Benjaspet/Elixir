@@ -1,8 +1,7 @@
 import {Client} from "discord.js";
 import ReadyEvent from "../events/ReadyEvent";
-import MessageEvent from "../events/MessageEvent";
 import InteractionEvent from "../events/InteractionEvent";
-import MessageDeleteEvent from "../events/MessageDeleteEvent";
+import VoiceStateEvent from "../events/VoiceStateEvent";
 
 export default class BaseEvent {
 
@@ -17,14 +16,11 @@ export default class BaseEvent {
         this.client.on("ready", async () => {
             await new ReadyEvent(this.client, "ready", true).execute();
         });
-        this.client.on("messageCreate", async message => {
-            await new MessageEvent(this.client, "messageCreate", false).execute(message);
-        });
-        this.client.on("messageDelete", async message => {
-           await new MessageDeleteEvent(this.client, "messageDelete", false).execute(message);
-        });
         this.client.on("interactionCreate", async interaction => {
             await new InteractionEvent(this.client, "interactionCreate", false).execute(interaction);
+        });
+        this.client.on("voiceStateUpdate", (oldState, newState) => {
+            new VoiceStateEvent(this.client, "voiceStateUpdate", false).execute(oldState, newState);
         });
     }
 }

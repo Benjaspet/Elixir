@@ -7,6 +7,7 @@ import BaseCommand from "../base/BaseCommand";
 import SlashCommandUtil from "../utils/SlashCommandUtil";
 import DatabaseManager from "../managers/DatabaseManager";
 import DatabaseUtil from "../utils/DatabaseUtil";
+import CommandManager from "../managers/CommandManager";
 
 export default class ReadyEvent implements IEvent {
 
@@ -24,6 +25,7 @@ export default class ReadyEvent implements IEvent {
         Logger.clear();
         Logger.info(`Logged in as ${this.client.user.tag}.`);
         this.handlePresence();
+        new CommandManager(this.client);
         await this.handleApplicationCommands();
         await DatabaseManager.connect();
         if (JSON.parse(Config.get("MONGO-SETUP")) == true) {

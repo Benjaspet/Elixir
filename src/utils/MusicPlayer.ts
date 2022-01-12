@@ -1,28 +1,40 @@
 import {PlayerOptions, Queue, Track, TrackSource} from "discord-player";
-import {Collection, CommandInteraction, PermissionResolvable, Snowflake} from "discord.js";
+import {Collection, CommandInteraction, Snowflake} from "discord.js";
 import playdl from "play-dl";
 import EmbedUtil from "./EmbedUtil";
+import SpotifyPlugin from "@distube/spotify";
+import SoundCloudPlugin from "@distube/soundcloud";
+import {DisTubeOptions} from "distube";
 
 export default class MusicPlayer {
 
     public static playing: Collection<Snowflake, boolean> = new Collection<Snowflake, boolean>();
     public static streamCount: number = 0;
+    public static sendQueuedMessage: Collection<Snowflake, boolean> = new Collection<Snowflake, boolean>();
 
     /**
      * Get the music player init options.
      * @return PlayerOptions
      */
 
-    public static getOptions(): PlayerOptions {
+    public static getOptions(): DisTubeOptions {
         return {
-            autoSelfDeaf: true,
-            bufferingTimeout: 500,
-            initialVolume: 100,
-            leaveOnEnd: true,
-            leaveOnStop: false,
+            leaveOnFinish: true,
+            leaveOnStop: true,
             leaveOnEmpty: false,
-            spotifyBridge: true
-        }
+            savePreviousSongs: true,
+            searchSongs: 5,
+            youtubeDL: true,
+            ytdlOptions: {
+                quality: "highestaudio",
+                filter: "audioonly",
+                highWaterMark: 1 << 25
+            },
+            nsfw: false,
+            emitAddListWhenCreatingQueue: true,
+            emitAddSongWhenCreatingQueue: true,
+            plugins: [new SpotifyPlugin(), new SoundCloudPlugin()]
+        };
     }
 
     /**
