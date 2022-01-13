@@ -32,14 +32,11 @@ export default class SlashCommandUtil {
             new PlaylistCommand(client).getCommandData(),
             new QueueCommand(client).getCommandData(),
             new ResumeCommand(client).getCommandData(),
-
-
-            new SearchCommand(client).getSlashData(),
-            new ShuffleCommand(client).getSlashData(),
-            new SkipCommand(client).getSlashData(),
-            new StopCommand(client).getSlashData(),
-            new VolumeCommand(client).getSlashData(),
-
+            new SearchCommand(client).getCommandData(),
+            new ShuffleCommand(client).getCommandData(),
+            new SkipCommand(client).getCommandData(),
+            new StopCommand(client).getCommandData(),
+            new VolumeCommand(client).getCommandData()
         ];
     }
 }

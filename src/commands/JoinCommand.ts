@@ -19,9 +19,9 @@
 import {ApplicationCommandData, Client, CommandInteraction, GuildMember} from "discord.js";
 const {joinVoiceChannel} = require("@discordjs/voice");
 import EmbedUtil from "../utils/EmbedUtil";
-import Logger from "../Logger";
+import Logger from "../structs/Logger";
 import Utilities from "../utils/Utilities";
-import Command from "../Command";
+import Command from "../structs/Command";
 
 export default class JoinCommand extends Command {
 

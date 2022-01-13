@@ -1,9 +1,9 @@
 import {IEvent} from "../interfaces/IEvent";
 import {Client, ClientEvents} from "discord.js";
-import Logger from "../Logger";
-import Config from "../Config";
+import Logger from "../structs/Logger";
+import Config from "../structs/Config";
 import Utilities from "../utils/Utilities";
-import BaseCommand from "../base/BaseCommand";
+import DeployManager from "../managers/DeployManager";
 import SlashCommandUtil from "../utils/SlashCommandUtil";
 import DatabaseManager from "../managers/DatabaseManager";
 import DatabaseUtil from "../utils/DatabaseUtil";
@@ -48,25 +48,25 @@ export default class ReadyEvent implements IEvent {
 
     private async handleApplicationCommands() {
         if (JSON.parse(Config.get("DEPLOY-APPLICATION-COMMANDS-GUILD")) == true) {
-            await new BaseCommand(this.client, SlashCommandUtil.getAllSlashCommandData(this.client), {
+            await new DeployManager(this.client, SlashCommandUtil.getAllSlashCommandData(this.client), {
                 deploy: true,
                 delete: false,
                 guild: true
             });
         } else if (JSON.parse(Config.get("DEPLOY-APPLICATION-COMMANDS-GLOBAL")) == true) {
-            await new BaseCommand(this.client, SlashCommandUtil.getAllSlashCommandData(this.client), {
+            await new DeployManager(this.client, SlashCommandUtil.getAllSlashCommandData(this.client), {
                 deploy: true,
                 delete: false,
                 guild: false
             });
         } else if (JSON.parse(Config.get("DELETE-APPLICATION-COMMANDS-GUILD")) == true) {
-            await new BaseCommand(this.client, SlashCommandUtil.getAllSlashCommandData(this.client), {
+            await new DeployManager(this.client, SlashCommandUtil.getAllSlashCommandData(this.client), {
                 deploy: false,
                 delete: true,
                 guild: true
             });
         } else if (JSON.parse(Config.get("DELETE-APPLICATION-COMMANDS-GLOBAL")) == true) {
-            await new BaseCommand(this.client, SlashCommandUtil.getAllSlashCommandData(this.client), {
+            await new DeployManager(this.client, SlashCommandUtil.getAllSlashCommandData(this.client), {
                 deploy: false,
                 delete: true,
                 guild: false

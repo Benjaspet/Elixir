@@ -1,4 +1,4 @@
-import Config from "../Config";
+import Config from "../structs/Config";
 
 export default class Vars {
 

@@ -1,8 +1,8 @@
 import {Client} from "discord.js";
-import Logger from "../Logger";
-import Config from "../Config";
+import Logger from "../structs/Logger";
+import Config from "../structs/Config";
 
-export default class BaseApp {
+export default class ApplicationManager {
 
     private readonly client: Client;
 

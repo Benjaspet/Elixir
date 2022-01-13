@@ -1,5 +1,24 @@
+/*
+ * Copyright © 2022 Ben Petrillo. All rights reserved.
+ *
+ * Project licensed under the MIT License: https://www.mit.edu/~amini/LICENSE.md
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
+ * OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * All portions of this software are available for public use, provided that
+ * credit is given to the original author(s).
+ */
+
 import {Client, Collection} from "discord.js";
 import {ApplicationCommand} from "../types/ApplicationCommand";
+import Command from "../structs/Command";
 import ControlsCommand from "../commands/ControlsCommand";
 import HelpCommand from "../commands/HelpCommand";
 import InfoCommand from "../commands/InfoCommand";
@@ -12,6 +31,11 @@ import PlayCommand from "../commands/PlayCommand";
 import PlaylistCommand from "../commands/PlaylistCommand";
 import QueueCommand from "../commands/QueueCommand";
 import ResumeCommand from "../commands/ResumeCommand";
+import SearchCommand from "../commands/SearchCommand";
+import ShuffleCommand from "../commands/ShuffleCommand";
+import SkipCommand from "../commands/SkipCommand";
+import StopCommand from "../commands/StopCommand";
+import VolumeCommand from "../commands/VolumeCommand";
 
 export default class CommandManager {
 
@@ -20,21 +44,30 @@ export default class CommandManager {
 
     constructor(client: Client) {
         this.client = client;
-        this.initCommands();
+        CommandManager.registerCommands([
+            new ControlsCommand(this.client),
+            new HelpCommand(this.client),
+            new InfoCommand(this.client),
+            new JoinCommand(this.client),
+            new LoopCommand(this.client),
+            new LyricsCommand(this.client),
+            new NowPlayingCommand(this.client),
+            new PauseCommand(this.client),
+            new PlayCommand(this.client),
+            new PlaylistCommand(this.client),
+            new QueueCommand(this.client),
+            new ResumeCommand(this.client),
+            new SearchCommand(this.client),
+            new ShuffleCommand(this.client),
+            new SkipCommand(this.client),
+            new StopCommand(this.client),
+            new VolumeCommand(this.client)
+        ]);
     }
 
-    private initCommands(): void {
-        CommandManager.commands.set(new ControlsCommand(this.client).getName(), new ControlsCommand(this.client));
-        CommandManager.commands.set(new HelpCommand(this.client).getName(), new HelpCommand(this.client));
-        CommandManager.commands.set(new InfoCommand(this.client).getName(), new InfoCommand(this.client));
-        CommandManager.commands.set(new JoinCommand(this.client).getName(), new JoinCommand(this.client));
-        CommandManager.commands.set(new LoopCommand(this.client).getName(), new LoopCommand(this.client));
-        CommandManager.commands.set(new LyricsCommand(this.client).getName(), new LyricsCommand(this.client));
-        CommandManager.commands.set(new NowPlayingCommand(this.client).getName(), new NowPlayingCommand(this.client));
-        CommandManager.commands.set(new PauseCommand(this.client).getName(), new PauseCommand(this.client));
-        CommandManager.commands.set(new PlayCommand(this.client).getName(), new PlayCommand(this.client));
-        CommandManager.commands.set(new PlaylistCommand(this.client).getName(), new PlaylistCommand(this.client));
-        CommandManager.commands.set(new QueueCommand(this.client).getName(), new QueueCommand(this.client));
-        CommandManager.commands.set(new ResumeCommand(this.client).getName(), new ResumeCommand(this.client));
+    private static registerCommands(commands: Command[]): void {
+        for (const command of commands) {
+            CommandManager.commands.set(command.getName(), command);
+        }
     }
 }

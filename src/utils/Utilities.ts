@@ -17,19 +17,20 @@
  */
 
 import {Client, Intents, MessageEmbed, Webhook, WebhookClient} from "discord.js";
-import Config from "../Config";
+import Config from "../structs/Config";
 
 export default class Utilities {
 
     public static getTotalElixirMemberCount(client): number {
-        return <number>Utilities.formatLargeNumber(client.guilds.cache.reduce((a, g) => a + g.memberCount, 0) + 25000);
+        const amount: number = client.guilds.cache.reduce((a, g) => a + g.memberCount, 0);
+        return Utilities.formatLargeNumber(amount) as number;
     }
 
     public static getTotalElixirServerCount(client): number {
         return client.guilds.cache.size;
     }
 
-    public static formatLargeNumber(num: number): number | string {
+    public static formatLargeNumber(num: number): number|string {
         if (num < 1e3) return num;
         if (num >= 1e3) return +(num / 1e3).toFixed(2) + "K";
     }
@@ -41,9 +42,7 @@ export default class Utilities {
      */
 
     public static formatSeconds(seconds: number): string {
-        function pad(sec: number){
-            return (sec < 10 ? "0" : "") + sec;
-        }
+        const pad = (sec: number) => { return (sec < 10 ? "0" : "") + sec; }
         const hours = Math.floor(seconds / (60 * 60));
         const minutes = Math.floor(seconds % (60 * 60) / 60);
         const secs = Math.floor(seconds % 60);
@@ -100,6 +99,13 @@ export default class Utilities {
             Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
         ];
     }
+
+    /**
+     * Send a webhook debug message.
+     * @param debugMessage The error message to send.
+     * @param guildPrefix Whether to alert the guild ID.
+     * @param guild? The resolvable guild.
+     */
 
     public static sendWebhookMessage(debugMessage: any, guildPrefix: boolean, guild?: string): void {
         if (guildPrefix) {

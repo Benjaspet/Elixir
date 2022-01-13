@@ -1,4 +1,4 @@
-import {ApplicationCommand} from "./types/ApplicationCommand";
+import {ApplicationCommand} from "../types/ApplicationCommand";
 import {ApplicationCommandData, CommandInteraction} from "discord.js";
 
 export default abstract class Command implements ApplicationCommand {
@@ -11,8 +11,26 @@ export default abstract class Command implements ApplicationCommand {
         this.data = data;
     }
 
+    /**
+     * Run the slash command.
+     * @param event The CommandInteraction object.
+     * @return Promise<void>
+     */
+
     abstract execute(event: CommandInteraction): Promise<void>;
+
+    /**
+     * Get the slash command data for this command.
+     * @return ApplicationCommandData
+     */
+
     abstract getCommandData(): ApplicationCommandData;
+
+    /**
+     * The name of this command.
+     * @return string
+     */
+
     abstract getName(): string;
 
 }

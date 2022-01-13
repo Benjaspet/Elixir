@@ -20,9 +20,9 @@ import {ApplicationCommandData, Client, CommandInteraction, GuildMember} from "d
 import {ApplicationCommandOptionTypes} from "discord.js/typings/enums";
 import {player} from "../Elixir";
 import EmbedUtil from "../utils/EmbedUtil";
-import Logger from "../Logger";
+import Logger from "../structs/Logger";
 import Utilities from "../utils/Utilities";
-import Command from "../Command";
+import Command from "../structs/Command";
 import {Queue, RepeatMode} from "distube";
 
 export default class LoopCommand extends Command {

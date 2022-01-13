@@ -1,6 +1,8 @@
-import Logger from "../Logger";
+
+
+import Logger from "../structs/Logger";
 import * as mongoose from "mongoose";
-import Config from "../Config";
+import Config from "../structs/Config";
 import Utilities from "../utils/Utilities";
 
 export default class DatabaseManager {

@@ -2,44 +2,32 @@ import {PlayerOptions, Queue, Track, TrackSource} from "discord-player";
 import {Collection, CommandInteraction, Snowflake} from "discord.js";
 import playdl from "play-dl";
 import EmbedUtil from "./EmbedUtil";
-import SpotifyPlugin from "@distube/spotify";
-import SoundCloudPlugin from "@distube/soundcloud";
-import {DisTubeOptions} from "distube";
 
 export default class MusicPlayer {
 
     public static playing: Collection<Snowflake, boolean> = new Collection<Snowflake, boolean>();
     public static streamCount: number = 0;
-    public static sendQueuedMessage: Collection<Snowflake, boolean> = new Collection<Snowflake, boolean>();
 
     /**
      * Get the music player init options.
      * @return PlayerOptions
      */
 
-    public static getOptions(): DisTubeOptions {
+    public static getOptions(): PlayerOptions {
         return {
-            leaveOnFinish: true,
-            leaveOnStop: true,
+            autoSelfDeaf: true,
+            bufferingTimeout: 500,
+            initialVolume: 100,
+            leaveOnEnd: true,
+            leaveOnStop: false,
             leaveOnEmpty: false,
-            savePreviousSongs: true,
-            searchSongs: 5,
-            youtubeDL: true,
-            ytdlOptions: {
-                quality: "highestaudio",
-                filter: "audioonly",
-                highWaterMark: 1 << 25
-            },
-            nsfw: false,
-            emitAddListWhenCreatingQueue: true,
-            emitAddSongWhenCreatingQueue: true,
-            plugins: [new SpotifyPlugin(), new SoundCloudPlugin()]
-        };
+            spotifyBridge: true
+        }
     }
 
     /**
      * Get the bot's queue options.
-     * @param interaction
+     * @param interaction The command interaction object.
      * @return PlayerOptions|any
      */
 
@@ -80,9 +68,21 @@ export default class MusicPlayer {
         }
     }
 
+    /**
+     * Set the queue as playing in a guild.
+     * @param queue The queue to modify.
+     * @param value The value to set.
+     */
+
     public static setPlaying(queue: Queue, value: boolean): void {
         this.playing.set(queue.guild.id, value);
     }
+
+    /**
+     * Determine if the queue is playing in a guild.
+     * @param queue The queue to check.
+     * @return boolean
+     */
 
     public static isPlaying(queue: Queue): boolean {
         return this.playing.get(queue.guild.id);

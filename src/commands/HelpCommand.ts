@@ -19,7 +19,7 @@
 import {ApplicationCommandData, Client, CommandInteraction} from "discord.js";
 import {ApplicationCommandOptionTypes} from "discord.js/typings/enums";
 import EmbedUtil from "../utils/EmbedUtil";
-import Command from "../Command";
+import Command from "../structs/Command";
 
 export default class HelpCommand extends Command {
 

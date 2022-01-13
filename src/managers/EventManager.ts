@@ -3,7 +3,7 @@ import ReadyEvent from "../events/ReadyEvent";
 import InteractionEvent from "../events/InteractionEvent";
 import VoiceStateEvent from "../events/VoiceStateEvent";
 
-export default class BaseEvent {
+export default class EventManager {
 
     private readonly client: Client;
 

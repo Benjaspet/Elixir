@@ -1,11 +1,28 @@
-import CustomPlaylist from "../schemas/PlaylistSchema";
-import {PlayerSearchResult, QueryType, Queue, Track} from "discord-player";
+/*
+ * Copyright © 2022 Ben Petrillo. All rights reserved.
+ *
+ * Project licensed under the MIT License: https://www.mit.edu/~amini/LICENSE.md
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
+ * OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * All portions of this software are available for public use, provided that
+ * credit is given to the original author(s).
+ */
+
+import {QueryType, Queue} from "discord-player";
 import {player} from "../Elixir";
+import {User} from "discord.js";
 import {CustomPlaylistObject} from "../types/CustomPlaylistObject";
 import {ElixirStatus} from "../types/ElixirStatus";
-import Logger from "../Logger";
-import {User} from "discord.js";
-import MusicPlayer from "./MusicPlayer";
+import CustomPlaylist from "../schemas/PlaylistSchema";
+import Logger from "../structs/Logger";
 
 export default class CustomPlaylistUtil {
 
@@ -17,17 +34,25 @@ export default class CustomPlaylistUtil {
      */
 
     public static async createCustomPlaylist(user: string, id: string): Promise<ElixirStatus> {
-        return new Promise(async (resolve, reject) => {
-            const result = await CustomPlaylist.findOne({playlistId: id});
-            if (result) return reject({status: false});
-            const data = await CustomPlaylist.create({
-                userId: user,
-                playlistId: id,
-                tracks: []
+        try {
+            return new Promise(async(resolve, reject) => {
+                await CustomPlaylist.findOne({playlistId: id})
+                    .then(async result => {
+                        if (result) reject({status: false});
+                        const data = await CustomPlaylist.create({
+                            userId: user,
+                            playlistId: id,
+                            tracks: []
+                        });
+                        await data.save();
+                        resolve({status: true});
+                    });
             });
-            await data.save();
-            resolve({status: true});
-        });
+        } catch {
+            return new Promise((resolve, reject) => {
+                reject({status: false});
+            });
+        }
     }
 
     /**
@@ -35,26 +60,23 @@ export default class CustomPlaylistUtil {
      * @param user The user who will add the track.
      * @param track The track to add.
      * @param id The playlist ID.
-     * @param tracksToAdd The custom playlist object.
+     * @param obj The custom playlist object.
      * @return Promise<CustomPlaylistObject>
      */
 
-    public static async addTrackToCustomPlaylist(user: string, track: string, id: string, tracksToAdd: CustomPlaylistObject): Promise<CustomPlaylistObject> {
+    public static async addTrackToCustomPlaylist(user: string, track: string, id: string, obj: CustomPlaylistObject): Promise<CustomPlaylistObject> {
         try {
-            return new Promise(async (resolve, reject) => {
+            return new Promise(async(resolve, reject) => {
                 const searchResult = await player.search(track, {requestedBy: user, searchEngine: QueryType.AUTO});
                 if (!searchResult) reject({status: false});
-                if (searchResult.playlist) {
-                    reject({status: false});
-                } else {
-                    tracksToAdd.tracks.push(searchResult.tracks[0].url);
-                    await CustomPlaylist.updateOne({playlistId: id, userId: user}, {tracks: tracksToAdd.tracks});
-                    resolve({
-                        status: true,
-                        playlistId: id,
-                        tracks: tracksToAdd.tracks
-                    });
-                }
+                if (searchResult.playlist) reject({status: false});
+                obj.tracks.push(searchResult.tracks[0]);
+                await CustomPlaylist.updateOne({playlistId: id, userId: user}, {tracks: obj.tracks});
+                resolve({
+                    status: true,
+                    playlistId: id,
+                    tracks: obj.tracks
+                });
             });
         } catch {
             return new Promise(async (resolve, reject) => {
@@ -85,7 +107,7 @@ export default class CustomPlaylistUtil {
                 });
             });
         } catch {
-            return new Promise(async (resolve, reject) => {
+            return new Promise((resolve, reject) => {
                 reject({status: false});
             });
         }
@@ -102,14 +124,13 @@ export default class CustomPlaylistUtil {
             return new Promise(async (resolve, reject) => {
                 await CustomPlaylist.findOne({playlistId: id})
                     .then(async result => {
-                        if (!result) reject(null);
+                        if (!result) reject({status: false});
                         return resolve({status: true, tracks: result.tracks});
-                    })
-                    .catch(async () => reject({status: false}));
+                    });
             });
         } catch (error: any) {
             Logger.error(error);
-            return new Promise(async (resolve, reject) => {
+            return new Promise((resolve, reject) => {
                 reject({status: false});
             });
         }
@@ -125,19 +146,12 @@ export default class CustomPlaylistUtil {
 
     public static async playCustomPlaylist(queue: Queue, user: User, id: string): Promise<CustomPlaylistObject> {
         try {
-            const playlist: CustomPlaylistObject = await CustomPlaylistUtil.getCustomPlaylist(id);
-            return new Promise(async (resolve, reject) => {
-                if (!playlist) reject({status: false});
-                MusicPlayer.sendQueuedMessage.set(queue.guild.id, false);
-                resolve({status: true, tracks: playlist.tracks});
-                for (const track of playlist.tracks) {
-                    const searched: PlayerSearchResult = await player.search(track, {
-                        requestedBy: user,
-                        searchEngine: QueryType.AUTO
+            return new Promise(async(resolve, reject) => {
+                await CustomPlaylistUtil.getCustomPlaylist(id)
+                    .then(async result => {
+                        if (!result) reject({status: false});
+                        await queue.addTracks(result.tracks)
                     });
-                    queue.addTrack(searched.tracks[0]);
-                }
-                MusicPlayer.sendQueuedMessage.set(queue.guild.id, true);
             });
         } catch (error: any) {
             return new Promise((resolve, reject) => {

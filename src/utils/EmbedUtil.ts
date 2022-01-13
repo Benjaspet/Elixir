@@ -1,20 +1,49 @@
-import * as Discord from "discord.js";
+/*
+ * Copyright © 2022 Ben Petrillo. All rights reserved.
+ *
+ * Project licensed under the MIT License: https://www.mit.edu/~amini/LICENSE.md
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
+ * OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * All portions of this software are available for public use, provided that
+ * credit is given to the original author(s).
+ */
+
 import {Client, MessageActionRow, MessageButton, MessageEmbed, version} from "discord.js";
+import {MessageButtonStyles} from "discord.js/typings/enums";
+import * as Discord from "discord.js";
 import Utilities from "./Utilities";
 import DatabaseUtil from "./DatabaseUtil";
-import {MessageButtonStyles} from "discord.js/typings/enums";
-import Config from "../Config";
+import Config from "../structs/Config";
 import Vars from "../constants/Vars";
 import MusicPlayer from "./MusicPlayer";
-import {Queue} from "discord-player";
 
 export default class EmbedUtil {
+
+    /**
+     * Generate a default embed.
+     * @param desc The description of the embed.
+     * @return MessageEmbed
+     */
 
     public static getDefaultEmbed(desc: string): MessageEmbed {
         return new MessageEmbed()
             .setColor(Vars.DEFAULT_EMBED_COLOR)
             .setDescription(desc)
     }
+
+    /**
+     * Get the help menu embed.
+     * @param client The client that instantiated this.
+     * @return MessageEmbed
+     */
 
     public static getHelpMenuEmbed(client: Client): MessageEmbed {
         return new MessageEmbed()
@@ -107,6 +136,11 @@ export default class EmbedUtil {
             .setTimestamp()
     }
 
+    /**
+     * Get the row of control panel buttons.
+     * @return MessageActionRow
+     */
+
     public static getControlPanelButtons(): MessageActionRow {
         return new MessageActionRow()
             .addComponents(
@@ -125,6 +159,12 @@ export default class EmbedUtil {
             );
     }
 
+    /**
+     * Get the control panel embed, with message components.
+     * @param client The client that instantiated this.
+     * @return MessageEmbed
+     */
+
     public static getControlPanelEmbed(client: Client): MessageEmbed {
         return new MessageEmbed()
             .setTitle("Elixir | Control Panel")
@@ -133,7 +173,7 @@ export default class EmbedUtil {
                 "easily be able to control your music using the buttons below. Current features include playing tracks, " +
                 "pausing tracks, rewinding tracks, fast-forwarding tracks, going to the previous track, and going to the " +
                 "next track.")
-            .setFooter({text: "Elixir Music", iconURL: client.user.displayAvatarURL({dynamic: false})})
+            .setFooter({text: "Elixir Music", iconURL: client.user.displayAvatarURL()})
             .setTimestamp();
     }
 }

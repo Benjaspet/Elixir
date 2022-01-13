@@ -3,10 +3,10 @@ import {REST} from "@discordjs/rest";
 import {Routes} from "discord-api-types/v9";
 import SlashCommandUtil from "../utils/SlashCommandUtil";
 import Utilities from "../utils/Utilities";
-import Config from "../Config";
-import Logger from "../Logger";
+import Config from "../structs/Config";
+import Logger from "../structs/Logger";
 
-export default class BaseCommand {
+export default class DeployManager {
 
     private readonly client: Client;
     public slashData: object[];

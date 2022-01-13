@@ -2,10 +2,10 @@ import {ApplicationCommandData, Client, CommandInteraction, MessageEmbed} from "
 import EmbedUtil from "../utils/EmbedUtil";
 import {ApplicationCommandOptionTypes} from "discord.js/typings/enums";
 import LyricUtil from "../utils/LyricUtil";
-import Logger from "../Logger";
+import Logger from "../structs/Logger";
 import Vars from "../constants/Vars";
 import Utilities from "../utils/Utilities";
-import Command from "../Command";
+import Command from "../structs/Command";
 
 export default class LyricsCommand extends Command {
 

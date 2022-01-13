@@ -1,11 +1,29 @@
+/*
+ * Copyright © 2022 Ben Petrillo. All rights reserved.
+ *
+ * Project licensed under the MIT License: https://www.mit.edu/~amini/LICENSE.md
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
+ * OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * All portions of this software are available for public use, provided that
+ * credit is given to the original author(s).
+ */
+
 import {ApplicationCommandData, Client, CommandInteraction, GuildMember, MessageEmbed} from "discord.js";
 import {player} from "../Elixir";
 import EmbedUtil from "../utils/EmbedUtil";
-import Logger from "../Logger";
+import Logger from "../structs/Logger";
 import Vars from "../constants/Vars";
 import Utilities from "../utils/Utilities";
-import Command from "../Command";
-import {Queue, Song} from "distube";
+import Command from "../structs/Command";
+import {Queue, Track} from "discord-player";
 
 export default class NowPlayingCommand extends Command {
 
@@ -31,16 +49,17 @@ export default class NowPlayingCommand extends Command {
                     const embed: MessageEmbed = EmbedUtil.getErrorEmbed("You must be in a voice channel.");
                     return void await interaction.reply({embeds: [embed]});
                 } else {
-                    const divisor: number = queue.currentTime / queue.songs[0].duration;
+                    const divisor: number = queue.streamTime / queue.current.durationMS;
                     const percentage: string = divisor >= 100 ? "Done." : Math.round((divisor * 100)).toString() + "%";
-                    const current: Song = queue.songs[0];
+                    const current: Track = queue.current;
                     const embed = new MessageEmbed()
                         .setTitle("Currently Playing")
                         .setColor(Vars.DEFAULT_EMBED_COLOR)
-                        .setDescription(`[${current.name}](${current.url})`)
+                        .setDescription(`[${current.title}](${current.url})`)
                         .addField("Track Details", "" + "• Duration: " + current.duration + "\n" +
-                            "• Percent completed: " + percentage + "\n" + "• Artist: " + current.uploader.name + "\n" +
-                            "• Requested by: " + current.user + "• Source: " + current.source)
+                            "• Percent completed: " + percentage + "\n" + "• Artist: " + current.author + "\n" +
+                            "• Requested by: " + current.requestedBy + "• Source: " + current.source + "\n" +
+                            "• Livestream: " + current.raw.live? "yes" : "no")
                         .setThumbnail(current.thumbnail)
                         .setFooter({text: "Elixir Music", iconURL: this.client.user.displayAvatarURL()})
                         .setTimestamp()

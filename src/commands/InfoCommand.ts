@@ -18,7 +18,7 @@
 
 import {ApplicationCommandData, Client, CommandInteraction} from "discord.js";
 import EmbedUtil from "../utils/EmbedUtil";
-import Command from "../Command";
+import Command from "../structs/Command";
 
 export default class InfoCommand extends Command {
 

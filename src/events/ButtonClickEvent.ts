@@ -2,7 +2,7 @@ import {ButtonInteraction, Client, ClientEvents, GuildMember} from "discord.js";
 import {IEvent} from "../interfaces/IEvent";
 import {Queue} from "discord-player";
 import {player} from "../Elixir";
-import Logger from "../Logger";
+import Logger from "../structs/Logger";
 import EmbedUtil from "../utils/EmbedUtil";
 import MusicPlayer from "../utils/MusicPlayer";
 import Utilities from "../utils/Utilities";

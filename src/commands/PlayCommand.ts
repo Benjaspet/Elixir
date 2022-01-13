@@ -1,3 +1,21 @@
+/*
+ * Copyright © 2022 Ben Petrillo. All rights reserved.
+ *
+ * Project licensed under the MIT License: https://www.mit.edu/~amini/LICENSE.md
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
+ * OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * All portions of this software are available for public use, provided that
+ * credit is given to the original author(s).
+ */
+
 import {
     ApplicationCommandData,
     Client,
@@ -11,10 +29,10 @@ import {QueryType, Queue} from "discord-player";
 import {ApplicationCommandOptionTypes} from "discord.js/typings/enums";
 import {player} from "../Elixir";
 import EmbedUtil from "../utils/EmbedUtil";
-import Logger from "../Logger";
+import Logger from "../structs/Logger";
 import MusicPlayer from "../utils/MusicPlayer";
 import Utilities from "../utils/Utilities";
-import Command from "../Command";
+import Command from "../structs/Command";
 
 export default class PlayCommand extends Command {
 
@@ -47,14 +65,13 @@ export default class PlayCommand extends Command {
                     const embed = EmbedUtil.getErrorEmbed("You must be in a voice channel.");
                     return void await interaction.editReply({embeds: [embed]});
                 }
-                const searchResult = await player.search(track, {limit: 5});
-                const embed: MessageEmbed = EmbedUtil.getDefaultEmbed("Searching for the track...");
+                const searchResult = await player.search(track, {requestedBy: interaction.user,})
+                const embed: MessageEmbed = EmbedUtil.getDefaultEmbed("Searching for your query...");
                 await interaction.editReply({embeds: [embed]});
                 if (!searchResult || !searchResult.tracks.length) {
                     const embed = EmbedUtil.getErrorEmbed("No search results found.");
                     return await interaction.followUp({embeds: [embed]});
                 }
-                await player.playCustomPlaylist()
                 const queue: Queue = player.getQueue(interaction.guild)
                     ? player.getQueue(interaction.guild)
                     : player.createQueue(interaction.guild, MusicPlayer.getQueueInitOptions(interaction));
@@ -83,7 +100,7 @@ export default class PlayCommand extends Command {
         } catch (error: any) {
             Logger.error(error);
             Utilities.sendWebhookMessage(error, true, interaction.guild.id);
-            const embed = EmbedUtil.getErrorEmbed("An error ocurred while running this command.");
+            const embed = EmbedUtil.getErrorEmbed("An error occurred while running this command.");
             return void await interaction.followUp({embeds: [embed]});
         }
     }
