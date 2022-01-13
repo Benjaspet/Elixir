@@ -27,8 +27,6 @@ import Command from "../structs/Command";
 
 export default class SkipCommand extends Command {
 
-    public name: string = "skip";
-    public description: string = "Skip to the next song in the queue.";
     private readonly client: Client;
 
     constructor(client: Client) {

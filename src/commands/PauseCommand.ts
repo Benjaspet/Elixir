@@ -17,7 +17,6 @@
  */
 
 import {ApplicationCommandData, Client, CommandInteraction, GuildMember} from "discord.js";
-import {ICommand} from "../interfaces/ICommand";
 import {player} from "../Elixir";
 import EmbedUtil from "../utils/EmbedUtil";
 import Logger from "../structs/Logger";
@@ -28,8 +27,6 @@ import Command from "../structs/Command";
 
 export default class PauseCommand extends Command {
 
-    public name: string = "pause";
-    public description: string = "Pause the current song.";
     private readonly client: Client;
 
     constructor(client: Client) {

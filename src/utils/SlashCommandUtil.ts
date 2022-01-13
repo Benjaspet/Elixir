@@ -29,7 +29,6 @@ export default class SlashCommandUtil {
             new NowPlayingCommand(client).getCommandData(),
             new PauseCommand(client).getCommandData(),
             new PlaylistCommand(client).getCommandData(),
-            new PlaylistCommand(client).getCommandData(),
             new QueueCommand(client).getCommandData(),
             new ResumeCommand(client).getCommandData(),
             new SearchCommand(client).getCommandData(),

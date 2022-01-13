@@ -17,7 +17,6 @@
  */
 
 import {ApplicationCommandData, Client, CommandInteraction, GuildMember} from "discord.js";
-import {ICommand} from "../interfaces/ICommand";
 import {Queue} from "discord-player";
 import {ApplicationCommandOptionTypes} from "discord.js/typings/enums";
 import {player} from "../Elixir";
@@ -28,8 +27,6 @@ import Command from "../structs/Command";
 
 export default class VolumeCommand extends Command {
 
-    public name: string = "volume";
-    public description: string = "Amplify or lower the music volume.";
     private readonly client: Client;
 
     constructor(client: Client) {

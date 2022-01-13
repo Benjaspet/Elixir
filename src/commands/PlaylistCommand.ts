@@ -38,8 +38,6 @@ import Command from "../structs/Command";
 
 export default class PlaylistCommand extends Command {
 
-    public name: string = "playlist";
-    public description: string = "Manage custom playlists.";
     private readonly client: Client;
 
     constructor(client: Client) {
