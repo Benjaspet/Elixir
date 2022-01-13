@@ -16,26 +16,27 @@
  * credit is given to the original author(s).
  */
 
-import {Client, CommandInteraction, GuildMember} from "discord.js";
-import {ICommand} from "../interfaces/ICommand";
+import {ApplicationCommandData, Client, CommandInteraction, GuildMember} from "discord.js";
 import {Queue} from "discord-player";
 import {player} from "../Elixir";
 import EmbedUtil from "../utils/EmbedUtil";
 import Logger from "../structs/Logger";
 import MusicPlayer from "../utils/MusicPlayer";
-import Utilities from "../utils/Utilities";
+import Command from "../structs/Command";
 
-export default class StopCommand implements ICommand {
+export default class StopCommand extends Command {
 
-    public name: string = "stop";
-    public description: string = "Stop the queue & remove Elixir from the voice channel.";
     private readonly client: Client;
 
     constructor(client: Client) {
+        super("stop", {
+            name: "stop",
+            description: "Stop the queue & remove Elixir from the voice channel."
+        });
         this.client = client;
     }
 
-    public async execute(interaction: CommandInteraction): Promise<any> {
+    public async execute(interaction: CommandInteraction): Promise<void> {
         if (!interaction.isCommand()) return;
         if (interaction.commandName === this.name) {
             try {
@@ -60,19 +61,17 @@ export default class StopCommand implements ICommand {
                 }
             } catch (error: any) {
                 Logger.error(error);
-                //Utilities.sendWebhookMessage(error, true, interaction.guild.id);
                 const embed = EmbedUtil.getErrorEmbed("An error occurred while running this command.");
                 return void await interaction.reply({embeds: [embed]});
             }
         }
     }
 
-    public getSlashData(): object {
-        return this.slashData;
+    public getName(): string {
+        return this.name;
     }
 
-    public slashData: object = {
-        name: this.name,
-        description: this.description
-    };
+    public getCommandData(): ApplicationCommandData {
+        return this.data;
+    }
 }

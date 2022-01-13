@@ -58,8 +58,7 @@ export default class NowPlayingCommand extends Command {
                         .setDescription(`[${current.title}](${current.url})`)
                         .addField("Track Details", "" + "• Duration: " + current.duration + "\n" +
                             "• Percent completed: " + percentage + "\n" + "• Artist: " + current.author + "\n" +
-                            "• Requested by: " + current.requestedBy + "• Source: " + current.source + "\n" +
-                            "• Livestream: " + current.raw.live? "yes" : "no")
+                            "• Requested by: " + `<@${current.requestedBy.id}>` + "\n" + "• Source: " + current.source)
                         .setThumbnail(current.thumbnail)
                         .setFooter({text: "Elixir Music", iconURL: this.client.user.displayAvatarURL()})
                         .setTimestamp()

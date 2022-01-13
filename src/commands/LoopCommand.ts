@@ -23,7 +23,7 @@ import EmbedUtil from "../utils/EmbedUtil";
 import Logger from "../structs/Logger";
 import Utilities from "../utils/Utilities";
 import Command from "../structs/Command";
-import {Queue, RepeatMode} from "distube";
+import {Queue, QueueRepeatMode} from "discord-player";
 
 export default class LoopCommand extends Command {
 
@@ -42,19 +42,19 @@ export default class LoopCommand extends Command {
                     choices: [
                         {
                             name: "Track Loop",
-                            value: RepeatMode.SONG
+                            value: QueueRepeatMode.TRACK
                         },
                         {
                             name: "Queue Loop",
-                            value: RepeatMode.QUEUE
+                            value: QueueRepeatMode.QUEUE
                         },
                         {
-                            name: "Toggle Autoplay",
-                            value: 3
+                            name: "Autoplay",
+                            value: QueueRepeatMode.AUTOPLAY
                         },
                         {
                             name: "Disable Loop",
-                            value: RepeatMode.DISABLED
+                            value: QueueRepeatMode.OFF
                         }
                     ]
                 }
@@ -77,39 +77,27 @@ export default class LoopCommand extends Command {
                     return void await interaction.reply({embeds: [embed]});
                 } else {
                     switch (mode) {
-                        case RepeatMode.SONG:
-                            queue.setRepeatMode(RepeatMode.SONG);
-                            return void await interaction.reply({
-                                embeds: [EmbedUtil.getDefaultEmbed("Set the loop mode to **track**.")]
-                            });
-                        case RepeatMode.QUEUE:
-                            queue.setRepeatMode(RepeatMode.QUEUE);
-                            return void await interaction.reply({
-                                embeds: [EmbedUtil.getDefaultEmbed("Set the loop mode to **queue**.")]
-                            });
-                        case 3:
-                            queue.toggleAutoplay();
-                            if (queue.autoplay) {
-                                return void await interaction.reply({
-                                    embeds: [EmbedUtil.getDefaultEmbed("Autoplay has been toggled **on**.")]
-                                });
-                            } else {
-                                return void await interaction.reply({
-                                    embeds: [EmbedUtil.getDefaultEmbed("Autoplay has been toggled **off**.")]
-                                });
-                            }
-                        case RepeatMode.DISABLED:
-                            queue.setRepeatMode(RepeatMode.DISABLED);
-                            return void await interaction.reply({
-                                embeds: [EmbedUtil.getDefaultEmbed("Turned **off** loop mode.")]
-                            });
+                        case QueueRepeatMode.TRACK:
+                            queue.setRepeatMode(QueueRepeatMode.TRACK);
+                            return void await interaction.reply({embeds: [EmbedUtil.getDefaultEmbed("Set the loop mode to **track**.")]});
+                        case QueueRepeatMode.QUEUE:
+                            queue.setRepeatMode(QueueRepeatMode.QUEUE);
+                            return void await interaction.reply({embeds: [EmbedUtil.getDefaultEmbed("Set the loop mode to **queue**.")]});
+                        case QueueRepeatMode.AUTOPLAY:
+                            queue.setRepeatMode(QueueRepeatMode.AUTOPLAY);
+                            return void await interaction.reply({embeds: [EmbedUtil.getDefaultEmbed("Set the loop mode to **autoplay**.")]});
+                        case QueueRepeatMode.OFF:
+                            queue.setRepeatMode(QueueRepeatMode.OFF);
+                            return void await interaction.reply({embeds: [EmbedUtil.getDefaultEmbed("Turned **off** repeat mode.")]});
                     }
                 }
+            } else {
+                return void await interaction.reply({content: "This command must be run in a guild."});
             }
         } catch (error) {
             Logger.error(error);
             Utilities.sendWebhookMessage(error, true, interaction.guild.id);
-            const embed = EmbedUtil.getErrorEmbed("An error occurred while running this command.");
+            const embed = EmbedUtil.getErrorEmbed("An error ocurred while running this command.");
             return void await interaction.reply({embeds: [embed]});
         }
     }

@@ -33,6 +33,7 @@ import Logger from "../structs/Logger";
 import MusicPlayer from "../utils/MusicPlayer";
 import Utilities from "../utils/Utilities";
 import Command from "../structs/Command";
+import {connection} from "mongoose";
 
 export default class PlayCommand extends Command {
 
@@ -81,20 +82,19 @@ export default class PlayCommand extends Command {
                         return void await interaction.followUp({embeds: [embed]});
                     } else searchResult.tracks[0].playlist = searchResult.playlist;
                 }
-                let connected: boolean;
+                searchResult.playlist ? queue.addTracks(searchResult.tracks) : queue.addTrack(searchResult.tracks[0]);
+                let initialConnection: boolean;
                 try {
                     if (!queue.connection) {
+                        initialConnection = true;
                         await queue.connect(member.voice.channel);
-                        connected = true;
                     }
-                } catch (error: any) {
+                } catch {
                     const embed = EmbedUtil.getErrorEmbed("Unable to join your voice channel.");
                     await player.deleteQueue(interaction.guild);
-                    await queue.destroy(true);
-                    return void await interaction.editReply({embeds: [embed]});
+                    return await interaction.reply({embeds: [embed]});
                 }
-                searchResult.playlist ? queue.addTracks(searchResult.tracks) : queue.addTrack(searchResult.tracks[0]);
-                if (connected) await queue.play();
+                if (initialConnection) await queue.play();
                 MusicPlayer.setPlaying(queue, true);
             }
         } catch (error: any) {

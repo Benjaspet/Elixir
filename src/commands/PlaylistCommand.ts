@@ -16,7 +16,15 @@
  * credit is given to the original author(s).
  */
 
-import {ApplicationCommandData, Client, CommandInteraction, GuildMember, MessageEmbed} from "discord.js";
+import {
+    ApplicationCommandData,
+    Client,
+    CommandInteraction,
+    GuildMember,
+    MessageEmbed,
+    StageChannel,
+    VoiceChannel
+} from "discord.js";
 import {ApplicationCommandOptionTypes} from "discord.js/typings/enums";
 import {Queue} from "discord-player";
 import {player} from "../Elixir";
@@ -136,21 +144,29 @@ export default class PlaylistCommand extends Command {
             switch (action) {
                 case "create":
                     id = interaction.options.getString("id");
-                    const res = await CustomPlaylistUtil.createCustomPlaylist(interaction.user.id, id);
-                    if (!res.status) {
-                        embed = EmbedUtil.getErrorEmbed("A playlist by that ID already exists.");
-                        return await interaction.editReply({embeds: [embed]});
-                    } else {
-                        embed = EmbedUtil.getDefaultEmbed("Created a custom playlist with ID **" + id + "**.");
-                        return await interaction.editReply({embeds: [embed]});
-                    }
+                    await CustomPlaylistUtil.createCustomPlaylist(interaction.user.id, id)
+                        .then(async result => {
+                            if (!result.status) {
+                                embed = EmbedUtil.getErrorEmbed("A playlist by that ID already exists.");
+                                return await interaction.editReply({embeds: [embed]});
+                            } else {
+                                embed = EmbedUtil.getDefaultEmbed("Created a custom playlist with ID **" + id + "**.");
+                                return await interaction.editReply({embeds: [embed]});
+                            }
+                        }).catch(() => {
+                            embed = EmbedUtil.getErrorEmbed("An unknown error ocurred.");
+                            return interaction.editReply({embeds: [embed]});
+                        });
+                    break;
                 case "fetch":
                     id = interaction.options.getString("id");
                     await CustomPlaylistUtil.getCustomPlaylist(id)
                         .then(async result => {
                             const endPosition: number = result.tracks.length >= 10 ? 10 - 1 : result.tracks.length;
                             const list = result.tracks.slice(0, endPosition).map((track, i) => {
-                                return `**#${i + 1}** ─ ${result[i]}`;
+                                const title: string = result.tracks[i].title;
+                                const reducedTitle: string = title.length > 60 ? title.substring(0, 60) + "..." : title;
+                                return `**${i + 1}**. [${reducedTitle}](${result.tracks[i].url}) (${result.tracks[i].duration})`;
                             });
                             embed = new MessageEmbed()
                                 .setTitle(id)
@@ -161,43 +177,48 @@ export default class PlaylistCommand extends Command {
                             return void await interaction.editReply({embeds: [embed]});
                         })
                         .catch(async () => {
-                            embed = EmbedUtil.getErrorEmbed("A playlist by that ID was not found.");
+                            embed = EmbedUtil.getErrorEmbed("Unable to find a playlist by that ID.");
                             return void await interaction.editReply({embeds: [embed]});
                         });
                     break;
                 case "queue":
                     id = interaction.options.getString("id");
-                    let queue: Queue = player.getQueue(interaction.guild);
-                    if (!queue) {
-                        queue = player.createQueue(interaction.guild, MusicPlayer.getQueueInitOptions(interaction));
-                    }
-                    await CustomPlaylistUtil.playCustomPlaylist(queue, interaction.user, id)
-                        .then(async result => {
-                            embed = EmbedUtil.getDefaultEmbed(`Queued **${result.tracks.length}** tracks from **${id}**.`);
-                            try {
-                                if (!queue.connection && interaction.member instanceof GuildMember) {
-                                    await queue.connect(interaction.member.voice.channel);
-                                }
-                            } catch (error: any) {
-                                const embed = EmbedUtil.getErrorEmbed("Unable to join your voice channel.");
-                                await player.deleteQueue(interaction.guild);
-                                await queue.destroy(true);
-                                return void await interaction.editReply({embeds: [embed]});
+                    if (interaction.member instanceof GuildMember) {
+                        const channel: VoiceChannel|StageChannel = interaction.member.voice.channel;
+                        if (!channel) {
+                            const embed = EmbedUtil.getErrorEmbed("You must be in a voice channel.");
+                            return void await interaction.editReply({embeds: [embed]});
+                        }
+                        let queue: Queue = await player.getQueue(interaction.guild);
+                        if (!queue) {
+                            queue = await player.createQueue(interaction.guild, MusicPlayer.getQueueInitOptions(interaction));
+                        }
+                        embed = EmbedUtil.getDefaultEmbed("Searching for your query...");
+                        await interaction.editReply({embeds: [embed]});
+                        await CustomPlaylistUtil.playCustomPlaylist(queue, id, interaction.member.voice.channel);
+                        let initialConnection: boolean;
+                        try {
+                            if (!queue.connection) {
+                                initialConnection = true;
+                                await queue.connect(interaction.member.voice.channel);
                             }
-                            await interaction.editReply({embeds: [embed]});
-                            await Utilities.sleep(1500);
-                            await queue.play();
-                            MusicPlayer.setPlaying(queue, true);
-                        })
-                        .catch(error => {
-                            embed = EmbedUtil.getErrorEmbed("A custom playlist by that ID was not found.");
-                        });
+                        } catch {
+                            const embed = EmbedUtil.getErrorEmbed("Unable to join your voice channel.");
+                            await player.deleteQueue(interaction.guild);
+                            return await interaction.reply({embeds: [embed]});
+                        }
+                        if (initialConnection) await queue.play();
+                        MusicPlayer.setPlaying(queue, true);
+                        return;
+                    }
                     break;
                 case "addtrack":
                     id = interaction.options.getString("id");
                     track = interaction.options.getString("track");
                     const result = await CustomPlaylist.findOne({playlistId: id, userId: interaction.user.id});
-                    if (!result) return await interaction.editReply({content: "A custom playlist by that ID doesn't exist."});
+                    if (!result) return void await interaction.editReply({
+                        content: "You cannot modify that playlist as you are not the creator or it does not exist."
+                    });
                     await CustomPlaylistUtil.addTrackToCustomPlaylist(interaction.user.id, track, id, result)
                         .then(async data => {
                             if (!data.status) return await interaction.editReply({
@@ -225,8 +246,12 @@ export default class PlaylistCommand extends Command {
                     break;
                 case "removetrack":
                     id = interaction.options.getString("id");
-                    const trackPosition: number = interaction.options.getNumber("track");
-                    await CustomPlaylistUtil.removeTrackFromCustomPlaylist(interaction.user.id, trackPosition - 1, id)
+                    const trackPosition: number = parseInt(interaction.options.getString("track"));
+                    const response = await CustomPlaylist.findOne({playlistId: id, userId: interaction.user.id});
+                    if (!response) return void await interaction.editReply({
+                        content: "You cannot modify that playlist as you are not the creator or it does not exist."
+                    });
+                    await CustomPlaylistUtil.removeTrackFromCustomPlaylist(interaction.user.id, trackPosition, id)
                         .then(async result => {
                             if (result) {
                                 return void await interaction.editReply({
@@ -236,7 +261,7 @@ export default class PlaylistCommand extends Command {
                         })
                         .catch(async () => {
                             return void await interaction.editReply({
-                                content: "A playlist by that ID does not exist."
+                                content: "You cannot modify that playlist as you are not the creator."
                             });
                         });
             }

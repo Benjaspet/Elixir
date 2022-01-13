@@ -17,6 +17,7 @@
  */
 
 import songlyrics from "songlyrics";
+import {LyricResolvable} from "../types/LyricResolvable";
 
 export default class LyricUtil {
 
@@ -26,7 +27,7 @@ export default class LyricUtil {
      * @return Promise<object>
      */
 
-    public static async getLyrics(song: string): Promise<object> {
+    public static async getLyrics(song: string): Promise<LyricResolvable> {
         return await new Promise(async (resolve, reject) => {
             await songlyrics(song)
                 .then(async result => resolve({source: result.source, lyrics: result.lyrics}))

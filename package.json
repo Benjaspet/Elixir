@@ -11,7 +11,6 @@
     "stop": "node src/scripts/StopProcess.ts"
   },
   "dependencies": {
-    "@acegoal07/discordjs-pagination": "^1.1.5",
     "@discord-player/extractor": "^3.0.2",
     "@discordjs/opus": "^0.5.3",
     "@discordjs/rest": "^0.1.0-canary.0",
@@ -28,7 +27,7 @@
     "nodemon": "^2.0.12",
     "play-dl": "^1.6.2",
     "songlyrics": "^2.2.4",
-    "spotify-url-info": "^2.2.3",
-    "ts-node": "^10.2.1"
+    "ts-node": "^10.2.1",
+    "ytdl-core": "^4.10.0"
   }
 }

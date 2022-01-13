@@ -1,7 +1,8 @@
 import {CommandInteraction, MessageButton, MessageEmbed} from "discord.js";
 import Vars from "../constants/Vars";
 import {Queue} from "discord-player";
-import pagination from "discordjs-button-pagination";
+
+const pagination = require("discordjs-button-pagination");
 
 export default class QueueNavigator {
 
@@ -28,7 +29,9 @@ export default class QueueNavigator {
             const pageStart = 10 * (page - 1);
             const pageEnd = pageStart + 10;
             const tracks = queue.tracks.slice(pageStart, pageEnd).map((track, i) => {
-                return `**#${i + 1 + pageStart}** ─ [${track.title}](${track.url})`;
+                const title: string = queue.tracks[i].title;
+                const reducedTitle: string = title.length > 60 ? title.substring(0, 60) + "..." : title;
+                return `**${i + 1 + pageStart}**. [${reducedTitle}](${track.url}) (${track.duration})`;
             });
             if (tracks.length) {
                 const queueLength = queue.tracks.length;
@@ -55,6 +58,6 @@ export default class QueueNavigator {
                 if (page === 2) return interaction.reply({embeds: [pages[0]]});
             }
         } while (!emptyPage);
-        return pagination(interaction, pages, buttons);
+        return pagination(interaction, pages, buttons, 12000);
     }
 }

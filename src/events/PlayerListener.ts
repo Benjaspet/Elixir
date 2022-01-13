@@ -1,37 +1,41 @@
+import {PlayerError, Queue, Track} from "discord-player";
 import {player} from "../Elixir";
-import {Song} from "distube";
 import EmbedUtil from "../utils/EmbedUtil";
 import DatabaseUtil from "../utils/DatabaseUtil";
+import Logger from "../structs/Logger";
+import Utilities from "../utils/Utilities";
 
-player.on("addSong", async (queue, song) => {
-   await queue.textChannel.send({
+player.on("trackEnd", (queue: Queue, track: Track) => { });
+
+player.on("trackStart", (queue: Queue, track: Track) => { });
+
+player.on("trackAdd", async (queue: Queue, track: Track) => {
+   const metadata: any = queue.metadata;
+   const title: string = track.title.length > 60 ? track.title.substring(0, 60) + "..." : track.title;
+   metadata.channel.send({
       embeds: [
-         EmbedUtil.getDefaultEmbed(`**Queued:** [${song.name}](${song.url})`)
+         EmbedUtil.getDefaultEmbed(`**Queued:** [${title}](${track.url}) (${track.duration})`)
       ]
    });
    await DatabaseUtil.addPlayedSong(1);
 });
 
-player.on("addList", async (queue, playlist) => {
-   const title: string = playlist.name; const tracks: Song[] = playlist.songs;
-   const tracksHyperlink = title ? `[${tracks[0].playlist.name}](${tracks[0].playlist.url})` : "Custom Playlist";
-   await queue.textChannel.send({
+player.on("tracksAdd", async (queue: Queue, tracks: Track[]) => {
+   const metadata: any = queue.metadata;
+   const tracksHyperlink = `[${tracks[0].playlist.title}](${tracks[0].playlist.url})` || "a custom playlist";
+   if (tracksHyperlink) {
+      metadata.channel.send({
          embeds: [
             EmbedUtil.getDefaultEmbed(`Queued **${tracks.length}** tracks from ${tracksHyperlink}.`)
          ]
       });
+   }
    await DatabaseUtil.addPlaylistPlayed(1);
 });
 
+player.on("error", (queue: Queue, error: PlayerError) => { });
 
-
-// player.on("trackEnd", (queue: Queue, track: Track) => { });
-//
-// player.on("trackStart", (queue: Queue, track: Track) => { });
-//
-// player.on("error", (queue: Queue, error: PlayerError) => { });
-//
-// player.on("connectionError", (queue: Queue, error: PlayerError) => {
-//    Logger.error(`[${queue.guild.name}] ConnectionError: ${error.message}`)
-//    Utilities.sendWebhookMessage(error, true, queue.guild.id);
-// });
+player.on("connectionError", (queue: Queue, error: PlayerError) => {
+   Logger.error(`[${queue.guild.name}] ConnectionError: ${error.message}`)
+   Utilities.sendWebhookMessage(error, true, queue.guild.id);
+});

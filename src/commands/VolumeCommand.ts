@@ -16,7 +16,7 @@
  * credit is given to the original author(s).
  */
 
-import {Client, CommandInteraction, GuildMember} from "discord.js";
+import {ApplicationCommandData, Client, CommandInteraction, GuildMember} from "discord.js";
 import {ICommand} from "../interfaces/ICommand";
 import {Queue} from "discord-player";
 import {ApplicationCommandOptionTypes} from "discord.js/typings/enums";
@@ -24,14 +24,53 @@ import {player} from "../Elixir";
 import EmbedUtil from "../utils/EmbedUtil";
 import Logger from "../structs/Logger";
 import Utilities from "../utils/Utilities";
+import Command from "../structs/Command";
 
-export default class VolumeCommand implements ICommand {
+export default class VolumeCommand extends Command {
 
     public name: string = "volume";
     public description: string = "Amplify or lower the music volume.";
     private readonly client: Client;
 
     constructor(client: Client) {
+        super("volume", {
+            name: "volume",
+            description: "Amplify or lower the music volume.",
+            options: [
+                {
+                    name: "amplifier",
+                    description: "The volume amplifier.",
+                    type: ApplicationCommandOptionTypes.NUMBER,
+                    required: true,
+                    choices: [
+                        {
+                            name: "100",
+                            value: 100
+                        },
+                        {
+                            name: "80",
+                            value: 80
+                        },
+                        {
+                            name: "60",
+                            value: 60
+                        },
+                        {
+                            name: "50",
+                            value: 50
+                        },
+                        {
+                            name: "40",
+                            value: 40
+                        },
+                        {
+                            name: "20",
+                            value: 20
+                        }
+                    ]
+                }
+            ]
+        });
         this.client = client;
     }
 
@@ -67,46 +106,11 @@ export default class VolumeCommand implements ICommand {
         }
     }
 
-    public getSlashData(): object {
-        return this.slashData;
+    public getName(): string {
+        return this.name;
     }
 
-    public slashData: object = {
-        name: this.name,
-        description: this.description,
-        options: [
-            {
-                name: "amplifier",
-                description: "The volume amplifier.",
-                type: ApplicationCommandOptionTypes.NUMBER,
-                required: true,
-                choices: [
-                    {
-                        name: "100",
-                        value: 100
-                    },
-                    {
-                        name: "80",
-                        value: 80
-                    },
-                    {
-                        name: "60",
-                        value: 60
-                    },
-                    {
-                        name: "50",
-                        value: 50
-                    },
-                    {
-                        name: "40",
-                        value: 40
-                    },
-                    {
-                        name: "20",
-                        value: 20
-                    }
-                ]
-            }
-        ]
-    };
+    public getCommandData(): ApplicationCommandData {
+        return this.data;
+    }
 }

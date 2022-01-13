@@ -16,13 +16,15 @@
  * credit is given to the original author(s).
  */
 
-import {QueryType, Queue} from "discord-player";
+import {QueryType, Queue, Track} from "discord-player";
 import {player} from "../Elixir";
-import {User} from "discord.js";
+import {GuildMember, StageChannel, User, VoiceChannel} from "discord.js";
 import {CustomPlaylistObject} from "../types/CustomPlaylistObject";
 import {ElixirStatus} from "../types/ElixirStatus";
 import CustomPlaylist from "../schemas/PlaylistSchema";
 import Logger from "../structs/Logger";
+import MusicPlayer from "./MusicPlayer";
+import EmbedUtil from "./EmbedUtil";
 
 export default class CustomPlaylistUtil {
 
@@ -98,7 +100,8 @@ export default class CustomPlaylistUtil {
             return new Promise(async (resolve, reject) => {
                 const result = await CustomPlaylistUtil.getCustomPlaylist(id);
                 if (!result) reject({status: false});
-                result.tracks.splice(track, 1);
+                if (result.tracks.length < 1 && track != 1) reject({status: false});
+                result.tracks.splice(track - 1, 1);
                 await CustomPlaylist.updateOne({playlistId: id, userId: user}, {tracks: result.tracks});
                 resolve({
                     status: true,
@@ -125,7 +128,10 @@ export default class CustomPlaylistUtil {
                 await CustomPlaylist.findOne({playlistId: id})
                     .then(async result => {
                         if (!result) reject({status: false});
-                        return resolve({status: true, tracks: result.tracks});
+                        resolve({status: true, tracks: result.tracks});
+                    })
+                    .catch(() => {
+                        reject({status: false});
                     });
             });
         } catch (error: any) {
@@ -139,19 +145,44 @@ export default class CustomPlaylistUtil {
     /**
      * Play a custom playlist by ID.
      * @param queue The queue in which to add the playlist.
-     * @param user The user who queued this custom playlist.
      * @param id The playlist ID.
+     * @param channel The voice channel to join.
      * @return Promise<CustomPlaylistObject>
      */
 
-    public static async playCustomPlaylist(queue: Queue, user: User, id: string): Promise<CustomPlaylistObject> {
+    public static async playCustomPlaylist(queue: Queue, id: string, channel: VoiceChannel|StageChannel): Promise<CustomPlaylistObject> {
         try {
             return new Promise(async(resolve, reject) => {
                 await CustomPlaylistUtil.getCustomPlaylist(id)
                     .then(async result => {
-                        if (!result) reject({status: false});
-                        await queue.addTracks(result.tracks)
-                    });
+                        if (!result) return reject({status: false});
+                        if (!result || result.tracks.length == 0) {
+                            const metadata: any = queue.metadata;
+                            const embed = EmbedUtil.getErrorEmbed("Unable to join your voice channel.");
+                            metadata.channel.send({embeds: [embed]});
+                            return reject({status: false});
+                        }
+                        let track: Track; let tracks: Track[] = [];
+                        for (let i = 0; i < result.tracks.length; i++) {
+                            track = new Track(player, {
+                                title: result.tracks[i].title,
+                                description: result.tracks[i].description,
+                                author: result.tracks[i].author,
+                                url: result.tracks[i].url,
+                                thumbnail: result.tracks[i].thumbnail,
+                                duration: result.tracks[i].duration,
+                                views: result.tracks[i].views,
+                                requestedBy: result.tracks[i].requestedBy,
+                                playlist: result.tracks[i].playlist,
+                                source: result.tracks[i].source,
+                                raw: result.tracks[i].raw
+                            });
+                            tracks.push(track);
+                        }
+                        queue.addTracks(tracks);
+                        resolve({status: true});
+                    })
+                    .catch((error) => {console.log(error); reject({status: false})});
             });
         } catch (error: any) {
             return new Promise((resolve, reject) => {
