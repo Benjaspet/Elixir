@@ -116,6 +116,7 @@ export default class EmbedUtil {
     }
 
     public static async getInformationEmbed(client: Client): Promise<MessageEmbed> {
+        const verified: string = client.user.verified ? "yes" : "no";
         return new MessageEmbed()
             .setTitle("Elixir | Information")
             .setAuthor({name: "Total Playing Streams: " + MusicPlayer.getOngoingStreamCount().toString()})
@@ -131,7 +132,7 @@ export default class EmbedUtil {
                 Config.get("EMOJI-PLAYLISTS") + " Playlists queued: " + Utilities.cleanFormat(await DatabaseUtil.getTotalPlaylistsQueued()) + "\n" +
                 Config.get("EMOJI-DEVELOPER") + " Bot Developer: Eerie#6560")
             .addField("Extra Data", "" +
-                    "• Verified: " + client.user.verified)
+                    "• Verified: " + verified)
             .setFooter({text: "Elixir Music", iconURL: client.user.displayAvatarURL({dynamic: false})})
             .setTimestamp()
     }

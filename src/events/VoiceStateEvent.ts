@@ -1,4 +1,6 @@
 import {Client, ClientEvents, VoiceState} from "discord.js";
+import Config from "../structs/Config";
+import MusicPlayer from "../utils/MusicPlayer";
 
 export default class VoiceStateEvent {
 
@@ -12,5 +14,11 @@ export default class VoiceStateEvent {
         this.name = name;
     }
 
-    public async execute(oldState: VoiceState, newState: VoiceState): Promise<void> {}
+    public async execute(oldState: VoiceState, newState: VoiceState): Promise<void> {
+        if (newState.channel != null && newState.member.id === Config.get("CLIENT-ID")) {
+            MusicPlayer.streamCount++;
+        } else if (newState.channel == null && newState.member.id === Config.get("CLIENT-ID")) {
+            MusicPlayer.streamCount--;
+        }
+    }
 }

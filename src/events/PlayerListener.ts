@@ -1,9 +1,10 @@
-import {PlayerError, Queue, Track} from "discord-player";
+import {PlayerError, Playlist, Queue, Track} from "discord-player";
 import {player} from "../Elixir";
 import EmbedUtil from "../utils/EmbedUtil";
 import DatabaseUtil from "../utils/DatabaseUtil";
 import Logger from "../structs/Logger";
 import Utilities from "../utils/Utilities";
+import MusicPlayer from "../utils/MusicPlayer";
 
 player.on("trackEnd", (queue: Queue, track: Track) => { });
 
@@ -21,16 +22,25 @@ player.on("trackAdd", async (queue: Queue, track: Track) => {
 });
 
 player.on("tracksAdd", async (queue: Queue, tracks: Track[]) => {
-   const metadata: any = queue.metadata;
-   const tracksHyperlink = `[${tracks[0].playlist.title}](${tracks[0].playlist.url})` || "a custom playlist";
-   if (tracksHyperlink) {
+   const metadata: any = queue.metadata; const playlist: Playlist = tracks[0].playlist;
+   if (playlist != null) {
+      const tracksHyperlink = `[${tracks[0].playlist.title}](${tracks[0].playlist.url})`;
       metadata.channel.send({
          embeds: [
             EmbedUtil.getDefaultEmbed(`Queued **${tracks.length}** tracks from ${tracksHyperlink}.`)
          ]
       });
+      await DatabaseUtil.addPlaylistPlayed(1);
+   } else {
+      const tracksHyperlink = "a custom playlist";
+      metadata.channel.send({
+         embeds: [
+            EmbedUtil.getDefaultEmbed(`Queued **${tracks.length}** tracks from ${tracksHyperlink}.`)
+         ]
+      });
+      await DatabaseUtil.addPlaylistPlayed(1);
+
    }
-   await DatabaseUtil.addPlaylistPlayed(1);
 });
 
 player.on("error", (queue: Queue, error: PlayerError) => { });
