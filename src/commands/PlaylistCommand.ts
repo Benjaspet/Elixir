@@ -224,7 +224,7 @@ export default class PlaylistCommand extends Command {
                             });
                             const endPosition: number = data.tracks.length >= 10 ? 10 - 1 : data.tracks.length;
                             const list = data.tracks.slice(0, endPosition).map((track, i) => {
-                                return `**#${i + 1}** ─ ${track}`;
+                                return `**#${i + 1}** ─ ${track.title}`;
                             });
                             embed = new MessageEmbed()
                                 .setTitle("Success!")
@@ -244,7 +244,7 @@ export default class PlaylistCommand extends Command {
                     break;
                 case "removetrack":
                     id = interaction.options.getString("id");
-                    const trackPosition: number = parseInt(interaction.options.getString("track"));
+                    const trackPosition: number = interaction.options.getNumber("track");
                     const response = await CustomPlaylist.findOne({playlistId: id, userId: interaction.user.id});
                     if (!response) return void await interaction.editReply({
                         content: "You cannot modify that playlist as you are not the creator or it does not exist."
