@@ -15,6 +15,7 @@ import SearchCommand from "../commands/SearchCommand";
 import LyricsCommand from "../commands/LyricsCommand";
 import ControlsCommand from "../commands/ControlsCommand";
 import PlaylistCommand from "../commands/PlaylistCommand";
+import PlayCommand from "../commands/PlayCommand";
 
 export default class SlashCommandUtil {
 
@@ -28,6 +29,7 @@ export default class SlashCommandUtil {
             new LyricsCommand(client).getCommandData(),
             new NowPlayingCommand(client).getCommandData(),
             new PauseCommand(client).getCommandData(),
+            new PlayCommand(client).getCommandData(),
             new PlaylistCommand(client).getCommandData(),
             new QueueCommand(client).getCommandData(),
             new ResumeCommand(client).getCommandData(),

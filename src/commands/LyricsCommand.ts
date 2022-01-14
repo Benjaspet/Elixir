@@ -4,7 +4,6 @@ import {ApplicationCommandOptionTypes} from "discord.js/typings/enums";
 import LyricUtil from "../utils/LyricUtil";
 import Logger from "../structs/Logger";
 import Vars from "../constants/Vars";
-import Utilities from "../utils/Utilities";
 import Command from "../structs/Command";
 
 export default class LyricsCommand extends Command {
@@ -33,7 +32,7 @@ export default class LyricsCommand extends Command {
         try {
             const track = interaction.options.getString("track");
             const result = await LyricUtil.getLyrics(track);
-            if (!result) {
+            if (!result.lyrics) {
                 const embed = EmbedUtil.getErrorEmbed("No lyrics found.");
                 return void await interaction.editReply({embeds: [embed]});
             } else {
@@ -48,7 +47,6 @@ export default class LyricsCommand extends Command {
             }
         } catch (error: any) {
             Logger.error(error);
-            Utilities.sendWebhookMessage(error, true, interaction.guild.id);
             const embed = EmbedUtil.getErrorEmbed("An error occurred while running this command.");
             return void await interaction.editReply({embeds: [embed]});
         }
