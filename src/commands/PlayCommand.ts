@@ -33,7 +33,6 @@ import Logger from "../structs/Logger";
 import MusicPlayer from "../utils/MusicPlayer";
 import Utilities from "../utils/Utilities";
 import Command from "../structs/Command";
-import {connection} from "mongoose";
 
 export default class PlayCommand extends Command {
 
@@ -66,7 +65,7 @@ export default class PlayCommand extends Command {
                     const embed = EmbedUtil.getErrorEmbed("You must be in a voice channel.");
                     return void await interaction.editReply({embeds: [embed]});
                 }
-                const searchResult = await player.search(track, {requestedBy: interaction.user,})
+                const searchResult = await player.search(track, {requestedBy: interaction.user, searchEngine: QueryType.AUTO});
                 const embed: MessageEmbed = EmbedUtil.getDefaultEmbed("Searching for your query...");
                 await interaction.editReply({embeds: [embed]});
                 if (!searchResult || !searchResult.tracks.length) {
