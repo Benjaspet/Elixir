@@ -1,5 +1,5 @@
 import {IEvent} from "../interfaces/IEvent";
-import {Client, ClientEvents} from "discord.js";
+import {Client, ClientEvents, TextChannel} from "discord.js";
 import Logger from "../structs/Logger";
 import Config from "../structs/Config";
 import Utilities from "../utils/Utilities";

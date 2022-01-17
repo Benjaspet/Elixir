@@ -17,7 +17,7 @@
  */
 
 import {ApplicationCommandData, Client, CommandInteraction, GuildMember} from "discord.js";
-import {player} from "../Elixir";
+import {client, player} from "../Elixir";
 import {Queue} from "discord-player";
 import EmbedUtil from "../utils/EmbedUtil";
 import Logger from "../structs/Logger";
@@ -46,7 +46,7 @@ export default class QueueCommand extends Command {
                     const embed = EmbedUtil.getDefaultEmbed("There are no songs in the queue.");
                     return await interaction.reply({embeds: [embed]});
                 }
-                return void await QueueNavigator.createQueueEmbed(queue, interaction);
+                return QueueNavigator.createQueueEmbed(queue, interaction, client);
             } else {
                 return await interaction.reply({content: "This command must be run in a guild."});
             }
