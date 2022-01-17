@@ -4,7 +4,6 @@ import EmbedUtil from "../utils/EmbedUtil";
 import DatabaseUtil from "../utils/DatabaseUtil";
 import Logger from "../structs/Logger";
 import Utilities from "../utils/Utilities";
-import MusicPlayer from "../utils/MusicPlayer";
 
 player.on("trackEnd", (queue: Queue, track: Track) => { });
 
@@ -43,7 +42,10 @@ player.on("tracksAdd", async (queue: Queue, tracks: Track[]) => {
    }
 });
 
-player.on("error", (queue: Queue, error: PlayerError) => { });
+player.on("error", (queue: Queue, error: PlayerError) => {
+   Logger.error(error.message);
+   Utilities.sendWebhookMessage(error, true, queue.guild.id);
+});
 
 player.on("connectionError", (queue: Queue, error: PlayerError) => {
    Logger.error(`[${queue.guild.name}] ConnectionError: ${error.message}`)

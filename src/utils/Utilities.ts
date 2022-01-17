@@ -16,19 +16,37 @@
  * credit is given to the original author(s).
  */
 
-import {Client, Intents, MessageEmbed, Webhook, WebhookClient} from "discord.js";
+import {Client, Intents, MessageEmbed, WebhookClient} from "discord.js";
 import Config from "../structs/Config";
 
 export default class Utilities {
+
+    /**
+     * Get the total member count.
+     * @param client The client that instantiated this.
+     * @return number
+     */
 
     public static getTotalElixirMemberCount(client): number {
         const amount: number = client.guilds.cache.reduce((a, g) => a + g.memberCount, 0);
         return Utilities.formatLargeNumber(amount) as number;
     }
 
+    /**
+     * Get the total guild count.
+     * @param client The client that instantiated this.
+     * @return number
+     */
+
     public static getTotalElixirServerCount(client): number {
         return client.guilds.cache.size;
     }
+
+    /**
+     * Format large numbers.
+     * @param num The number to format.
+     * @return number|string
+     */
 
     public static formatLargeNumber(num: number): number|string {
         if (num < 1e3) return num;
@@ -48,6 +66,12 @@ export default class Utilities {
         const secs = Math.floor(seconds % 60);
         return pad(hours) + ":" + pad(minutes) + ":" + pad(secs);
     }
+
+    /**
+     * The sleep utility function.
+     * @param ms The amount of time to sleep.
+     * @return Promise<any>
+     */
 
     public static sleep(ms): Promise<any> {
         return new Promise(resolve => setTimeout(resolve, ms));
