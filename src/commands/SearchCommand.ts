@@ -41,11 +41,11 @@ export default class SearchCommand extends Command {
     constructor(client: Client) {
         super("search", {
             name: "search",
-            description: "Search for a specific song.",
+            description: "Search for a specific track.",
             options: [
                 {
-                    name: "song",
-                    description: "The URL or song query.",
+                    name: "track",
+                    description: "The track to search for.",
                     type: ApplicationCommandOptionTypes.STRING,
                     required: true,
                     autocomplete: true

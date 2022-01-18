@@ -30,7 +30,7 @@ export default class JoinCommand extends Command {
     constructor(client: Client) {
         super("join", {
             name: "join",
-            description: "Have Elixir join the voice channel."
+            description: "Bind Elixir to your voice channel."
         });
         this.client = client;
     }

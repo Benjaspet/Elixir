@@ -19,9 +19,6 @@
 import {Client, Collection} from "discord.js";
 import {ApplicationCommand} from "../types/ApplicationCommand";
 import Command from "../structs/Command";
-import ControlsCommand from "../commands/ControlsCommand";
-import HelpCommand from "../commands/HelpCommand";
-import InfoCommand from "../commands/InfoCommand";
 import JoinCommand from "../commands/JoinCommand";
 import LoopCommand from "../commands/LoopCommand";
 import LyricsCommand from "../commands/LyricsCommand";
@@ -45,9 +42,6 @@ export default class CommandManager {
     constructor(client: Client) {
         this.client = client;
         CommandManager.registerCommands([
-            new ControlsCommand(this.client),
-            new HelpCommand(this.client),
-            new InfoCommand(this.client),
             new JoinCommand(this.client),
             new LoopCommand(this.client),
             new LyricsCommand(this.client),

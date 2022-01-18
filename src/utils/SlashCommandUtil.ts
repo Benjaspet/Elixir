@@ -1,6 +1,4 @@
 import {Client} from "discord.js";
-import InfoCommand from "../commands/InfoCommand";
-import HelpCommand from "../commands/HelpCommand";
 import JoinCommand from "../commands/JoinCommand";
 import NowPlayingCommand from "../commands/NowPlayingCommand";
 import PauseCommand from "../commands/PauseCommand";
@@ -13,7 +11,6 @@ import VolumeCommand from "../commands/VolumeCommand";
 import LoopCommand from "../commands/LoopCommand";
 import SearchCommand from "../commands/SearchCommand";
 import LyricsCommand from "../commands/LyricsCommand";
-import ControlsCommand from "../commands/ControlsCommand";
 import PlaylistCommand from "../commands/PlaylistCommand";
 import PlayCommand from "../commands/PlayCommand";
 
@@ -21,9 +18,6 @@ export default class SlashCommandUtil {
 
     public static getAllSlashCommandData(client: Client): object[] {
         return [
-            new ControlsCommand(client).getCommandData(),
-            new HelpCommand(client).getCommandData(),
-            new InfoCommand(client).getCommandData(),
             new JoinCommand(client).getCommandData(),
             new LoopCommand(client).getCommandData(),
             new LyricsCommand(client).getCommandData(),

@@ -1,3 +1,21 @@
+/*
+ * Copyright © 2022 Ben Petrillo. All rights reserved.
+ *
+ * Project licensed under the MIT License: https://www.mit.edu/~amini/LICENSE.md
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
+ * OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * All portions of this software are available for public use, provided that
+ * credit is given to the original author(s).
+ */
+
 import {IEvent} from "../interfaces/IEvent";
 import {
     ButtonInteraction,
@@ -7,8 +25,6 @@ import {
     GuildMember,
     Interaction, MessageEmbed
 } from "discord.js";
-import DatabaseUtil from "../utils/DatabaseUtil";
-import ButtonClickEvent from "./ButtonClickEvent";
 import SearchResultEvent from "./SearchResultEvent";
 import EmbedUtil from "../utils/EmbedUtil";
 import CommandManager from "../managers/CommandManager";
@@ -34,11 +50,8 @@ export default class InteractionEvent implements IEvent {
                     const command: ApplicationCommand = CommandManager.commands.get(name);
                     if (command != null && interaction.isCommand()) {
                         command.execute(interaction);
-                        await DatabaseUtil.addExecutedCommand(1);
                     }
                 }
-            } else if (interaction.isButton()) {
-                void await new ButtonClickEvent(this.client, "interactionCreate", false).execute(interaction);
             } else if (interaction.isAutocomplete()) {
                 void await new SearchResultEvent(this.client, "interactionCreate", false).execute(interaction);
             }

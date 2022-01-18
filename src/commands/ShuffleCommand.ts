@@ -30,7 +30,7 @@ export default class ShuffleCommand extends Command {
     constructor(client: Client) {
         super("shuffle", {
             name: "shuffle",
-            description: "Shuffle the order of the songs in the queue."
+            description: "Shuffle the order of the tracks in the queue."
         });
         this.client = client;
     }

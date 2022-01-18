@@ -17,13 +17,13 @@
  */
 
 import {ApplicationCommandData, Client, CommandInteraction, GuildMember, MessageEmbed} from "discord.js";
+import {Queue, Track} from "discord-player";
 import {player} from "../Elixir";
 import EmbedUtil from "../utils/EmbedUtil";
 import Logger from "../structs/Logger";
 import Vars from "../constants/Vars";
 import Utilities from "../utils/Utilities";
 import Command from "../structs/Command";
-import {Queue, Track} from "discord-player";
 
 export default class NowPlayingCommand extends Command {
 
@@ -32,7 +32,7 @@ export default class NowPlayingCommand extends Command {
     constructor(client: Client) {
         super("nowplaying", {
             name: "nowplaying",
-            description: "View information about the song currently playing."
+            description: "View information on the track currently playing."
         });
         this.client = client;
     }

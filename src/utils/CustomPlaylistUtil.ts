@@ -18,12 +18,11 @@
 
 import {QueryType, Queue, Track} from "discord-player";
 import {player} from "../Elixir";
-import {GuildMember, StageChannel, User, VoiceChannel} from "discord.js";
+import {StageChannel, VoiceChannel} from "discord.js";
 import {CustomPlaylistObject} from "../types/CustomPlaylistObject";
 import {ElixirStatus} from "../types/ElixirStatus";
 import CustomPlaylist from "../schemas/PlaylistSchema";
 import Logger from "../structs/Logger";
-import MusicPlayer from "./MusicPlayer";
 import EmbedUtil from "./EmbedUtil";
 
 export default class CustomPlaylistUtil {

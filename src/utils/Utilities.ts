@@ -33,16 +33,6 @@ export default class Utilities {
     }
 
     /**
-     * Get the total guild count.
-     * @param client The client that instantiated this.
-     * @return number
-     */
-
-    public static getTotalElixirServerCount(client): number {
-        return client.guilds.cache.size;
-    }
-
-    /**
      * Format large numbers.
      * @param num The number to format.
      * @return number|string
@@ -75,30 +65,6 @@ export default class Utilities {
 
     public static sleep(ms): Promise<any> {
         return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
-    /**
-     * Get the bot's websocket latency.
-     * @param client The client instance
-     * @return number
-     */
-
-    public static getWebsocketLatency(client: Client): number {
-        return client.ws.ping;
-    }
-
-    /**
-     * Get the bot's uptime.
-     * @return string
-     */
-
-    public static getProcessUptime(): string {
-        const uptimeAsUnix = process.uptime();
-        return Utilities.formatSeconds(uptimeAsUnix);
-    }
-
-    public static cleanFormat(num: number): string {
-        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
     /**

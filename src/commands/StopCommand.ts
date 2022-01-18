@@ -31,7 +31,7 @@ export default class StopCommand extends Command {
     constructor(client: Client) {
         super("stop", {
             name: "stop",
-            description: "Stop the queue & remove Elixir from the voice channel."
+            description: "Stop the current track queue."
         });
         this.client = client;
     }

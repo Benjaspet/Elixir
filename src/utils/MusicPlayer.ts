@@ -6,7 +6,6 @@ import EmbedUtil from "./EmbedUtil";
 export default class MusicPlayer {
 
     public static playing: Collection<Snowflake, boolean> = new Collection<Snowflake, boolean>();
-    public static streamCount: number = 0;
 
     /**
      * Get the music player init options.
@@ -86,14 +85,5 @@ export default class MusicPlayer {
 
     public static isPlaying(queue: Queue): boolean {
         return this.playing.get(queue.guild.id);
-    }
-
-    /**
-     * Get the amount of ongoing streams.
-     * @return number
-     */
-
-    public static getOngoingStreamCount(): number {
-        return this.streamCount;
     }
 }

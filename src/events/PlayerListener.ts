@@ -1,13 +1,25 @@
+/*
+ * Copyright © 2022 Ben Petrillo. All rights reserved.
+ *
+ * Project licensed under the MIT License: https://www.mit.edu/~amini/LICENSE.md
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
+ * OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * All portions of this software are available for public use, provided that
+ * credit is given to the original author(s).
+ */
+
 import {PlayerError, Playlist, Queue, Track} from "discord-player";
 import {player} from "../Elixir";
 import EmbedUtil from "../utils/EmbedUtil";
-import DatabaseUtil from "../utils/DatabaseUtil";
 import Logger from "../structs/Logger";
-import Utilities from "../utils/Utilities";
-
-player.on("trackEnd", (queue: Queue, track: Track) => { });
-
-player.on("trackStart", (queue: Queue, track: Track) => { });
 
 player.on("trackAdd", async (queue: Queue, track: Track) => {
    const metadata: any = queue.metadata;
@@ -17,7 +29,6 @@ player.on("trackAdd", async (queue: Queue, track: Track) => {
          EmbedUtil.getDefaultEmbed(`**Queued:** [${title}](${track.url}) (${track.duration})`)
       ]
    });
-   await DatabaseUtil.addPlayedSong(1);
 });
 
 player.on("tracksAdd", async (queue: Queue, tracks: Track[]) => {
@@ -29,7 +40,6 @@ player.on("tracksAdd", async (queue: Queue, tracks: Track[]) => {
             EmbedUtil.getDefaultEmbed(`Queued **${tracks.length}** tracks from ${tracksHyperlink}.`)
          ]
       });
-      await DatabaseUtil.addPlaylistPlayed(1);
    } else {
       const tracksHyperlink = "a custom playlist";
       metadata.channel.send({
@@ -37,17 +47,13 @@ player.on("tracksAdd", async (queue: Queue, tracks: Track[]) => {
             EmbedUtil.getDefaultEmbed(`Queued **${tracks.length}** tracks from ${tracksHyperlink}.`)
          ]
       });
-      await DatabaseUtil.addPlaylistPlayed(1);
-
    }
 });
 
 player.on("error", (queue: Queue, error: PlayerError) => {
    Logger.error(error.message);
-   Utilities.sendWebhookMessage(error, true, queue.guild.id);
 });
 
 player.on("connectionError", (queue: Queue, error: PlayerError) => {
    Logger.error(`[${queue.guild.name}] ConnectionError: ${error.message}`)
-   Utilities.sendWebhookMessage(error, true, queue.guild.id);
 });

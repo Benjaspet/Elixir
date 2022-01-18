@@ -14,16 +14,17 @@ export default class QueueNavigator {
 
     public static createQueueEmbed(queue: Queue, interaction: CommandInteraction, client: Client): void {
 
-        const tracks: string[] = queue.tracks.slice(0, 20 - 1).map((track, i) => {
+        const tracks: string[] = queue.tracks.slice(0, 15).map((track, i) => {
             const title: string = queue.tracks[i].title;
             const reducedTitle: string = title.length > 60 ? title.substring(0, 60) + "..." : title;
             return `**${i + 1}**. [${reducedTitle}](${track.url}) (${track.duration})`;
         });
         const queueLength = queue.tracks.length;
         const embed: MessageEmbed = new MessageEmbed()
-            .setDescription(`${tracks.join("\n")}${queueLength > 20 ? `\n\n...${queueLength - 20} more track(s).` : ""}`)
+            .setDescription(`${tracks.join("\n")}${queueLength > 20 ? `\n\n...${queueLength - 15} more track(s).` : ""}`)
             .setColor(Vars.DEFAULT_EMBED_COLOR)
-            .setFooter({text: "Elixir Music", iconURL: client.user.displayAvatarURL({dynamic: false})});
+            .setFooter({text: "Elixir Music", iconURL: client.user.displayAvatarURL({dynamic: false})})
+            .setTimestamp();
         return void interaction.reply({embeds: [embed]});
     }
 }

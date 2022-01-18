@@ -41,11 +41,11 @@ export default class PlayCommand extends Command {
     constructor(client: Client) {
         super("play", {
             name: "play",
-            description: "Play a song in a voice channel with a link or query.",
+            description: "Play a track or playlist by URl or search query.",
             options: [
                 {
-                    name: "song",
-                    description: "The URL or song query.",
+                    name: "query",
+                    description: "A URL or search query.",
                     type: ApplicationCommandOptionTypes.STRING,
                     required: true
                 }
@@ -75,6 +75,9 @@ export default class PlayCommand extends Command {
                 const queue: Queue = player.getQueue(interaction.guild)
                     ? player.getQueue(interaction.guild)
                     : player.createQueue(interaction.guild, MusicPlayer.getQueueInitOptions(interaction));
+                if (searchResult.tracks[0].raw.live) {
+                    return void await interaction.editReply({content: "Unfortunately, Elixir no longer supports livestreams."});
+                }
                 if (searchResult.playlist) {
                     if (searchResult.playlist.tracks.length > 300) {
                         const embed = EmbedUtil.getErrorEmbed("You cannot add playlists with over 300 tracks.");
