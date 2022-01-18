@@ -57,7 +57,7 @@ export default class PlayCommand extends Command {
     public async execute(interaction: CommandInteraction): Promise<any> {
         await interaction.deferReply();
         try {
-            const track = interaction.options.getString("song");
+            const track = interaction.options.getString("query");
             const member = interaction.member;
             if (member instanceof GuildMember) {
                 const channel: VoiceChannel|StageChannel = member.voice.channel;
@@ -72,12 +72,13 @@ export default class PlayCommand extends Command {
                     const embed = EmbedUtil.getErrorEmbed("No search results found.");
                     return await interaction.followUp({embeds: [embed]});
                 }
+                if (searchResult.tracks[0].duration == "0:00") {
+                    const embed = EmbedUtil.getErrorEmbed("Unfortunately, Elixir no longer supports livestreams.");
+                    return void await interaction.channel.send({embeds: [embed]});
+                }
                 const queue: Queue = player.getQueue(interaction.guild)
                     ? player.getQueue(interaction.guild)
                     : player.createQueue(interaction.guild, MusicPlayer.getQueueInitOptions(interaction));
-                if (searchResult.tracks[0].raw.live) {
-                    return void await interaction.editReply({content: "Unfortunately, Elixir no longer supports livestreams."});
-                }
                 if (searchResult.playlist) {
                     if (searchResult.playlist.tracks.length > 300) {
                         const embed = EmbedUtil.getErrorEmbed("You cannot add playlists with over 300 tracks.");
@@ -100,7 +101,7 @@ export default class PlayCommand extends Command {
                 MusicPlayer.setPlaying(queue, true);
             }
         } catch (error: any) {
-            Logger.error(error);
+            console.log(error)
             Utilities.sendWebhookMessage(error, true, interaction.guild.id);
             const embed = EmbedUtil.getErrorEmbed("An error occurred while running this command.");
             return void await interaction.followUp({embeds: [embed]});
