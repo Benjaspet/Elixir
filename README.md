@@ -1,10 +1,10 @@
 <p align="center">
     <img width="70px" src="https://raw.githubusercontent.com/Eerie6560/Archives/main/images/icons/Elixir-Circle.png" align="center" alt="GitHub Readme Stats" />
-    <h2 align="center">Elixir</h2>
+    <h2 align="center">Elixir Music - TypeScript</h2>
 </p>
 
 <p align="center">
-    The official repository for Elixir, an advanced music bot for your Discord server.
+    An outdated repository of Elixir, an advanced Discord music bot.
 </p>
 
 <p align="center">
@@ -16,29 +16,17 @@
     </a>
 </p>
 
+### Disclaimer
+
+This project will no longer be maintained as development for Elixir has moved to Java. This code is outdated and will no longer be updated, and has been made open source
+for the benefit of the general public.
+
 ### Credits
 
-- Developer & sole maintainer: Ben Petrillo
-
-### Features
- 
-- [x] Full support for Spotify and SoundCloud (YouTube Together coming soon).
-- [x] Fully integrated slash commands.
-- [x] Support for playlist URLS with up to 100 songs.
-- [x] Numerous audio filters.
-- [x] Loop mode, by song or by entire queue.
-- [x] Pause & resume soundtracks.
-- [x] Adjustable volume.
-- [x] Ability to view the song queue for a guild.
-- [x] The ability to skip any song in the queue.
-- [x] Supreme audio quality.
-- [x] The ability to seek through songs and skip to a certain timestamp.
-- [x] Many more features not listed here. 
+Developer & maintainer: Ben Petrillo
 
 ### License
 
-© Copyright 2021-2022 Ben Petrillo. All rights reserved.
-- Unauthorized reproduction or use of this project, via any medium, is strictly prohibitted.
-- This project is to remain proprietary and confidential.
+© Copyright 2021-Present Ben Petrillo. All rights reserved.
 
-Elixir is licensed under the [MIT License](https://www.mit.edu/~amini/LICENSE.md), and modification is permitted provided that proper credit is given to the original author(s). Under no circumstances should this repository be redistributed withount permission from the original author. 
+Elixir is licensed under the [MIT License](https://www.mit.edu/~amini/LICENSE.md), and modification is permitted provided that proper credit is given to the original author(s).
